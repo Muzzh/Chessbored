@@ -2,4 +2,7 @@ deployment:
   staging:
     branch: master
     heroku:
-      appname: meeting-time-404
+      commands:
+        - git push git@heroku.com:meeting-time-404.git $CIRCLE_SHA1:master
+        - heroku run rake db:migrate --app meeting-time-404
+      
