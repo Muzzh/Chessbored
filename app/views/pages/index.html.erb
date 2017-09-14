@@ -1,5 +1,25 @@
 <h1>Hello Team MeetingTime404!!</h1>
 
+<div>
+  <%= @pending_games.each do |game|  %>
+    <p><%= game.id %></p>
+  <% end %>
+</div>
+<br />
+<div>
+  <%= @completed_games.each do |game|  %>
+    <p><%= game.id %></p>
+  <% end %>
+</div>
+<br />
+<div>
+  <%= @in_progress_games.each do |game|  %>
+    <p><%= game.id %></p>
+  <% end %>
+</div>
+<br />
+
+
 <!-- Board will need to be moved to games#show page -->
 
 <div class="board">
