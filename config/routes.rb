@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   root 'pages#index'
   resources :chess_pieces, only: :create
   resources :games, only: [:new, :create, :show]
