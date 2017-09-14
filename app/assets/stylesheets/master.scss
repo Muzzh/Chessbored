@@ -1,8 +1,22 @@
-$size: 700px;
+//Variables
+$boardsize: 700px;
+
+//Landing Page Styles
+.container {
+  display: flex;
+}
+
+.landing-img {
+  height: 100vh;
+}
+
+
+//Chessboard styles
+
 
 .board {
-  height: $size;
-  width: $size;
+  height: $boardsize;
+  width: $boardsize;
   display: flex;
   flex-direction: column;
 }
