@@ -1,23 +1,23 @@
 <h1>Hello Team MeetingTime404!!</h1>
 
 <div>
-  <%= @pending_games.each do |game|  %>
-    <p><%= game.id %></p>
+  <% @all_games.pending.each do |game| %>
+    <div>
+      Game #<%= game.id %>
+      Current sattus: <%= game.status %>
+    </div>
   <% end %>
 </div>
 <br />
 <div>
-  <%= @completed_games.each do |game|  %>
-    <p><%= game.id %></p>
+  Showing most recent game first
+  <% @all_games.pending.recent.each do |game| %>
+    <div>
+      Game #<%= game.id %>
+      Current sattus: <%= game.status %>
+    </div>
   <% end %>
 </div>
-<br />
-<div>
-  <%= @in_progress_games.each do |game|  %>
-    <p><%= game.id %></p>
-  <% end %>
-</div>
-<br />
 
 
 <!-- Board will need to be moved to games#show page -->

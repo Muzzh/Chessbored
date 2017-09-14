@@ -8,4 +8,12 @@ FactoryGirl.define do
 		y					2
 		captured 	false
 	end
+
+  factory :game do
+
+    trait :pending do
+      status 'pending'
+    end
+  end
+
 end
