@@ -8,4 +8,5 @@ FactoryGirl.define do
 		y					2
 		captured 	false
 	end
+
 end

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="landing">
     <%= image_tag 'board.jpeg', class: 'landing-img' %>
 <ul class="navbar">
   <% if user_signed_in? %>
@@ -10,7 +10,7 @@
       <%= link_to 'Sign In', new_user_session_path, class: 'nav-link'%>
     </li>
     <li>
-      <%= link_to 'Sign Up', new_user_registration_path, class: 'nav-link' %>
+      <%= link_to 'Create an Account', new_user_registration_path, class: 'nav-link' %>
     </li>
   <% end %>
 </ul>
