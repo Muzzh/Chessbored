@@ -1,4 +1,19 @@
-
+<div class="nav">
+  <ul>
+    <% if user_signed_in? %>
+      <li>
+        <%= link_to 'Sign Out', destroy_user_session_path, class: 'nav-link'%>
+      </li>
+    <% else %>
+      <li>
+        <%= link_to 'Sign In', new_user_session_path, class: 'nav-link'%>
+      </li>
+      <li>
+        <%= link_to 'Create an Account', new_user_registration_path, class: 'nav-link' %>
+      </li>
+    <% end %>
+  </ul>
+<div>
 <div>
   <% @all_games.pending.each do |game| %>
     <div>
@@ -17,107 +32,3 @@
     </div>
   <% end %>
 </div>
-
-
-<!-- Board will need to be moved to games#show page -->
-
-<div class="board">
-  <div class="row">
-    <div class="label">8</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">7</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">6</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">5</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">4</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">3</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">2</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">1</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="last-label">*</div>
-    <div class="column-label">A</div>
-    <div class="column-label">B</div>
-    <div class="column-label">C</div>
-    <div class="column-label">D</div>
-    <div class="column-label">E</div>
-    <div class="column-label">F</div>
-    <div class="column-label">G</div>
-    <div class="column-label">H</div>
-  </div>
