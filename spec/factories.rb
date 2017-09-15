@@ -14,6 +14,14 @@ FactoryGirl.define do
     trait :pending do
       status 'pending'
     end
+
+    trait :completed do
+      status 'completed'
+    end
+
+    trait :in_progress do
+      status 'in_progress'
+    end
   end
 
 end
