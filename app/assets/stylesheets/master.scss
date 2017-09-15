@@ -1,8 +1,30 @@
-$size: 700px;
+@import "bootstrap";
+//Variables
+$boardsize: 700px;
+
+//Landing Page Styles
+.landing {
+  display: flex;
+}
+
+.landing-img {
+  height: 100vh;
+}
+
+h1 {
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+}
+
+//Chessboard styles
+
 
 .board {
-  height: $size;
-  width: $size;
+  height: $boardsize;
+  width: $boardsize;
   display: flex;
   flex-direction: column;
 }
