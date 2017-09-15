@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Game, type: :model do
-  
   describe '.pending' do
     let(:game) { FactoryGirl.create :game, :pending }
 
