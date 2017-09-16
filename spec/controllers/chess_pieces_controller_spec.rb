@@ -20,6 +20,15 @@ RSpec.describe ChessPiecesController, type: :controller do
       expect(King.last.captured).to eq(false)
       expect(ChessPiece.last.type).to eq('King')
     end
+    it "should check for a valid move for a King" do
+      post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: 0, y: 0, captured: false, type: 'King' } }
+      king = King.last
+      expect(king.valid_move?(0,1)).to eq(true)
+      expect(king.valid_move?(1,0)).to eq(true)
+      expect(king.valid_move?(1,1)).to eq(false)
+      expect(king.valid_move?(2,2)).to eq(false)
+      expect(king.valid_move?(-1,0)).to eq(false)
+    end
   end
 
 end
