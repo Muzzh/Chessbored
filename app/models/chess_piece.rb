@@ -9,5 +9,9 @@ class ChessPiece < ApplicationRecord
   def self.chess_piece
     %w(Rook Knight Bishop King Queen Pawn)
   end
+
   # Common methods for all pieces ...
+  def valid_move?(x_target, y_target)
+  end
+
 end
