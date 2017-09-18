@@ -1,5 +1,7 @@
 class ChessPiece < ApplicationRecord
-  # Will have to add belongs_to :game, :user_id
+  belongs_to :game
+  belongs_to :user_id
+
   self.inheritance_column = :type
 
   def self.types
