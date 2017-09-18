@@ -1,7 +1,7 @@
 <div class="container">
   <div class="board-image">
   </div>
-  <div class="box sign_in">
+  <div class="box">
     <% if user_signed_in? %>
       <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
     <% else %>
