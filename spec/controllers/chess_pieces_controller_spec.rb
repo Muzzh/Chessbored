@@ -21,13 +21,26 @@ RSpec.describe ChessPiecesController, type: :controller do
       expect(ChessPiece.last.type).to eq('King')
     end
     it "should check for a valid move for a King" do
-      post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: 0, y: 0, captured: false, type: 'King' } }
+      x= 0; y=0; type="King" # piece at 0,0
+      post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: x, y: y, captured: false, type: type } }
       king = King.last
       expect(king.valid_move?(0,1)).to eq(true)
       expect(king.valid_move?(1,0)).to eq(true)
+      expect(king.valid_move?(0,0)).to eq(false)
       expect(king.valid_move?(1,1)).to eq(false)
       expect(king.valid_move?(2,2)).to eq(false)
       expect(king.valid_move?(-1,0)).to eq(false)
+    end
+
+    it "should check for a valid move for a Rook" do
+      x= 2; y=0; type="Rook" # piece at 2,0
+      post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: x, y: y, captured: false, type: type } }
+      rook = Rook.last
+      expect(rook.valid_move?(4,2)).to eq(true)
+      expect(rook.valid_move?(1,1)).to eq(true)
+      expect(rook.valid_move?(2,0)).to eq(false)
+      expect(rook.valid_move?(3,2)).to eq(false)
+      expect(rook.valid_move?(-1,0)).to eq(false)
     end
   end
 
