@@ -21,7 +21,7 @@ class ChessPiece < ApplicationRecord
   end
 
   def in_board?(x_target, y_target)
-    return x_target >= 0 && y_target >= 0
+    return x_target >= 0 && x_target <=7 && y_target >= 0 && y_target <=7
   end
 
 end
