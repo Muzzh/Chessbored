@@ -1,14 +1,5 @@
 class ChessPiece < ApplicationRecord
-  # Will have to add belongs_to :game, :user_id
-  self.inheritance_column = :type
-
-  def self.types
-    %w(Rook Knight Bishop King Queen Pawn)
-  end
-
-  def self.chess_piece
-    %w(Rook Knight Bishop King Queen Pawn)
-  end
+  # Will have to add belongs_to :game, :user
 
   # Common methods for all pieces ...
   def valid_move?(x_target, y_target)
