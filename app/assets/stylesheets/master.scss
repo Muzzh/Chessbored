@@ -2,24 +2,31 @@
 //Variables
 $boardsize: 700px;
 
-//Landing Page Styles
-.landing {
+//Landing Page Styles (pages#index)
+.container {
   display: flex;
 }
 
-.landing-img {
-  height: 100vh;
+.board-image {
+  width: 60%;
+  background-image: url(board.jpeg);
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
-h1 {
-  text-align: center;
+.box {
+
+  -moz-box-shadow: 1px 1px 2px 0 #d0d0d0;
+ -webkit-box-shadow: 1px 1px 2px 0 #d0d0d0;
+ box-shadow: 1px 1px 2px 0 #d0d0d0;
+ background: #fff;
+ border: 1px solid #ccc;
+ border-color: #e4e4e4 #bebebd #bebebd #e4e4e4;
+ margin-top: 10px;
+ padding: 10px;
 }
 
-ul {
-  list-style: none;
-}
-
-//Chessboard styles
+//Chessboard styles (games#index)
 
 
 .board {
