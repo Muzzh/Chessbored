@@ -1,4 +1,5 @@
 class ChessPiecesController < ApplicationController
+  
   def create
     ChessPiece.create(chess_piece_params)
   end
