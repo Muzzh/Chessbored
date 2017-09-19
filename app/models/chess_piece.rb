@@ -1,5 +1,5 @@
 class ChessPiece < ApplicationRecord
-  belongs_to :game
+  belongs_to :game #optional: true
   
 
   self.inheritance_column = :type
