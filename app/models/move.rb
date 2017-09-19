@@ -1,0 +1,4 @@
+class Move < ApplicationRecord
+  
+  
+end
