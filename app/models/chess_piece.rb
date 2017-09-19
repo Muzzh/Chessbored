@@ -1,6 +1,9 @@
 class ChessPiece < ApplicationRecord
   # Will have to add belongs_to :game, :user
 
+  MIN_INDEX = 0
+  MAX_INDEX = 7
+
   # Common methods for all pieces ...
   def valid_move?(x_target, y_target)
   end
@@ -12,7 +15,8 @@ class ChessPiece < ApplicationRecord
   end
 
   def in_board?(x_target, y_target)
-    return x_target >= 0 && x_target <=7 && y_target >= 0 && y_target <=7
+    return x_target >= MIN_INDEX && x_target <= MAX_INDEX && 
+           y_target >= MIN_INDEX && y_target <= MAX_INDEX
   end
 
 end

@@ -14,7 +14,7 @@ RSpec.describe ChessPiecesController, type: :controller do
     end
 
     it "should check for a valid move for a King" do
-      x= 0; y=0; type="King" # piece at 0,0
+      x= 0; y=0; type="King"
       post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: x, y: y, captured: false, type: type } }
       piece = King.last
       expect(piece.valid_move?(0,1)).to eq(true)
@@ -28,7 +28,7 @@ RSpec.describe ChessPiecesController, type: :controller do
     end
 
     it "should check for a valid move for a Bishop" do
-      x= 2; y=0; type="Bishop" # piece at 2,0
+      x= 2; y=0; type="Bishop"
       post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: x, y: y, captured: false, type: type } }
       piece = Bishop.last
       expect(piece.valid_move?(4,2)).to eq(true)
@@ -39,7 +39,7 @@ RSpec.describe ChessPiecesController, type: :controller do
     end
 
     it "should check for a valid move for a Knight" do
-      x= 2; y=5; type="Knight" # piece at 2,5
+      x= 2; y=5; type="Knight"
       post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: x, y: y, captured: false, type: type } }
       piece = Knight.last
       expect(piece.valid_move?(3,7)).to eq(true)
@@ -55,7 +55,7 @@ RSpec.describe ChessPiecesController, type: :controller do
     end
 
     it "should check for a valid move for a Rook" do
-      x= 0; y=0; type="Rook" # piece at 0,0
+      x= 0; y=0; type="Rook"
       post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: x, y: y, captured: false, type: type } }
       piece = Rook.last
       expect(piece.valid_move?(0,4)).to eq(true)
@@ -63,6 +63,20 @@ RSpec.describe ChessPiecesController, type: :controller do
       expect(piece.valid_move?(4,5)).to eq(false)
       expect(piece.valid_move?(8,0)).to eq(false)
       expect(piece.valid_move?(0,-1)).to eq(false)
+    end
+
+    it "should check for a valid move for a Pawn" do
+      x= 1; y=0; type="Pawn"
+      post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: x, y: y, captured: false, type: type } }
+      piece = Pawn.last
+      expect(piece.valid_move?(1,1)).to eq(true)
+      expect(piece.valid_move?(0,0)).to eq(true)
+      expect(piece.valid_move?(1,2)).to eq(false)
+      expect(piece.valid_move?(-1,0)).to eq(false)
+      expect(piece.valid_move?(8,0)).to eq(false)
+      piece.x = 1; piece.y = 7
+      expect(piece.valid_move?(1,8)).to eq(true)
+      expect(piece.valid_move?(1,9)).to eq(false)
     end
 
   end
