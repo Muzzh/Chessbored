@@ -1,4 +1,10 @@
 FactoryGirl.define do
+  factory :user do
+    id 1
+    email "test@test.user"
+    password "I am a password."
+  end
+
   factory :rook do
     type      'Rook'
     user_id   1
@@ -25,7 +31,7 @@ FactoryGirl.define do
     y         0
     captured  false
   end
-  
+
   factory :king do
     type      'King'
     user_id   1

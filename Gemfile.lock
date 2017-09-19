@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rspec/rspec-core.git
-  revision: 18d0e0e5bf471ff46048bd4a1266e20cefee2217
+  revision: b81b8b3e3449bc1b95c5dab499592eba174c0e3f
   branch: master
   specs:
     rspec-core (3.7.0.pre)
@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-expectations.git
-  revision: d7c74ef3843866acf3165fc500b2c6f1a3c290ee
+  revision: 430cf59249ebe0291bcfec88d76b1c914a52ad11
   branch: master
   specs:
     rspec-expectations (3.7.0.pre)
@@ -17,7 +17,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-mocks.git
-  revision: 8b010b7a774570ceca86fb7bf6b0cc9da9a28eb0
+  revision: 78d04f05d45ef920afb0a51f118b119898c76ab3
   branch: master
   specs:
     rspec-mocks (3.7.0.pre)
@@ -26,7 +26,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-rails.git
-  revision: 9118e2c62b86ef2103d132ac88409bddca187d5c
+  revision: 404651a743f316f681e578233f9f4dde35a6ece9
   branch: master
   specs:
     rspec-rails (3.7.0.pre)
@@ -40,7 +40,7 @@ GIT
 
 GIT
   remote: https://github.com/rspec/rspec-support.git
-  revision: 111879e6451c623fdc5d8921b79f2a57d9db64f0
+  revision: 95a23e928232659f05903575b7b0cb0f6f2b4030
   branch: master
   specs:
     rspec-support (3.7.0.pre)
@@ -86,6 +86,8 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
     arel (7.1.4)
     autoprefixer-rails (7.1.4)
       execjs
@@ -96,6 +98,16 @@ GEM
       sass (>= 3.4.19)
     builder (3.2.3)
     byebug (9.1.0)
+    capybara (2.14.4)
+      addressable
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      xpath (~> 2.0)
+    capybara-screenshot (1.0.17)
+      capybara (>= 1.0, < 3)
+      launchy
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -129,6 +141,8 @@ GEM
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -149,6 +163,7 @@ GEM
     orm_adapter (0.5.0)
     pg (0.21.0)
     popper_js (1.11.1)
+    public_suffix (3.0.0)
     puma (3.10.0)
     rack (2.0.3)
     rack-test (0.6.3)
@@ -177,7 +192,7 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (12.0.0)
+    rake (12.1.0)
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
@@ -232,6 +247,8 @@ GEM
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
+    xpath (2.1.0)
+      nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
@@ -239,6 +256,8 @@ PLATFORMS
 DEPENDENCIES
   bootstrap (= 4.0.0.alpha6)
   byebug
+  capybara (~> 2.14.0)
+  capybara-screenshot
   coffee-rails (~> 4.2)
   devise
   factory_girl_rails (~> 4.0)
