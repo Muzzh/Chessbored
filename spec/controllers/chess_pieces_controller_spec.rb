@@ -27,10 +27,10 @@ RSpec.describe ChessPiecesController, type: :controller do
       expect(piece.valid_move?(0,8)).to eq(false)
     end
 
-    it "should check for a valid move for a Rook" do
-      x= 2; y=0; type="Rook" # piece at 2,0
+    it "should check for a valid move for a Bishop" do
+      x= 2; y=0; type="Bishop" # piece at 2,0
       post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: x, y: y, captured: false, type: type } }
-      piece = Rook.last
+      piece = Bishop.last
       expect(piece.valid_move?(4,2)).to eq(true)
       expect(piece.valid_move?(1,1)).to eq(true)
       expect(piece.valid_move?(2,0)).to eq(false)
@@ -52,6 +52,17 @@ RSpec.describe ChessPiecesController, type: :controller do
       expect(piece.valid_move?(1,8)).to eq(false)
       expect(piece.valid_move?(2,6)).to eq(false)
       expect(piece.valid_move?(3,4)).to eq(false)
+    end
+
+    it "should check for a valid move for a Rook" do
+      x= 0; y=0; type="Rook" # piece at 0,0
+      post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: x, y: y, captured: false, type: type } }
+      piece = Rook.last
+      expect(piece.valid_move?(0,4)).to eq(true)
+      expect(piece.valid_move?(3,0)).to eq(true)
+      expect(piece.valid_move?(4,5)).to eq(false)
+      expect(piece.valid_move?(8,0)).to eq(false)
+      expect(piece.valid_move?(0,-1)).to eq(false)
     end
 
   end
