@@ -9,12 +9,17 @@
   </head>
 
   <body>
+    <%= render "pages/sign_up_modal" %>
 
     <% if notice.present? %>
       <p class="alert alert-info"><%= notice %></p>
     <% end %>
     <% if alert.present? %>
       <p class="alert alert-danger">boo<%= alert %></p>
+    <% end %>
+
+    <% if user_signed_in? %>
+      <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
     <% end %>
     
     <%= yield %>

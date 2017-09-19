@@ -44,4 +44,12 @@ RSpec.describe Game, type: :model do
       expect(Queen.where(game_id: game.id, x: 3, y: 0).first).not_to be_nil
     end
   end
+
+  describe '#populate_pieces' do
+    let(:game) { FactoryGirl.create :game }
+
+    it 'adds a king at x_position: 4, y_position: 0' do
+      expect(Queen.where(game_id: game.id, x: 3, y: 0).first).not_to be_nil
+    end
+  end
 end

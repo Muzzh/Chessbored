@@ -1,34 +1,11 @@
-<div class="nav">
-  <ul>
-    <% if user_signed_in? %>
-      <li>
-        <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'nav-link'%>
-      </li>
-    <% else %>
-      <li>
-        <%= link_to 'Sign In', new_user_session_path, class: 'nav-link'%>
-      </li>
-      <li>
-        <%= link_to 'Create an Account', new_user_registration_path, class: 'nav-link' %>
-      </li>
+<div class="container">
+  <div class="board-image">
+  </div>
+  <div class="box">
+    
+    <% unless user_signed_in? %>
+      <%= render "login" %>
+      <%= link_to "Sign Up", "#sign_up", "data-toggle" => "modal", :class => 'btn btn-small btn-success' %>
     <% end %>
-  </ul>
-<div>
-<div>
-  <% @all_games.pending.each do |game| %>
-    <div>
-      Game #<%= game.id %>
-      Current sattus: <%= game.status %>
-    </div>
-  <% end %>
-</div>
-<br />
-<div>
-  Showing most recent game first
-  <% @all_games.pending.recent.each do |game| %>
-    <div>
-      Game #<%= game.id %>
-      Current sattus: <%= game.status %>
-    </div>
-  <% end %>
+  </div>
 </div>
