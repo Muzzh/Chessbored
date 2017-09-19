@@ -4,4 +4,7 @@ class PagesController < ApplicationController
     @all_games = Game.all
   end
 
+  def create
+  end
+
 end

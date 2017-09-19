@@ -20,5 +20,9 @@ RSpec.describe ChessPiecesController, type: :controller do
       expect(King.last.captured).to eq(false)
       expect(ChessPiece.last.type).to eq('King')
     end
+  #  it "should require a user to be created" do
+  #    user = FactoryGirl.create :user
+  #  end
   end
+
 end
