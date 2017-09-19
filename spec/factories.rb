@@ -8,6 +8,7 @@ FactoryGirl.define do
   end
 
   factory :rook do
+    game
     type      'Rook'
     user_id   1
     game_id   1
@@ -17,6 +18,7 @@ FactoryGirl.define do
   end
 
   factory :knight do
+    game
     type      'Knight'
     user_id   1
     game_id   1
@@ -26,6 +28,7 @@ FactoryGirl.define do
   end
 
   factory :bishop do
+    game
     type      'Bishop'
     user_id   1
     game_id   1
@@ -45,6 +48,7 @@ FactoryGirl.define do
   end
 
   factory :queen do
+    game
     type      'Queen'
     user_id   1
     game_id   1
@@ -54,6 +58,7 @@ FactoryGirl.define do
   end
 
   factory :pawn do
+    game
     type      'Pawn'
     user_id   1
     game_id   1
@@ -74,6 +79,9 @@ FactoryGirl.define do
     trait :in_progress do
       status 'in_progress'
     end
+    black_player_id 1
+    white_player_id 2
+    winner_id       nil
   end
 
   factory :user do
