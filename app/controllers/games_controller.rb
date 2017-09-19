@@ -1,4 +1,5 @@
 class GamesController < ApplicationController
+  before_action :authenticate_user!
   
   def index
     @all_games = Game.all
