@@ -39,9 +39,8 @@ FactoryGirl.define do
 
   factory :king do
     game
-    user_id   1
     type      'King'
-    game_id   1
+    user_id   1
     x         3
     y         0
     captured  false
