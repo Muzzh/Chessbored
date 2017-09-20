@@ -1,8 +1,10 @@
 FactoryGirl.define do
   factory :user do
-    id 1
-    email "test@test.user"
-    password "I am a password."
+    sequence :email do |n|
+      "test#{n}@test.user"
+    end
+    password 'mypassword'
+    password_confirmation 'mypassword'
   end
 
   factory :rook do
