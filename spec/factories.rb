@@ -74,4 +74,12 @@ FactoryGirl.define do
       status 'in_progress'
     end
   end
+
+  factory :user do
+    sequence :email do |n|
+      "dummyEmail#{n}@gmail.com"
+    end
+    password "smartPassword"
+    password_confirmation "smartPassword"
+  end
 end
