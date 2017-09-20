@@ -8,10 +8,4 @@ RSpec.describe PagesController, type: :controller do
     end
   end
 
-  # describe 'pages#create' do
-  #   it "should require a user to be created" do
-  #     user = FactoryGirl.create :user
-  #   end
-  #  end
-
 end

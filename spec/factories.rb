@@ -35,6 +35,7 @@ FactoryGirl.define do
   end
 
   factory :king do
+    game
     type      'King'
     user_id   1
     game_id   1
