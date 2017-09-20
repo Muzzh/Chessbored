@@ -1,5 +1,4 @@
 FactoryGirl.define do
-<<<<<<< HEAD
   factory :user do
     sequence :email do |n|
       "test#{n}@test.user"
@@ -7,8 +6,6 @@ FactoryGirl.define do
     password 'mypassword'
     password_confirmation 'mypassword'
   end
-=======
->>>>>>> 533f799c559dd37408bbc2dc36cfa65dd800f48b
 
   factory :rook do
     game
@@ -39,13 +36,8 @@ FactoryGirl.define do
 
   factory :king do
     game
-<<<<<<< HEAD
     type      'King'
     user_id   1
-=======
-    user_id   1
-    type      'King'
->>>>>>> 533f799c559dd37408bbc2dc36cfa65dd800f48b
     x         3
     y         0
     captured  false
@@ -84,14 +76,7 @@ FactoryGirl.define do
     black_player_id 1
     white_player_id 2
     winner_id       nil
-<<<<<<< HEAD
-=======
+
   end
 
-  factory :user do
-    email "dummyEmail@gmail.com"
-    password "smartPassword"
-    password_confirmation "smartPassword"
->>>>>>> 533f799c559dd37408bbc2dc36cfa65dd800f48b
-  end
 end
