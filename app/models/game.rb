@@ -1,5 +1,5 @@
 class Game < ApplicationRecord
-  belongs_to :user, optional: true
+  belongs_to :user
   
   
   scope :by_status, ->(status) { where(status: status) }
