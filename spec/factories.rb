@@ -39,8 +39,8 @@ FactoryGirl.define do
 
   factory :king do
     game
-    type      'King'
     user_id   1
+    type      'King'
     game_id   1
     x         3
     y         0
@@ -82,13 +82,5 @@ FactoryGirl.define do
     black_player_id 1
     white_player_id 2
     winner_id       nil
-  end
-
-  factory :user do
-    sequence :email do |n|
-      "dummyEmail#{n}@gmail.com"
-    end
-    password "smartPassword"
-    password_confirmation "smartPassword"
   end
 end
