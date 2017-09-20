@@ -4,7 +4,6 @@ FactoryGirl.define do
     game
     type      'Rook'
     user_id   1
-    game_id   1
     x         0
     y         0
     captured  false
@@ -14,7 +13,6 @@ FactoryGirl.define do
     game
     type      'Knight'
     user_id   1
-    game_id   1
     x         1
     y         0
     captured  false
@@ -24,7 +22,6 @@ FactoryGirl.define do
     game
     type      'Bishop'
     user_id   1
-    game_id   1
     x         2
     y         0
     captured  false
@@ -43,7 +40,6 @@ FactoryGirl.define do
     game
     type      'Queen'
     user_id   1
-    game_id   1
     x         4
     y         0
     captured  false
@@ -53,7 +49,6 @@ FactoryGirl.define do
     game
     type      'Pawn'
     user_id   1
-    game_id   1
     x         0
     y         1
     captured  false
