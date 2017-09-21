@@ -65,19 +65,40 @@ RSpec.describe ChessPiecesController, type: :controller do
       expect(piece.valid_move?(0,-1)).to eq(false)
     end
 
-    it "should check for a valid move for a Pawn" do
-      x= 1; y=0; type="Pawn"
+   it "should check for a valid move for a Queen" do
+      x= 3; y=3; type="Queen"
       post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: x, y: y, captured: false, type: type } }
-      piece = Pawn.last
-      expect(piece.valid_move?(1,1)).to eq(true)
-      expect(piece.valid_move?(0,0)).to eq(true)
-      expect(piece.valid_move?(1,2)).to eq(false)
-      expect(piece.valid_move?(-1,0)).to eq(false)
+      piece = Queen.last
+      expect(piece.valid_move?(3,5)).to eq(true)  # up 2 steps
+      expect(piece.valid_move?(3,2)).to eq(true)  # down 1 step
+      expect(piece.valid_move?(1,3)).to eq(true)  # left 2 steps
+      expect(piece.valid_move?(4,3)).to eq(true)  # right 2 steps
+      expect(piece.valid_move?(1,5)).to eq(true)  # north west 2 steps
+      expect(piece.valid_move?(4,4)).to eq(true)  # north east 1 step
+      expect(piece.valid_move?(5,1)).to eq(true)  # south east 2 steps
+      expect(piece.valid_move?(2,2)).to eq(true)  # south west 1 steps
+      expect(piece.valid_move?(4,5)).to eq(false) 
+      expect(piece.valid_move?(6,7)).to eq(false)
       expect(piece.valid_move?(8,0)).to eq(false)
-      piece.x = 1; piece.y = 7
-      expect(piece.valid_move?(1,8)).to eq(true)
-      expect(piece.valid_move?(1,9)).to eq(false)
+      expect(piece.valid_move?(0,-1)).to eq(false)
     end
+
+    # Note: need color column in move table
+    # it "should check for a valid move for a Pawn" do
+    #   x= 1; y=0; type="Pawn"
+    #   post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: x, y: y, captured: false, type: type } }
+    #   piece = Pawn.last
+    #   expect(piece.valid_move?(0,0)).to eq(true)    # left
+    #   expect(piece.valid_move?(0,2)).to eq(true)    # right
+    #   expect(piece.valid_move?(1,1)).to eq(true)    # up 1 step
+    #   expect(piece.valid_move?(1,2)).to eq(false)   # up 2 steps
+    #   expect(piece.valid_move?(-1,0)).to eq(false)
+    #   expect(piece.valid_move?(8,0)).to eq(false)
+    #   piece.x = 1; piece.y = 7
+    #   expect(piece.valid_move?(1,8)).to eq(true) # pass the board
+    #   expect(piece.valid_move?(1,9)).to eq(false) # not in board
+    #   expect(piece.valid_move?(1,6)).to eq(false) # go back
+    # end
 
   end
 

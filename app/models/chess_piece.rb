@@ -19,4 +19,27 @@ class ChessPiece < ApplicationRecord
            y_target >= MIN_INDEX && y_target <= MAX_INDEX
   end
 
+  # check horizontal and vertical moves
+  def move_straight_line?(x_target, y_target, single_step=true)
+    x_dist = (x_target - x).abs
+    y_dist = (y_target - y).abs
+#    puts "#{x},#{y}->#{x_target},#{y_target} => #{x_dist},#{y_dist} #{single_step}"
+    if single_step
+        return true if (x_dist == 0 && y_dist == 1) || 
+                       (x_dist == 1 && y_dist == 0)
+    else
+        return true if (x_dist == 0 && y_dist > 0) || 
+                       (x_dist > 0 && y_dist == 0)
+
+    end
+    return false
+  end
+
+  def move_diagonally?(x_target, y_target)
+    x_dist = (x_target - x).abs
+    y_dist = (y_target - y).abs
+    return true if x_dist == y_dist
+    return false
+  end
+
 end
