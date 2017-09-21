@@ -17,7 +17,7 @@ RSpec.describe GamesController, type: :controller do
   end
 
   describe 'game#index action' do
-    
+
     it 'should require a user to be logged in to display opened games' do
       get :index
       expect(response).to redirect_to new_user_session_path
@@ -46,10 +46,16 @@ RSpec.describe GamesController, type: :controller do
       get :show, params: { id: game.id }
       expect(response).to have_http_status(:success)
     end
-
-      describe 'game#create action' do
-
-      end
   end
 
+  describe "games#update action" do
+    it "should successfully update a game" do
+      user = FactoryGirl.create(:user)
+      sign_in user
+      game = FactoryGirl.create(:game, :pending)
+      patch :update, params: { current_user: user}
+      expect(response).to redirect_to action: "show", id: game.id
+      expect(game.black_player_id).to eq(user.id)
+    end
+  end
 end
