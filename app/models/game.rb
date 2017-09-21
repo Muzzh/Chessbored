@@ -1,4 +1,5 @@
 class Game < ApplicationRecord
+  after_create :populate_pieces
   
   scope :by_status, ->(status) { where(status: status) }
   scope :pending, -> { by_status('pending') }
@@ -6,12 +7,15 @@ class Game < ApplicationRecord
   scope :in_progress, -> { by_status('in_progress') }
   scope :recent, -> { order('games.updated_at DESC') }
 
-  after_create :populate_pieces
 
   def pending?
     status == 'pending'
   end
 
+
+
+  private
+  
   def populate_pieces
     #"white" Game Pieces
     (0..7).each do |i|
