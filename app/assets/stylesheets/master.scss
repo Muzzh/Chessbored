@@ -9,7 +9,7 @@ $boardsize: 700px;
 
 .board-image {
   width: 60%;
-  background-image: url(board.jpeg);
+  background-image: image-url('board.jpeg');
   background-size: cover;
   background-repeat: no-repeat;
 }
