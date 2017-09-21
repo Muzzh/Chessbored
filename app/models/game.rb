@@ -1,4 +1,5 @@
 class Game < ApplicationRecord
+  
   scope :by_status, ->(status) { where(status: status) }
   scope :pending, -> { by_status('pending') }
   scope :completed, -> { by_status('completed') }

@@ -1,5 +1,6 @@
 class ChessPiece < ApplicationRecord
-  # Will have to add belongs_to :game, :user
+  belongs_to :game
+  belongs_to :user
 
   # Common methods for all pieces ...
 end
