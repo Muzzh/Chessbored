@@ -4,17 +4,17 @@ RSpec.describe ChessPiecesController, type: :controller do
 	
 	describe 'chess_pieces#create' do
 
-		it "should allow creating a King" do
-			x = 1; y =2; type = "King"; color = "white";
-			post :create, params: { chess_piece: { user_id: 1, game_id: 1, x: x, y: y, captured: false, type: type, color: color } }
-			piece = King.last
-			expect(piece.user_id).to eq(1)
-			expect(piece.x).to eq(1)
-			expect(piece.y).to eq(2)
-			expect(piece.captured).to eq(false)
-			expect(piece.color).to eq("white")
-			expect(ChessPiece.last.type).to eq('King')
-		end
+    it "should create dummy King" do
+
+      user = FactoryGirl.create(:user)
+      king = FactoryGirl.create(:king, user_id: user.id)
+
+      expect(king.user_id).to eq(user.id)
+      expect(king.x).to eq(3)
+      expect(king.y).to eq(0)
+      expect(king.captured).to eq(false)
+      expect(king.type).to eq('King')
+    end
 
 		it "should check for a valid move for a King" do
 			x = 0; y = 0; type = "King"; color = "white";
