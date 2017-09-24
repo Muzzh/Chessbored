@@ -1,4 +1,6 @@
 class Game < ApplicationRecord
+  has_many :chess_pieces
+
   after_create :populate_pieces
   
   scope :by_status, ->(status) { where(status: status) }
@@ -11,7 +13,6 @@ class Game < ApplicationRecord
   def pending?
     status == 'pending'
   end
-
 
 
   private

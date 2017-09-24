@@ -1,93 +1,17 @@
-
 <div class="board">
-  <div class="row">
-    <div class="label">8</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">7</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">6</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">5</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">4</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">3</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">2</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
-  <div class="row">
-    <div class="label">1</div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-    <div class="cell"></div>
-  </div>
+  <% 0.upto(7) do |y| %>
+    <div class="row">
+      <div class="label"><%= "#{y + 1}" %></div>
+      <% 0.upto(7) do |x| %>
+        <% piece = @chess_pieces.where(x: x, y: y).first %>
+        <% if piece == nil %>
+          <div class="cell"></div>
+        <% else %>
+          <div class="cell"><%= image_tag "#{piece.type}_#{piece.color}" %></div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
   <div class="row">
     <div class="last-label">*</div>
     <div class="column-label">A</div>
@@ -99,3 +23,4 @@
     <div class="column-label">G</div>
     <div class="column-label">H</div>
   </div>
+</div>
