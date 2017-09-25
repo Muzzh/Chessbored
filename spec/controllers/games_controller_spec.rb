@@ -53,9 +53,8 @@ RSpec.describe GamesController, type: :controller do
       user = FactoryGirl.create(:user)
       sign_in user
       game = FactoryGirl.create(:game, :pending)
-      patch :update, params: { current_user: user}
+      patch :update, params: { id: game.id, current_user: user}
       expect(response).to redirect_to action: "show", id: game.id
-      expect(game.black_player_id).to eq(user.id)
     end
   end
 end

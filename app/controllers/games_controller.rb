@@ -12,8 +12,14 @@ class GamesController < ApplicationController
   end
 
   def create
+    @game = Game.create(:white_player_id => current_user.id, :status => "pending")
+    if @game.valid?
+      redirect_to game_path(@game)
+    else
+      return render text: 'invalid game', status: :forbidden
+    end     
+  end
 
-<<<<<<< HEAD
   def update
     @game = Game.find_by_id(params[:id])
     white_player = @game.white_player_id
@@ -27,11 +33,10 @@ class GamesController < ApplicationController
   end
 
   def show
-=======
->>>>>>> master
+
   end
 
-  def show; end
+
 
   private
 
