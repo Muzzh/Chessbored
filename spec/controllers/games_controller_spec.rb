@@ -54,9 +54,9 @@ RSpec.describe GamesController, type: :controller do
       user = FactoryGirl.create(:user)
       sign_in user
       post :create
-      expect(response).to redirect_to games_path
-      @game = Game.last
-      expect(@game.white_player_id).to eq(user.id)
+      game = Game.last
+      expect(response).to redirect_to game_path(game.id)
+      expect(game.white_player_id).to eq(user.id)
     end
   end
 
