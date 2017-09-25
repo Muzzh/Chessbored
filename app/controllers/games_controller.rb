@@ -1,5 +1,7 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!
+  before_action :current_game, only: [:show]
+  before_action :chess_pieces, only: [:show]
 
   def index
     @all_games = Game.all
@@ -10,8 +12,8 @@ class GamesController < ApplicationController
   end
 
   def create
-  end
 
+<<<<<<< HEAD
   def update
     @game = Game.find_by_id(params[:id])
     white_player = @game.white_player_id
@@ -25,9 +27,21 @@ class GamesController < ApplicationController
   end
 
   def show
+=======
+>>>>>>> master
   end
 
+  def show; end
+
   private
+
+  def chess_pieces
+    @chess_pieces ||= current_game.chess_pieces
+  end
+
+  def current_game
+    @game ||= Game.find(params[:id])
+  end
 
   def game_params
     params.require(:game).permit(:black_player_id, :white_player_id, :status, :winner_id)

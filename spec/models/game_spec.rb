@@ -38,7 +38,9 @@ RSpec.describe Game, type: :model do
   end
 
   describe '#populate_pieces' do
-    let(:game) { FactoryGirl.create :game }
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:game) { FactoryGirl.create :game, white_player_id: user1.id, black_player_id: user2.id }
 
     it 'adds a white pawn at x_position: 0 through 7, y_position: 1' do
       expect(Pawn.where(game_id: game.id, x: (0..7), y: 1, user_id: game.white_player_id).first).not_to be_nil
