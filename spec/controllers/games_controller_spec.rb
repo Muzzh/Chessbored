@@ -53,7 +53,7 @@ RSpec.describe GamesController, type: :controller do
     it "should successfully create a game" do
       user = FactoryGirl.create(:user)
       sign_in user
-      get :create
+      post :create
       expect(response).to redirect_to games_path
       @game = Game.last
       expect(@game.white_player_id).to eq(user.id)
