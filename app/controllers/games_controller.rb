@@ -18,6 +18,7 @@ class GamesController < ApplicationController
     else
       return render text: 'invalid game', status: :forbidden
     end     
+<<<<<<< HEAD
   end
 
   def update
@@ -30,6 +31,8 @@ class GamesController < ApplicationController
     else
       redirect_to games_path
     end
+=======
+>>>>>>> master
   end
 
   def show
