@@ -52,11 +52,25 @@ RSpec.describe GamesController, type: :controller do
     it "should allow user to join a game as the black player" do
       user1 = FactoryGirl.create(:user)
       user2 = FactoryGirl.create(:user)
+
       sign_in user1
       sign_in user2
+
       game = FactoryGirl.create(:game, :pending, white_player_id: user1.id)
-      patch :update, params: { id: game.id, current_user: user2}
+      put :update, params: { id: game.id, current_user: user2.id}
+      game.reload
+      expect(game.status).to eq("in_progress")
       expect(game.black_player_id).to eq(user2.id)
+    end
+
+    it "should not allow user to join a game they created" do
+      user = FactoryGirl.create(:user)
+      sign_in user
+
+      game = FactoryGirl.create(:game, :pending, white_player_id: user.id)
+      put :update, params: { id: game.id, current_user: user.id}
+      expect(game.status).to eq("pending")
+      expect(response).to redirect_to game_path(game)
     end
   end
 end
