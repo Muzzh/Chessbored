@@ -49,12 +49,14 @@ RSpec.describe GamesController, type: :controller do
   end
 
   describe "games#update action" do
-    it "should successfully update a game" do
-      user = FactoryGirl.create(:user)
-      sign_in user
-      game = FactoryGirl.create(:game, :pending)
-      patch :update, params: { id: game.id, current_user: user}
-      expect(response).to redirect_to action: "show", id: game.id
+    it "should allow user to join a game as the black player" do
+      user1 = FactoryGirl.create(:user)
+      user2 = FactoryGirl.create(:user)
+      sign_in user1
+      sign_in user2
+      game = FactoryGirl.create(:game, :pending, white_player_id: user1.id)
+      patch :update, params: { id: game.id, current_user: user2}
+      expect(game.black_player_id).to eq(user2.id)
     end
   end
 end
