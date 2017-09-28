@@ -37,17 +37,12 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  describe '#populate_pieces' do
+  describe 'game#populate_white_pieces action' do
     let(:user1) { FactoryGirl.create(:user) }
-    let(:user2) { FactoryGirl.create(:user) }
-    let(:game) { FactoryGirl.create :game, white_player_id: user1.id, black_player_id: user2.id }
+    let(:game) { FactoryGirl.create :game, white_player_id: user1.id }
 
     it 'adds a white pawn at x_position: 0 through 7, y_position: 1' do
       expect(Pawn.where(game_id: game.id, x: (0..7), y: 1, user_id: game.white_player_id).first).not_to be_nil
-    end
-
-    it 'adds a black pawn at x_position: 0 through 7, y_position: 6' do
-      expect(Pawn.where(game_id: game.id, x: (0..7), y: 6, user_id: game.black_player_id).first).not_to be_nil
     end
   
     it 'adds a white rook at x_position: 0 and 7, y_position: 0' do
@@ -55,14 +50,36 @@ RSpec.describe Game, type: :model do
       expect(Rook.where(game_id: game.id, x: 7, y: 0, user_id: game.white_player_id).first).not_to be_nil
     end
 
-    it 'adds a black rook at x_position: 0 and 7, y_position: 7' do
-      expect(Rook.where(game_id: game.id, x: 0, y: 7, user_id: game.black_player_id).first).not_to be_nil
-      expect(Rook.where(game_id: game.id, x: 7, y: 7, user_id: game.black_player_id).first).not_to be_nil
-    end
-
     it 'adds a white knight at x_position: 1 and 6, y_position: 0' do
       expect(Knight.where(game_id: game.id, x: 1, y: 0, user_id: game.white_player_id).first).not_to be_nil
       expect(Knight.where(game_id: game.id, x: 6, y: 0, user_id: game.white_player_id).first).not_to be_nil
+    end
+
+    it 'adds a white bishop at x_position: 2 and 5, y_position: 0' do
+      expect(Bishop.where(game_id: game.id, x: 2, y: 0, user_id: game.white_player_id).first).not_to be_nil
+      expect(Bishop.where(game_id: game.id, x: 5, y: 0, user_id: game.white_player_id).first).not_to be_nil
+    end
+  
+    it 'adds a white queen at x_position: 3, y_position: 0' do
+      expect(Queen.where(game_id: game.id, x: 3, y: 0, user_id: game.white_player_id).first).not_to be_nil
+    end
+
+    it 'adds a white king at x_position: 4, y_position: 0' do
+      expect(King.where(game_id: game.id, x: 4, y: 0, user_id: game.white_player_id).first).not_to be_nil
+    end
+  end
+
+  describe 'game#populate_black_pieces action' do
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:game) { FactoryGirl.create :game, black_player_id: user2.id }
+
+    it 'adds a black pawn at x_position: 0 through 7, y_position: 6' do
+      expect(Pawn.where(game_id: game.id, x: (0..7), y: 6, user_id: game.black_player_id).first).not_to be_nil
+    end
+
+    it 'adds a black rook at x_position: 0 and 7, y_position: 7' do
+      expect(Rook.where(game_id: game.id, x: 0, y: 7, user_id: game.black_player_id).first).not_to be_nil
+      expect(Rook.where(game_id: game.id, x: 7, y: 7, user_id: game.black_player_id).first).not_to be_nil
     end
 
     it 'adds a black knight at x_position: 1 and 6, y_position: 7' do
@@ -70,26 +87,13 @@ RSpec.describe Game, type: :model do
       expect(Knight.where(game_id: game.id, x: 6, y: 7, user_id: game.black_player_id).first).not_to be_nil
     end
 
-    it 'adds a white bishop at x_position: 2 and 5, y_position: 0' do
-      expect(Bishop.where(game_id: game.id, x: 2, y: 0, user_id: game.white_player_id).first).not_to be_nil
-      expect(Bishop.where(game_id: game.id, x: 5, y: 0, user_id: game.white_player_id).first).not_to be_nil
-    end
-
     it 'adds a black bishop at x_position: 2 and 5, y_position: 0' do
       expect(Bishop.where(game_id: game.id, x: 2, y: 7, user_id: game.black_player_id).first).not_to be_nil
       expect(Bishop.where(game_id: game.id, x: 5, y: 7, user_id: game.black_player_id).first).not_to be_nil
     end
-  
-    it 'adds a white queen at x_position: 3, y_position: 0' do
-      expect(Queen.where(game_id: game.id, x: 3, y: 0, user_id: game.white_player_id).first).not_to be_nil
-    end
 
     it 'adds a black queen at x_position: 3, y_position: 7' do
       expect(Queen.where(game_id: game.id, x: 3, y: 7, user_id: game.black_player_id).first).not_to be_nil
-    end
-
-    it 'adds a white king at x_position: 4, y_position: 0' do
-      expect(King.where(game_id: game.id, x: 4, y: 0, user_id: game.white_player_id).first).not_to be_nil
     end
 
     it 'adds a black king at x_position: 4, y_position: 7' do

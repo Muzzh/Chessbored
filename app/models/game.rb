@@ -1,7 +1,8 @@
 class Game < ApplicationRecord
   has_many :chess_pieces
 
-  after_create :populate_pieces
+  after_create :populate_white_pieces
+  after_create :populate_black_pieces
   
   scope :by_status, ->(status) { where(status: status) }
   scope :pending, -> { by_status('pending') }
@@ -17,7 +18,7 @@ class Game < ApplicationRecord
 
   private
   
-  def populate_pieces
+  def populate_white_pieces
     #"white" Game Pieces
     (0..7).each do |i|
       Pawn.create(
@@ -40,6 +41,9 @@ class Game < ApplicationRecord
     Queen.create(game_id: id, x: 3, y: 0, user_id: white_player_id)
 
     King.create(game_id: id, x: 4, y: 0, user_id: white_player_id)
+  end
+
+  def populate_black_pieces
 
     #"black" Game Pieces
 
