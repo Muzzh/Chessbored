@@ -78,6 +78,7 @@ FactoryGirl.define do
     white_player_id 2
     winner_id       nil
 
+    factory :pending_game,  :traits => [:pending]
   end
 
 end
