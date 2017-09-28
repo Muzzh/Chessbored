@@ -8,14 +8,14 @@
         <div class="col-4 offset-1 text-center game-card">
           Game #<%= game.id %>
           Current status: <%= game.status %>
+          <%= button_to "Join Game", game_path(game.id), method: :put, class: 'btn btn-primary btn-sm' %>
         </div>
       <% end %>
-      
+
     </div>
-    
+
   </div>
   <div class="col-4 text-center player-panel">
     <h1> Welcome, Player XYZ</h1>
   </div>
-
 </div>
