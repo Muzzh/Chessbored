@@ -5,6 +5,7 @@ class GamesController < ApplicationController
 
   def index
     @all_games = Game.all
+    @random_game = Game.where(status: "pending").where.not(white_player_id: current_user).order("RANDOM()").first
   end
 
   def new
@@ -25,7 +26,7 @@ class GamesController < ApplicationController
     white_player = @game.white_player_id
     if current_user.id != white_player
       @game.update_attributes(:black_player_id => current_user.id, :status => "in_progress")
-      flash[:notice] = "Joined game!"
+      flash[:notice] = "Joined game #{@game.id}!"
       redirect_to game_path(@game.id)
     else
       flash[:notice] = "You are already in this game as the white player!"

@@ -17,5 +17,8 @@
   </div>
   <div class="col-4 text-center player-panel">
     <h1> Welcome, Player XYZ</h1>
+    <% if @random_game %>
+      <%= button_to "Join a Random Game", game_path(@random_game), method: :put, class: 'btn btn-primary btn-sm' %>
+    <% end %>
   </div>
 </div>
