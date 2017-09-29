@@ -5,7 +5,8 @@ class ChessPiecesController < ApplicationController
   end
 
   def show
-    
+    render_target = 'games/' + game.id + '/show'
+    render render_target
   end
 
   def update

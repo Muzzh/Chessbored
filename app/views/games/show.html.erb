@@ -7,10 +7,12 @@
         <% if piece == nil %>
           <div class="cell"></div>
         <% else %>
-          <%= link_to game_chess_piece_path(piece), remote: true do %>
+          <div class="cell">
+            <%= link_to chess_piece_path(piece) do %>
+              <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+            <% end %>
+          </div>
 
-            <div class="cell"><%= image_tag "#{piece.type}_#{piece.color}.png" %></div>
-          <% end %>
         <% end %>
       <% end %>
     </div>
