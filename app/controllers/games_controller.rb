@@ -20,7 +20,13 @@ class GamesController < ApplicationController
     end     
   end
 
-  def show; end
+  def show
+    if params[:chess_piece_id]
+      @selected_piece = ChessPiece.find(params[:chess_piece_id])
+    end
+  end
+
+  
 
   private
 

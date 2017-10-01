@@ -4,13 +4,10 @@ class ChessPiecesController < ApplicationController
     ChessPiece.create(chess_piece_params)
   end
 
-  def show
-    render_target = 'games/' + game.id + '/show'
-    render render_target
-  end
-
   def update
-    
+    piece = ChessPiece.find(params[:id])
+    piece.update_attributes(:x => params[:x_target], :y => params[:y_target])
+    redirect_to piece.game
   end
 
   private

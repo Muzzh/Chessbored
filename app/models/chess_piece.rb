@@ -6,5 +6,6 @@ class ChessPiece < ApplicationRecord
   def color
     user.id == game.white_player_id ? 'white' : 'black'
   end
+
   # Common methods for all pieces ...
 end

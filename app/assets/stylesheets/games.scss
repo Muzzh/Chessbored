@@ -18,3 +18,6 @@
 a .cell {
   flex: 1;
 }
+div.board div.row .cell.selected-square {
+  box-shadow: inset 0 0 0 5px rgba(242, 50, 24, 0.9);
+}
