@@ -1,5 +1,7 @@
 class PagesController < ApplicationController
+
   def index
-    @all_games = Game.all
+    redirect_to games_path if user_signed_in?
   end
+
 end

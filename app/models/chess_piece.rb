@@ -1,11 +1,16 @@
 class ChessPiece < ApplicationRecord
-  # Will have to add belongs_to :game, :user
+  belongs_to :game
+  belongs_to :user
 
   MIN_INDEX = 0
   MAX_INDEX = 7
 
   private_constant :MIN_INDEX
   private_constant :MAX_INDEX
+
+  def color
+    user.id == game.white_player_id ? 'white' : 'black'
+  end
 
   # Common methods for all pieces ...
   def valid_move?(x_target, y_target)
