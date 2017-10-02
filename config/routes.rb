@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   devise_for :users
   root 'pages#index'
-  resources :chess_pieces, only: [:create, :update]
-  resources :games, only: [:new, :create, :show, :index]
 
+  resources :chess_pieces, only: [:create, :update]
+  resources :games, only: [:new, :create, :update, :show, :index]
 
   get 'games/:id/select_piece/:chess_piece_id', to: 'games#show', as: :select_piece
 

@@ -64,6 +64,7 @@ FactoryGirl.define do
   factory :game do
     trait :pending do
       status 'pending'
+      black_player_id nil
     end
 
     trait :completed do

@@ -17,7 +17,7 @@ class GamesController < ApplicationController
       redirect_to game_path(@game)
     else
       return render text: 'invalid game', status: :forbidden
-    end     
+    end
   end
 
   def show
@@ -26,7 +26,18 @@ class GamesController < ApplicationController
     end
   end
 
-  
+  def update
+    @game = Game.find_by_id(params[:id])
+    white_player = @game.white_player_id
+    if current_user.id != white_player
+      @game.update_attributes(:black_player_id => current_user.id, :status => "in_progress")
+      flash[:notice] = "Joined game!"
+      redirect_to game_path(@game.id)
+    else
+      flash[:notice] = "You are already in this game as the white player!"
+      redirect_to game_path(@game)
+    end
+  end
 
   private
 
