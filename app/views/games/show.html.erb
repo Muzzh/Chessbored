@@ -8,27 +8,29 @@
           <% if piece.nil? %>
             <div class="cell"></div>
           <% else %>
-            <div class="cell">
-              <%= link_to select_piece_path(@game, piece) do %>
+            <%= link_to select_piece_path(@game, piece), class: "cell" do %>
+              <div>
                 <%= image_tag "#{piece.type}_#{piece.color}.png" %>
-              <% end %>
-            </div>
+              </div>
+            <% end %>
           <% end %>
         <% else %>
           <% if @selected_piece == piece %>
-            <div class="cell selected-square">
-              <%= image_tag "#{piece.type}_#{piece.color}.png" %>
-            </div>
-          <% elsif piece.nil? %>
-            <div class="cell">
-               <%= link_to 'target', move_to_path(@selected_piece, x, y), method: :put %>
-            </div>
-          <% else %>
-            <div class="cell">
-              <%= link_to move_to_path(@selected_piece, x, y), method: :put do %>
+            <%= link_to game_path(@game), class: "cell selected-square" do %>
+              <div>
                 <%= image_tag "#{piece.type}_#{piece.color}.png" %>
-              <% end %>
-            </div>
+              </div>
+            <% end %>
+          <% elsif piece.nil? %>
+            <%= link_to move_to_path(@selected_piece, x, y), method: :put, class: "cell" do %>
+              <div></div>
+            <% end %>
+          <% else %>
+            <%= link_to move_to_path(@selected_piece, x, y), method: :put, class: "cell" do %>
+              <div>
+                <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+              </div>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>
