@@ -4,19 +4,19 @@ RSpec.describe ChessPiecesController, type: :controller do
 	
 	describe 'chess_pieces#create' do
 
-    it "should create dummy King" do
-      user = FactoryGirl.create(:user)
-      king = FactoryGirl.create(:king, user_id: user.id)
-      expect(king.user_id).to eq(user.id)
-      expect(king.x).to eq(3)
-      expect(king.y).to eq(0)
-      expect(king.captured).to eq(false)
-      expect(king.type).to eq('King')
-    end
+		it "should create dummy King" do
+			user = FactoryGirl.create(:user)
+			king = FactoryGirl.create(:king, user_id: user.id)
+			expect(king.user_id).to eq(user.id)
+			expect(king.x).to eq(3)
+			expect(king.y).to eq(0)
+			expect(king.captured).to eq(false)
+			expect(king.type).to eq('King')
+		end
 
 		it "should check for a valid move for a King" do
-      user = FactoryGirl.create(:user)
-      piece = FactoryGirl.create(:king, user_id: user.id)
+			user = FactoryGirl.create(:user)
+			piece = FactoryGirl.create(:king, user_id: user.id)
 			piece.x = 4; piece.y = 4; piece.color = "white"
 			# valid move
 			expect(piece.valid_move?(piece.x+1, piece.y+0)).to eq(true) 
@@ -33,8 +33,8 @@ RSpec.describe ChessPiecesController, type: :controller do
 		end
 
 		it "should check for a valid move for a Bishop" do
-      user = FactoryGirl.create(:user)
-      piece = FactoryGirl.create(:bishop, user_id: user.id)
+			user = FactoryGirl.create(:user)
+			piece = FactoryGirl.create(:bishop, user_id: user.id)
 			piece.x = 3; piece.y = 3; piece.color = "white";
 			# valid move
 			expect(piece.valid_move?(piece.x+3, piece.y+3)).to eq(true)		# 3 step move
@@ -52,8 +52,8 @@ RSpec.describe ChessPiecesController, type: :controller do
 		end
 
 		it "should check for a valid move for a Rook" do
-      user = FactoryGirl.create(:user)
-      piece = FactoryGirl.create(:rook, user_id: user.id)
+			user = FactoryGirl.create(:user)
+			piece = FactoryGirl.create(:rook, user_id: user.id)
 			piece.x = 3; piece.y = 3; piece.color = "white";
 			# valid move
 			expect(piece.valid_move?(piece.x+0, piece.y+2)).to eq(true)
@@ -71,8 +71,8 @@ RSpec.describe ChessPiecesController, type: :controller do
 		end
 
 	 it "should check for a valid move for a Queen" do
-      user = FactoryGirl.create(:user)
-      piece = FactoryGirl.create(:queen, user_id: user.id)
+			user = FactoryGirl.create(:user)
+			piece = FactoryGirl.create(:queen, user_id: user.id)
 			piece.x = 3; piece.y = 3; piece.color = "white";
 			# valid  moves for rook
 			expect(piece.valid_move?(piece.x+0, piece.y+2)).to eq(true)
@@ -98,8 +98,8 @@ RSpec.describe ChessPiecesController, type: :controller do
 		end
 
 		it "should check for a valid move for a Knight" do
-      user = FactoryGirl.create(:user)
-      piece = FactoryGirl.create(:knight, user_id: user.id)
+			user = FactoryGirl.create(:user)
+			piece = FactoryGirl.create(:knight, user_id: user.id)
 			piece.x = 2; piece.y = 5; piece.color = "white";
 			# valid move
 			expect(piece.valid_move?(piece.x+2, piece.y+1)).to eq(true) 
@@ -118,8 +118,8 @@ RSpec.describe ChessPiecesController, type: :controller do
 		end
 
 		it "should check for a valid move for a Pawn" do
-      user = FactoryGirl.create(:user)
-      piece = FactoryGirl.create(:pawn, user_id: user.id)
+			user = FactoryGirl.create(:user)
+			piece = FactoryGirl.create(:pawn, user_id: user.id)
 
 			# white pawn at 2,1
 			piece.x = 2; piece.y = 1; piece.color = "white";

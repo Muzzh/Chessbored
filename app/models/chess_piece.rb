@@ -8,10 +8,6 @@ class ChessPiece < ApplicationRecord
   private_constant :MIN_INDEX
   private_constant :MAX_INDEX
 
-  def color
-    user.id == game.white_player_id ? 'white' : 'black'
-  end
-
   # Common methods for all pieces ...
   def valid_move?(x_target, y_target)
   end
