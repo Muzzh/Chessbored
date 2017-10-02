@@ -126,8 +126,6 @@ RSpec.describe ChessPiecesController, type: :controller do
       # valid move
       expect(piece.valid_move?(piece.x+0, piece.y+1)).to eq(true) 
       expect(piece.valid_move?(piece.x+0, piece.y+2)).to eq(true)   # up 2 steps
-      expect(piece.valid_move?(piece.x+1, piece.y+0)).to eq(true)
-      expect(piece.valid_move?(piece.x-1, piece.y+0)).to eq(true)
       # invalid move
       expect(piece.valid_move?(piece.x+0, piece.y-1)).to eq(false)  # invalid move - back 1 step
       expect(piece.valid_move?(piece.x+0, piece.y+3)).to eq(false)  # invalid move - up 3 steps
@@ -147,10 +145,8 @@ RSpec.describe ChessPiecesController, type: :controller do
       # valid moves
       expect(piece.valid_move?(piece.x+0, piece.y-1)).to eq(true)   # down 1 step
       expect(piece.valid_move?(piece.x+0, piece.y-2)).to eq(true)   # down 2 steps
-      expect(piece.valid_move?(piece.x+1, piece.y+0)).to eq(true)
-      expect(piece.valid_move?(piece.x-1, piece.y+0)).to eq(true)
       # invalid move
-      expect(piece.valid_move?(piece.x+0, piece.y+11)).to eq(false) # invalid move - back 1 step
+      expect(piece.valid_move?(piece.x+0, piece.y+1)).to eq(false) # invalid move - back 1 step
 
       # black pawn at 1,0
       piece.x = 1; piece.y = 0; piece.color = "black";

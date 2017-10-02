@@ -24,7 +24,7 @@ class ChessPiece < ApplicationRecord
   end
 
   # check horizontal and vertical moves
-  def move_straight_line?(x_target, y_target, single_step=true)
+  def move_straight_line?(x_target, y_target, single_step=false)
     x_dist = (x_target - x).abs
     y_dist = (y_target - y).abs
     if single_step
@@ -36,6 +36,10 @@ class ChessPiece < ApplicationRecord
 
     end
     return false
+  end
+
+  def move_single_step?(x_target, y_target)
+    return move_straight_line?(x_target, y_target, single_step=true)
   end
 
   def move_diagonally?(x_target, y_target)

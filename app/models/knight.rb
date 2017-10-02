@@ -19,9 +19,7 @@ class Knight < ChessPiece
     return false if !in_board?(x_target, y_target)
     result = false
     @@offsets.each do |offset| 
-      if x_target == x + offset[:x] && y_target == y + offset[:y]
-        result = true
-      end
+      return true if x_target == x + offset[:x] && y_target == y + offset[:y]
     end
     return result
   end

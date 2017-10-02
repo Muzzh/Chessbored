@@ -13,7 +13,6 @@ class Pawn < ChessPiece
     return true if color == "black" && y == 6 && x_dist == 0 && (y_dist == -1 || y_dist == -2) # 1st move 
     return true if color == "white" && x_dist == 0 && y_dist == 1  # only up
     return true if color == "black" && x_dist == 0 && y_dist == -1 # only down
-    return true if y_dist == 0 && x_dist == 1 # left or right
     return false
   end
 
