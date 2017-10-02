@@ -4,8 +4,9 @@ class GamesController < ApplicationController
   before_action :chess_pieces, only: [:show]
 
   def index
-    @all_games = Game.all
-    @random_game = Game.where(status: "pending").where.not(white_player_id: current_user).order("RANDOM()").first
+    # @all_games = Game.all
+    @pending_games = Game.all.pending
+    @random_game = Game.pending.where.not(white_player_id: current_user).order("RANDOM()").first
   end
 
   def new
