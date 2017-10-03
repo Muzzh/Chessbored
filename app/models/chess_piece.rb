@@ -6,8 +6,8 @@ class ChessPiece < ApplicationRecord
   # this will be called inside valid_move? method
   def is_obstructed?(x_target, y_target)
     # determine direction
-    
-    if move_direction(x_target, y_target) == 'horizontal'
+    direction = move_direction(x_target, y_target)
+    if direction == 'horizontal'
       if x_target > x
         # right
         (x + 1).upto(x_target -1) do |x_current|
@@ -19,7 +19,7 @@ class ChessPiece < ApplicationRecord
           return true if occupied?(x_current, y)
         end
       end
-    elsif move_direction(x_target, y_target) == 'vertical'
+    elsif direction == 'vertical'
       if y_target > y
         # up
         (y + 1).upto(y_target -1) do |y_current|
@@ -31,7 +31,7 @@ class ChessPiece < ApplicationRecord
           return true if occupied?(x, y_current)
         end
       end
-    elsif move_direction(x_target, y_target) == 'diagonal'
+    elsif direction == 'diagonal'
       # up and right
       if x_target > x && y_target > y
         (x + 1).upto(x_target - 1) do |x_current|
