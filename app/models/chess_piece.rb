@@ -9,20 +9,24 @@ class ChessPiece < ApplicationRecord
     
     if move_direction(x_target, y_target) == 'horizontal'
       if x_target > x
+        # right
         (x + 1).upto(x_target -1) do |x_current|
           return true if occupied?(x_current, y)
         end
       else
+        # left
         (x - 1).downto(x_target + 1) do |x_current|
           return true if occupied?(x_current, y)
         end
       end
     elsif move_direction(x_target, y_target) == 'vertical'
       if y_target > y
+        # up
         (y + 1).upto(y_target -1) do |y_current|
           return true if occupied?(x, y_current)
         end
       else
+        # down
         (y - 1).downto(y_target + 1) do |y_current|
           return true if occupied?(x, y_current)
         end
@@ -30,16 +34,29 @@ class ChessPiece < ApplicationRecord
     elsif move_direction(x_target, y_target) == 'diagonal'
       # up and right
       if x_target > x && y_target > y
-      
+        (x + 1).upto(x_target - 1) do |x_current|
+          y_current = y + (x_current - x)
+          return true if occupied?(x_current, y_current)
+        end
+
       # up and left
       elsif x_target < x && y_target > y
-        
+        (x - 1).downto(x_target + 1) do |x_current|
+          y_current = y + (x_current - x).abs
+          return true if occupied?(x_current, y_current)
+        end
       # down and right
       elsif x_target > x && y_target < y
-        
+        (x + 1).upto(x_target - 1) do |x_current|
+          y_current = y - (x_current - x)
+          return true if occupied?(x_current, y_current)
+        end
       # down and left
       else
-      
+        (x - 1).downto(x_target + 1) do |x_current|
+          y_current = y - (x_current - x).abs
+          return true if occupied?(x_current, y_current)
+        end
       end
     end
     return false
