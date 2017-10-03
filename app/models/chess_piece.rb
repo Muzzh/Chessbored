@@ -3,7 +3,7 @@ class ChessPiece < ApplicationRecord
   belongs_to :user
 
 
-
+  # this will be called inside valid_move? method
   def is_obstructed?(x_target, y_target)
     # determine direction
     
