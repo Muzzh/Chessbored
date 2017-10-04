@@ -2,6 +2,9 @@ class ChessPiece < ApplicationRecord
   belongs_to :game
   belongs_to :user
 
+  def color
+    user.id == game.white_player_id ? 'white' : 'black'
+  end
   # this will be called inside valid_move? method
   def obstructed?(x_target, y_target)
     # determine direction
