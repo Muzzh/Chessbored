@@ -73,6 +73,7 @@ class ChessPiece < ApplicationRecord
   def occupied?(x_current, y_current)
     game.chess_pieces.where(x: x_current, y: y_current).present?
   end
+
   # Common methods for all pieces ...
 end
 

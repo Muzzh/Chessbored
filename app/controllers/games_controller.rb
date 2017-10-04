@@ -21,6 +21,12 @@ class GamesController < ApplicationController
     end
   end
 
+  def show
+    if params[:chess_piece_id]
+      @selected_piece = ChessPiece.find(params[:chess_piece_id])
+    end
+  end
+
   def update
     @game = Game.find_by_id(params[:id])
     white_player = @game.white_player_id
@@ -33,12 +39,6 @@ class GamesController < ApplicationController
       redirect_to game_path(@game)
     end
   end
-
-  def show
-
-  end
-
-
 
   private
 
