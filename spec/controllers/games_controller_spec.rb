@@ -46,6 +46,14 @@ RSpec.describe GamesController, type: :controller do
       get :show, params: { id: game.id }
       expect(response).to have_http_status(:success)
     end
+
+    it 'should direct to piece url on link request' do
+      user = FactoryGirl.create(:user)
+      game = FactoryGirl.create(:game)
+      piece = FactoryGirl.create(:king, user_id: user.id, game_id: game.id)
+      get :show, params: { id: game.id, chess_piece_id: piece.id }
+      expect(response).to have_http_status(:found)
+    end
   end
 
   describe "games#update action" do
