@@ -14,7 +14,7 @@ $boardsize: 700px;
   background: image-url('board.jpeg');
   background-size: cover;
   background-repeat: no-repeat;
-  min-height: 75vh;  
+  min-height: 75vh;
 }
 
 .box {
@@ -98,12 +98,6 @@ $boardsize: 700px;
 }
 
 .cell img {
-  padding-top: 10%;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  max-width: 85%;
-  max-height: 85%;
 }
 
 .column-label {

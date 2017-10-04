@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe GamesController, type: :controller do
-  describe "games#new action" do
-    it "should require user to be logged in" do
+  describe 'games#new action' do
+    it 'should require user to be logged in' do
       get :new
       expect(response).to redirect_to new_user_session_path
     end
 
-    it "should successfully show the new form to a logged in user" do
+    it 'should successfully show the new form to a logged in user' do
       user = FactoryGirl.create(:user)
       sign_in user
 
@@ -17,7 +17,6 @@ RSpec.describe GamesController, type: :controller do
   end
 
   describe 'game#index action' do
-
     it 'should require a user to be logged in to display opened games' do
       get :index
       expect(response).to redirect_to new_user_session_path
@@ -32,7 +31,6 @@ RSpec.describe GamesController, type: :controller do
   end
 
   describe 'game#show action' do
-
     it 'should require a user to be logged in to display a game' do
       game = FactoryGirl.create(:game)
       get :show, params: { id: game.id }
@@ -46,10 +44,18 @@ RSpec.describe GamesController, type: :controller do
       get :show, params: { id: game.id }
       expect(response).to have_http_status(:success)
     end
+
+    it 'should direct to piece url on link request' do
+      user = FactoryGirl.create(:user)
+      game = FactoryGirl.create(:game)
+      piece = FactoryGirl.create(:king, user_id: user.id, game_id: game.id)
+      get :show, params: { id: game.id, chess_piece_id: piece.id }
+      expect(response).to have_http_status(:found)
+    end
   end
 
-  describe "games#update action" do
-    it "should allow user to join a game as the black player" do
+  describe 'games#update action' do
+    it 'should allow user to join a game as the black player' do
       user1 = FactoryGirl.create(:user)
       user2 = FactoryGirl.create(:user)
 
@@ -57,19 +63,19 @@ RSpec.describe GamesController, type: :controller do
       sign_in user2
 
       game = FactoryGirl.create(:game, :pending, white_player_id: user1.id)
-      put :update, params: { id: game.id, current_user: user2.id}
+      put :update, params: { id: game.id, current_user: user2.id }
       game.reload
-      expect(game.status).to eq("in_progress")
+      expect(game.status).to eq('in_progress')
       expect(game.black_player_id).to eq(user2.id)
     end
 
-    it "should not allow user to join a game they created" do
+    it 'should not allow user to join a game they created' do
       user = FactoryGirl.create(:user)
       sign_in user
 
       game = FactoryGirl.create(:game, :pending, white_player_id: user.id)
-      put :update, params: { id: game.id, current_user: user.id}
-      expect(game.status).to eq("pending")
+      put :update, params: { id: game.id, current_user: user.id }
+      expect(game.status).to eq('pending')
       expect(response).to redirect_to game_path(game)
     end
   end
