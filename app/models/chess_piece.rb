@@ -2,15 +2,14 @@ class ChessPiece < ApplicationRecord
   belongs_to :game
   belongs_to :user
 
-
   # this will be called inside valid_move? method
-  def is_obstructed?(x_target, y_target)
+  def obstructed?(x_target, y_target)
     # determine direction
     direction = move_direction(x_target, y_target)
     if direction == 'horizontal'
       if x_target > x
         # right
-        (x + 1).upto(x_target -1) do |x_current|
+        (x + 1).upto(x_target - 1) do |x_current|
           return true if occupied?(x_current, y)
         end
       else
@@ -22,7 +21,7 @@ class ChessPiece < ApplicationRecord
     elsif direction == 'vertical'
       if y_target > y
         # up
-        (y + 1).upto(y_target -1) do |y_current|
+        (y + 1).upto(y_target - 1) do |y_current|
           return true if occupied?(x, y_current)
         end
       else
@@ -59,7 +58,7 @@ class ChessPiece < ApplicationRecord
         end
       end
     end
-    return false
+    false
     # determine each spot between start and target
     # check presence of a piece at each spot
   end
