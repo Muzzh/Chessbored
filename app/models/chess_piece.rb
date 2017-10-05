@@ -2,86 +2,72 @@ class ChessPiece < ApplicationRecord
   belongs_to :game
   belongs_to :user
 
+  def color
+    user.id == game.white_player_id ? 'white' : 'black'
+  end
+
   # this will be called inside valid_move? method
   def obstructed?(x_target, y_target)
-    case 
-      when horizontal_move?(x_target, y_target)
-        horizontal_obstruction?(x_target, y_target)
-      when vertical_move?(x_target, y_target)
-        vertical_obstruction?(x_target, y_target)
-      when diagonal_move?(x_target, y_target)
-        diagonal_obstruction?(x_target, y_target)
+    # determine direction
+  
+    if horizontal_move?(x_target, y_target)
+      return true if horizontal_obstruction?(x_target, y_target)
+    elsif vertical_move?(x_target, y_target)
+      if y_target > y
+        # up
+        (y + 1).upto(y_target - 1) do |y_current|
+          return true if occupied?(x, y_current)
+        end
       else
-        false
-    end
-  end
+        # down
+        (y - 1).downto(y_target + 1) do |y_current|
+          return true if occupied?(x, y_current)
+        end
+      end
+    elsif diagonal_move?(x_target, y_target)
+      # up and right
+      if x_target > x && y_target > y
+        (x + 1).upto(x_target - 1) do |x_current|
+          y_current = y + (x_current - x)
+          return true if occupied?(x_current, y_current)
+        end
 
-  def up_horizontal_obstruction?(x_target, y_target)
-    ary = (x + 1).step(x_target - 1, 1)
-    ary.each do |x_current|
-      return true if occupied?(x_current, y)
+      # up and left
+      elsif x_target < x && y_target > y
+        (x - 1).downto(x_target + 1) do |x_current|
+          y_current = y + (x_current - x).abs
+          return true if occupied?(x_current, y_current)
+        end
+      # down and right
+      elsif x_target > x && y_target < y
+        (x + 1).upto(x_target - 1) do |x_current|
+          y_current = y - (x_current - x)
+          return true if occupied?(x_current, y_current)
+        end
+      # down and left
+      else
+        (x - 1).downto(x_target + 1) do |x_current|
+          y_current = y - (x_current - x).abs
+          return true if occupied?(x_current, y_current)
+        end
+      end
     end
-  end
-
-  def down_horizontal_obstruction?(x_target, y_target)
-    ary = (x - 1).step(x_target + 1, -1)
-    ary.each do |x_current|
-      return true if occupied?(x_current, y)
-    end
+    false
   end
 
   def horizontal_obstruction?(x_target, y_target)
-    # range = Range.new(x_target, y_target)
-    direction = x_target > x ? 1 : -1
-
     if x_target > x
-      up_horizontal_obstruction?(x_target, y_target)
-    else
-      down_horizontal_obstruction?(x_target, y_target)
-    end
-  end
-
-  def vertical_obstruction?(x_target, y_target)
-    if y_target > y
-      # up
-      (y + 1).upto(y_target - 1) do |y_current|
-        return true if occupied?(x, y_current)
-      end
-    else
-      # down
-      (y - 1).downto(y_target + 1) do |y_current|
-        return true if occupied?(x, y_current)
-      end
-    end
-  end
-
-  def diagonal_obstruction?(x_target, y_target)
-    # up and right
-    if x_target > x && y_target > y
+      # right
       (x + 1).upto(x_target - 1) do |x_current|
-        y_current = y + (x_current - x)
-        return true if occupied?(x_current, y_current)
+        return true if occupied?(x_current, y)
       end
-
-    # up and left
-    elsif x_target < x && y_target > y
-      (x - 1).downto(x_target + 1) do |x_current|
-        y_current = y + (x_current - x).abs
-        return true if occupied?(x_current, y_current)
-      end
-    # down and right
-    elsif x_target > x && y_target < y
-      (x + 1).upto(x_target - 1) do |x_current|
-        y_current = y - (x_current - x)
-        return true if occupied?(x_current, y_current)
-      end
-    # down and left
     else
+      # left
       (x - 1).downto(x_target + 1) do |x_current|
-        y_current = y - (x_current - x).abs
-        return true if occupied?(x_current, y_current)
+        return true if occupied?(x_current, y)
       end
     end
+    false
   end
 
   def horizontal_move?(x_target, y_target)
