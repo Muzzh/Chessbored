@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!
-  before_action :current_game, only: [:show]
+  before_action :current_game, only: [:show, :forfeit]
   before_action :chess_pieces, only: [:show]
 
   def index
@@ -19,6 +19,11 @@ class GamesController < ApplicationController
     else
       return render text: 'invalid game', status: :forbidden
     end
+  end
+
+  def forfeit
+    @game.forfeit(current_user.id)
+    redirect_to game_path(@game), notice: "You have forfeited this game."
   end
 
   def show
@@ -47,7 +52,7 @@ class GamesController < ApplicationController
   end
 
   def current_game
-    @game ||= Game.find(params[:id])
+    @game ||= Game.find(params[:id] || params[:game_id])
   end
 
   def game_params

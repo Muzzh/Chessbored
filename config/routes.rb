@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   root 'pages#index'
 
   resources :chess_pieces, only: [:create, :update]
-  resources :games, only: [:new, :create, :update, :show, :index]
+  resources :games, except: [:edit, :destroy] do
+    post 'forfeit'
+  end
 
   get 'games/:id/select_piece/:chess_piece_id', to: 'games#show', as: :select_piece
 
