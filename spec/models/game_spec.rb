@@ -37,6 +37,43 @@ RSpec.describe Game, type: :model do
     end
   end
 
+  describe '.white_player_won?' do
+    let(:game) { FactoryGirl.create :game, :white_player_won }
+
+    it 'is white_player_won' do
+      expect(game.status).to eq 'white_player_won'
+    end
+
+    it 'is not completed' do
+      expect(game.white_player_won?).to eq true
+    end
+  end
+
+  describe '.black_player_won?' do
+    let(:game) { FactoryGirl.create :game, :black_player_won }
+
+    it 'is black_player_won' do
+      expect(game.status).to eq 'black_player_won'
+    end
+
+    it 'is not completed' do
+      expect(game.black_player_won?).to eq true
+    end
+  end
+
+  describe '.game_over?' do
+    
+    it 'returns true if the black player has won' do
+      game = FactoryGirl.create :game, :black_player_won
+      expect(game.game_over?).to eq true
+    end
+
+    it 'returns true if the white player has won' do
+      game = FactoryGirl.create :game, :white_player_won
+      expect(game.game_over?).to eq true
+    end
+  end
+
   describe 'game#populate_white_pieces action' do
     let(:user1) { FactoryGirl.create(:user) }
     let(:game) { FactoryGirl.create :game, white_player_id: user1.id }
@@ -100,4 +137,27 @@ RSpec.describe Game, type: :model do
       expect(King.where(game_id: game.id, x: 4, y: 7, user_id: game.black_player_id).first).not_to be_nil
     end
   end
+
+  describe 'game#forfeit' do
+    let(:game) { FactoryGirl.create :game }
+    it 'marks white player as won if black player forfeits' do
+      game.forfeit(game.black_player_id)
+      expect(game.white_player_won?).to eq true
+    end
+
+    it 'marks black player as won if white player forfeits' do
+      game.forfeit(game.white_player_id)
+      expect(game.black_player_won?).to eq true
+    end
+
+    it 'raises an error if an invalid user_id is provided' do
+      expect{game.forfeit(0)}.to raise_error("Player does not exist.")
+    end
+  end
+
+
+
+
+
+
 end

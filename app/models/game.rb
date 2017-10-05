@@ -15,6 +15,27 @@ class Game < ApplicationRecord
     status == 'pending'
   end
 
+  def white_player_won?
+    status == 'white_player_won'
+  end
+
+  def black_player_won?
+    status == 'black_player_won'
+  end
+
+  def game_over?
+    white_player_won? || black_player_won?
+  end
+
+  def forfeit(user_id)
+    if user_id == white_player_id
+      update status: "black_player_won"
+    elsif user_id == black_player_id
+      update status: "white_player_won"
+    else
+      raise "Player does not exist."
+    end
+  end
 
   private
   
