@@ -33,7 +33,6 @@ class GamesController < ApplicationController
     if current_user.id != white_player
       @game.update_attributes(:black_player_id => current_user.id, :status => "in_progress")
       @game.populate_black_pieces
-      # I am a comment
       flash[:notice] = "Joined game #{@game.id}!"
       redirect_to game_path(@game.id)
     else
