@@ -1,10 +1,10 @@
 <!-- should eventually have user info on the right as wireframes-->
 <div class="row game-page-container">
-  <div class="col-8 text-center games-container">
+  <div class="col-8 text-center games-container board-image">
     <h3>Currently available games !</h3>
     <br />
     <div class="row">
-      <% @all_games.pending.recent.each do |game| %>
+      <% @pending_games.recent.each do |game| %>
         <div class="col-4 offset-1 text-center game-card">
           Game #<%= game.id %>
           Current status: <%= game.status %>
@@ -17,5 +17,8 @@
   </div>
   <div class="col-4 text-center player-panel">
     <h1> Welcome, Player XYZ</h1>
+    <% if @random_game %>
+      <%= button_to "Join a Random Game", game_path(@random_game), method: :put, class: 'btn btn-primary btn-sm' %>
+    <% end %>
   </div>
 </div>

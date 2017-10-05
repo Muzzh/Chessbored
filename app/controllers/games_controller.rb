@@ -4,7 +4,8 @@ class GamesController < ApplicationController
   before_action :chess_pieces, only: [:show]
 
   def index
-    @all_games = Game.all
+    @pending_games = Game.all.pending
+    @random_game = Game.pending.where.not(white_player_id: current_user).order("RANDOM()").first
   end
 
   def new
@@ -20,24 +21,24 @@ class GamesController < ApplicationController
     end
   end
 
+  def show
+    if params[:chess_piece_id]
+      @selected_piece = ChessPiece.find(params[:chess_piece_id])
+    end
+  end
+
   def update
     @game = Game.find_by_id(params[:id])
     white_player = @game.white_player_id
     if current_user.id != white_player
       @game.update_attributes(:black_player_id => current_user.id, :status => "in_progress")
-      flash[:notice] = "Joined game!"
+      flash[:notice] = "Joined game #{@game.id}!"
       redirect_to game_path(@game.id)
     else
       flash[:notice] = "You are already in this game as the white player!"
       redirect_to game_path(@game)
     end
   end
-
-  def show
-
-  end
-
-
 
   private
 

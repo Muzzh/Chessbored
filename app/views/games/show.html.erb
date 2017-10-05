@@ -4,10 +4,34 @@
       <div class="label"><%= "#{y + 1}" %></div>
       <% 0.upto(7) do |x| %>
         <% piece = @chess_pieces.where(x: x, y: y).first %>
-        <% if piece == nil %>
-          <div class="cell"></div>
+        <% if @selected_piece.nil? %>
+          <% if piece.nil? %>
+            <div class="cell"></div>
+          <% else %>
+            <%= link_to select_piece_path(@game, piece), class: "cell" do %>
+              <div>
+                <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+              </div>
+            <% end %>
+          <% end %>
         <% else %>
-          <div class="cell"><%= image_tag "#{piece.type}_#{piece.color}.png" %></div>
+          <% if @selected_piece == piece %>
+            <%= link_to game_path(@game), class: "cell selected-square" do %>
+              <div>
+                <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+              </div>
+            <% end %>
+          <% elsif piece.nil? %>
+            <%= link_to move_to_path(@selected_piece, x, y), method: :put, class: "cell" do %>
+              <div></div>
+            <% end %>
+          <% else %>
+            <%= link_to move_to_path(@selected_piece, x, y), method: :put, class: "cell" do %>
+              <div>
+                <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+              </div>
+            <% end %>
+          <% end %>
         <% end %>
       <% end %>
     </div>
