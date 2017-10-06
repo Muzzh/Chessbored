@@ -5,7 +5,6 @@ RSpec.describe ChessPiecesController, type: :controller do
     it 'should create dummy King' do
       user = FactoryGirl.create(:user)
       king = FactoryGirl.create(:king, user_id: user.id)
-
       expect(king.user_id).to eq(user.id)
       expect(king.x).to eq(3)
       expect(king.y).to eq(0)

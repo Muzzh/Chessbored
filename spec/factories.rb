@@ -14,6 +14,7 @@ FactoryGirl.define do
     x         0
     y         0
     captured  false
+    color     'white'
   end
 
   factory :knight do
@@ -23,6 +24,7 @@ FactoryGirl.define do
     x         1
     y         0
     captured  false
+    color     'white'
   end
 
   factory :bishop do
@@ -32,6 +34,7 @@ FactoryGirl.define do
     x         2
     y         0
     captured  false
+    color     'white'
   end
 
   factory :king do
@@ -41,6 +44,7 @@ FactoryGirl.define do
     x         3
     y         0
     captured  false
+    color     'white'
   end
 
   factory :queen do
@@ -50,6 +54,7 @@ FactoryGirl.define do
     x         4
     y         0
     captured  false
+    color     'white'
   end
 
   factory :pawn do
@@ -59,6 +64,7 @@ FactoryGirl.define do
     x         0
     y         1
     captured  false
+    color     'white'
   end
 
   factory :game do

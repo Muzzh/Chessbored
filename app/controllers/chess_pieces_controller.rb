@@ -12,6 +12,6 @@ class ChessPiecesController < ApplicationController
   private
 
   def chess_piece_params
-    params.require(:chess_piece).permit(:type, :user_id, :game_id, :x, :y, :captured)
+    params.require(:chess_piece).permit(:type, :user_id, :game_id, :x, :y, :captured, :color)
   end
 end
