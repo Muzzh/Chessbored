@@ -7,7 +7,6 @@ class ChessPiece < ApplicationRecord
 
   private_constant :MIN_INDEX
   private_constant :MAX_INDEX
-  # Common methods for all pieces ...
 
   # this will be called inside valid_move? method
   def obstructed?(x_target, y_target)

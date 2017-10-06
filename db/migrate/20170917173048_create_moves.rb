@@ -8,6 +8,7 @@ class CreateMoves < ActiveRecord::Migration[5.0]
       t.integer :y1
       t.integer :x2
       t.integer :y2
+      t.string :color
       t.timestamps
     end
   end
