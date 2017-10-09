@@ -14,6 +14,7 @@ RSpec.describe ChessPiecesController, type: :controller do
   end
 
   describe 'chess_pieces#update' do
+
     it 'should change coordinates of the moved piece' do
       user1 = FactoryGirl.create(:user)
       game = FactoryGirl.create(:game, white_player_id: user1.id)
@@ -23,5 +24,54 @@ RSpec.describe ChessPiecesController, type: :controller do
       expect(piece.x).to eq(4)
       expect(piece.y).to eq(4)
     end
+
+    it 'should capture a piece' do
+
+      user1 = FactoryGirl.create(:user)
+      user2 = FactoryGirl.create(:user)
+      sign_in user1
+      sign_in user2
+
+      game = FactoryGirl.create(:game, white_player_id: user1.id)
+
+      white = FactoryGirl.create(:pawn, user_id: user1.id, game_id: game.id, 
+        x: 3, y: 3, color: "white")
+
+      black = FactoryGirl.create(:pawn, user_id: user2.id, game_id: game.id, 
+        x: 3, y: 4, color: "black")
+
+      put :update, params: { id: white.id, x_target: 3, y_target: 4 }
+      white.reload
+      black.reload
+
+      expect(white.y).to eq(4)
+      expect(black.captured).to eq(true)
+
+    end
+
+    it 'should not capture a piece' do
+
+      user1 = FactoryGirl.create(:user)
+      user2 = FactoryGirl.create(:user)
+      sign_in user1
+      sign_in user2
+
+      game = FactoryGirl.create(:game, white_player_id: user1.id)
+
+      white = FactoryGirl.create(:pawn, user_id: user1.id, game_id: game.id, 
+        x: 3, y: 3, color: "white")
+
+      black = FactoryGirl.create(:pawn, user_id: user2.id, game_id: game.id, 
+        x: 3, y: 5, color: "black")
+
+      put :update, params: { id: white.id, x_target: 3, y_target: 4 }
+      white.reload
+      black.reload
+
+      expect(white.y).to eq(4)
+      expect(black.captured).to eq(false)
+
+    end
+
   end
 end
