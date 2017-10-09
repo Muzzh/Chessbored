@@ -15,8 +15,7 @@ class Knight < ChessPiece
 
   # iterate through valid offsets to determine valid target locations
   def valid_move?(x_target, y_target)
-    return false if same_location?(x_target, y_target)
-    return false if !in_board?(x_target, y_target)
+    return false if !super
     @@offsets.each do |offset| 
       return true if x_target == x + offset[:x] && y_target == y + offset[:y]
     end
