@@ -34,22 +34,22 @@ RSpec.describe ChessPiecesController, type: :controller do
 
       game = FactoryGirl.create(:game, white_player_id: user1.id)
 
-      white = FactoryGirl.create(:pawn, user_id: user1.id, game_id: game.id, 
+      piece1 = FactoryGirl.create(:pawn, user_id: user1.id, game_id: game.id, 
         x: 3, y: 3, color: "white")
 
-      black = FactoryGirl.create(:pawn, user_id: user2.id, game_id: game.id, 
+      piece2 = FactoryGirl.create(:pawn, user_id: user2.id, game_id: game.id, 
         x: 3, y: 4, color: "black")
 
-      put :update, params: { id: white.id, x_target: 3, y_target: 4 }
-      white.reload
-      black.reload
+      put :update, params: { id: piece1.id, x_target: 3, y_target: 4 }
+      piece1.reload
+      piece2.reload
 
-      expect(white.y).to eq(4)
-      expect(black.captured).to eq(true)
+      expect(piece1.y).to eq(4)
+      expect(piece2.captured).to eq(true)
 
     end
 
-    it 'should not capture a piece' do
+    it 'should not capture a piece; target is blank' do
 
       user1 = FactoryGirl.create(:user)
       user2 = FactoryGirl.create(:user)
@@ -58,18 +58,42 @@ RSpec.describe ChessPiecesController, type: :controller do
 
       game = FactoryGirl.create(:game, white_player_id: user1.id)
 
-      white = FactoryGirl.create(:pawn, user_id: user1.id, game_id: game.id, 
+      piece1 = FactoryGirl.create(:pawn, user_id: user1.id, game_id: game.id, 
         x: 3, y: 3, color: "white")
 
-      black = FactoryGirl.create(:pawn, user_id: user2.id, game_id: game.id, 
+      piece2 = FactoryGirl.create(:pawn, user_id: user2.id, game_id: game.id, 
         x: 3, y: 5, color: "black")
 
-      put :update, params: { id: white.id, x_target: 3, y_target: 4 }
-      white.reload
-      black.reload
+      put :update, params: { id: piece1.id, x_target: 3, y_target: 4 }
+      piece1.reload
+      piece2.reload
 
-      expect(white.y).to eq(4)
-      expect(black.captured).to eq(false)
+      expect(piece1.y).to eq(4)
+      expect(piece2.captured).to eq(false)
+
+    end
+
+    it 'should not capture a piece; target is of same color' do
+
+      user1 = FactoryGirl.create(:user)
+      user2 = FactoryGirl.create(:user)
+      sign_in user1
+      sign_in user2
+
+      game = FactoryGirl.create(:game, white_player_id: user1.id)
+
+      piece1 = FactoryGirl.create(:pawn, user_id: user1.id, game_id: game.id, 
+        x: 3, y: 3, color: "white")
+
+      piece2 = FactoryGirl.create(:pawn, user_id: user2.id, game_id: game.id, 
+        x: 3, y: 4, color: "white")
+
+      put :update, params: { id: piece1.id, x_target: 3, y_target: 4 }
+      piece1.reload
+      piece2.reload
+
+      expect(piece1.y).to eq(3)
+      expect(piece2.y).to eq(4)
 
     end
 
