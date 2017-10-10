@@ -27,4 +27,13 @@ RSpec.describe Knight, type: :class do
       expect(piece.valid_move?(piece.x+8, piece.y+0)).to eq(false)
     end
   end
+
+  describe '.obstructed?' do
+    it 'should always return false on a knight move' do
+      user = FactoryGirl.create(:user)
+      knight = FactoryGirl.create(:knight, user_id: user.id, x: 3, y: 3)
+      piece = FactoryGirl.create(:pawn, user_id: user.id)
+      expect(piece.obstructed?(5, 5)).to eq(false)
+    end
+  end
 end
