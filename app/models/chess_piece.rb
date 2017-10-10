@@ -64,7 +64,6 @@ class ChessPiece < ApplicationRecord
     game.chess_pieces.where(x: x_current, y: y_current).present?
   end
   def valid_move?(x_target, y_target)
-    return false if obstructed?(x_target, y_target)
   end
 
   private
