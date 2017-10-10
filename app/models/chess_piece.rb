@@ -82,6 +82,7 @@ class ChessPiece < ApplicationRecord
 
   # Common methods for all pieces ...
   def valid_move?(x_target, y_target)
+    return false if same_location?(x_target, y_target)
   end
 
   private
