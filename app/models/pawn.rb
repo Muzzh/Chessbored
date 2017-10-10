@@ -6,7 +6,6 @@ class Pawn < ChessPiece
   # 1st move can be 1 or 2 steps
   def valid_move?(x_target, y_target)
     return false if !super
-    return false if !in_board?(x_target, y_target)
     x_dist = (x_target - x).abs
     y_dist = y_target - y
     return true if color == "white" && y == 1 && x_dist == 0 && (y_dist == 1 || y_dist == 2)   # 1st move

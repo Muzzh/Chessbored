@@ -22,4 +22,7 @@ class Knight < ChessPiece
     return false
   end
 
+  def obstructed?(x_target, y_target)
+    return false
+  end
 end
