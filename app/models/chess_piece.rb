@@ -82,6 +82,7 @@ class ChessPiece < ApplicationRecord
 
   # Common methods for all pieces ...
   def valid_move?(x_target, y_target)
+    
   end
 
   private
@@ -91,7 +92,7 @@ class ChessPiece < ApplicationRecord
   end
 
   def in_board?(x_target, y_target)
-    return x_target >= MIN_INDEX && x_target <= MAX_INDEX && 
+    return x_target >= MIN_INDEX && x_target <= MAX_INDEX &&
            y_target >= MIN_INDEX && y_target <= MAX_INDEX
   end
 
@@ -100,10 +101,10 @@ class ChessPiece < ApplicationRecord
     x_dist = (x_target - x).abs
     y_dist = (y_target - y).abs
     if single_step
-        return true if (x_dist == 0 && y_dist == 1) || 
+        return true if (x_dist == 0 && y_dist == 1) ||
                        (x_dist == 1 && y_dist == 0)
     else
-        return true if (x_dist == 0 && y_dist > 0) || 
+        return true if (x_dist == 0 && y_dist > 0) ||
                        (x_dist > 0 && y_dist == 0)
 
     end
@@ -122,5 +123,3 @@ class ChessPiece < ApplicationRecord
   end
 
 end
-
-
