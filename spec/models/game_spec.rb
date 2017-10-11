@@ -37,6 +37,28 @@ RSpec.describe Game, type: :model do
     end
   end
 
+  describe '.assign_turn' do
+    it 'should assign turn to white' do
+      user1 = FactoryGirl.create(:user)
+      user2 = FactoryGirl.create(:user)
+      game = FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id)
+      game.assign_first_turn
+      expect(game.turn).to eq('white')
+    end
+  end
+
+  describe '.swap_turn' do
+    it 'should change turn after a move' do
+      user1 = FactoryGirl.create(:user)
+      user2 = FactoryGirl.create(:user)
+      game = FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id)
+      game.assign_first_turn
+      game.swap_turn
+      game.reload
+      expect(game.turn).to eq('black')
+    end
+  end
+
   describe '.populate_white_pieces' do
     let(:user1) { FactoryGirl.create(:user) }
     let(:game) { FactoryGirl.create :game, white_player_id: user1.id }
