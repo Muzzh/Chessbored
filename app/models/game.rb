@@ -16,7 +16,10 @@ class Game < ApplicationRecord
   end
 
 
-
+  def swap_turn
+    change = game.turn == 'white' ? 'black' : 'white'
+    update_attributes(turn: change)
+  end
 
   def populate_white_pieces
     #"white" Game Pieces
