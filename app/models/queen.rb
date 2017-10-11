@@ -4,7 +4,7 @@ class Queen < ChessPiece
 
   def valid_move?(x_target, y_target)
     return false if !super
-    return true if move_straight_line?(x_target, y_target) || move_diagonally?(x_target, y_target)
+    return true if horizontal_move?(x_target, y_target) || vertical_move?(x_target, y_target) || diagonal_move?(x_target, y_target)
     return false
   end
 

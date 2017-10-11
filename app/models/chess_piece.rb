@@ -8,13 +8,6 @@ class ChessPiece < ApplicationRecord
   private_constant :MIN_INDEX
   private_constant :MAX_INDEX
 
-  def valid_move?(x_target, y_target)
-    return false if same_location?(x_target, y_target)
-    return false if !in_board?(x_target, y_target)
-    return false if obstructed?(x_target, y_target)
-    true
-  end
-
   def move_to(x_target, y_target)
     if valid_move?(x_target.to_i, y_target.to_i)
       update_attributes(x: x_target, y: y_target)
@@ -23,7 +16,13 @@ class ChessPiece < ApplicationRecord
     end
   end
 
-  # this will be called inside valid_move? method
+  def valid_move?(x_target, y_target)
+    return false if same_location?(x_target, y_target)
+    return false if !in_board?(x_target, y_target)
+    return false if obstructed?(x_target, y_target)
+    true
+  end
+
   def obstructed?(x_target, y_target)
     case
       when horizontal_move?(x_target, y_target)
@@ -107,12 +106,5 @@ class ChessPiece < ApplicationRecord
 
   def move_single_step?(x_target, y_target)
     return move_straight_line?(x_target, y_target, single_step=true)
-  end
-
-  def move_diagonally?(x_target, y_target)
-    x_dist = (x_target - x).abs
-    y_dist = (y_target - y).abs
-    return true if x_dist == y_dist
-    return false
   end
 end
