@@ -20,12 +20,16 @@
           <% if @selected_piece.nil? %>
             <% if piece.nil? %>
               <div class="cell"></div>
-            <% else %>
+            <% elsif piece.color == @current_player_color %>
               <%= link_to select_piece_path(@game, piece), class: "cell" do %>
                 <div>
                   <%= image_tag "#{piece.type}_#{piece.color}.png" %>
                 </div>
               <% end %>
+            <% else %>
+              <div class="cell">
+                  <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+                </div>
             <% end %>
           <% else %>
             <% if @selected_piece == piece %>
