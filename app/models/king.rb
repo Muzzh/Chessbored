@@ -8,22 +8,17 @@ class King < ChessPiece
     return false
   end
 
-  def valid_castle_move?
-    if @king.moved?
-      return false
-    end
+  def valid_castle_move?(x_target, y_target)
     #has king moved?
     #has rook moved?
     #is there an obstruction?
   end
 
   def moved?
-    if created_at != updated_at
+    if @selected_piece.created_at != @selected_piece.updated_at
       return true
     end
   end
 
-  def rook_moved?
-  end
 
 end
