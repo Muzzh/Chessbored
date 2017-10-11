@@ -2,7 +2,6 @@ class Game < ApplicationRecord
   has_many :chess_pieces
 
   after_create :populate_white_pieces
-  after_create :populate_black_pieces
 
   scope :by_status, ->(status) { where(status: status) }
   scope :pending, -> { by_status('pending') }
@@ -15,9 +14,12 @@ class Game < ApplicationRecord
     status == 'pending'
   end
 
+  def assign_first_turn
+    update_attributes(turn: 'white')
+  end
 
   def swap_turn
-    change = game.turn == 'white' ? 'black' : 'white'
+    change = turn == 'white' ? 'black' : 'white'
     update_attributes(turn: change)
   end
 

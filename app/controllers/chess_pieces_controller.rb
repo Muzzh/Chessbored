@@ -5,7 +5,9 @@ class ChessPiecesController < ApplicationController
 
   def update
     piece = ChessPiece.find(params[:id])
-    unless piece.move_to(params[:x_target], params[:y_target])
+    if piece.move_to(params[:x_target], params[:y_target])
+      piece.game.swap_turn
+    else
       flash[:notice] = "Can't do that!"
     end
     redirect_to piece.game

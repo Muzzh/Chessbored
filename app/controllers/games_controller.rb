@@ -22,6 +22,7 @@ class GamesController < ApplicationController
   end
 
   def show
+    @current_player_color = current_player_color
     if params[:chess_piece_id]
       @selected_piece = ChessPiece.find(params[:chess_piece_id])
     end
@@ -33,6 +34,7 @@ class GamesController < ApplicationController
     if current_user.id != white_player
       @game.update_attributes(:black_player_id => current_user.id, :status => "in_progress")
       @game.populate_black_pieces
+      @game.assign_first_turn
       flash[:notice] = "Joined game #{@game.id}!"
       redirect_to game_path(@game.id)
     else
@@ -42,6 +44,10 @@ class GamesController < ApplicationController
   end
 
   private
+
+  def current_player_color
+    current_user.id == @game.white_player_id ? 'white' : 'black'
+  end
 
   def chess_pieces
     @chess_pieces ||= current_game.chess_pieces
