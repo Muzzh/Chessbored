@@ -15,6 +15,14 @@ class ChessPiece < ApplicationRecord
     true
   end
 
+  def move_to(x_target, y_target)
+    if valid_move?(x_target.to_i, y_target.to_i)
+      update_attributes(x: x_target, y: y_target)
+    else
+      return false
+    end
+  end
+
   # this will be called inside valid_move? method
   def obstructed?(x_target, y_target)
     # determine direction
