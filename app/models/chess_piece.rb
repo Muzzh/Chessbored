@@ -8,6 +8,14 @@ class ChessPiece < ApplicationRecord
   private_constant :MIN_INDEX
   private_constant :MAX_INDEX
 
+  def move_to(x_target, y_target)
+    if valid_move?(x_target.to_i, y_target.to_i)
+      update_attributes(x: x_target, y: y_target)
+    else
+      return false
+    end
+  end
+
   # this will be called inside valid_move? method
   def obstructed?(x_target, y_target)
     # determine direction
@@ -82,7 +90,7 @@ class ChessPiece < ApplicationRecord
 
   # Common methods for all pieces ...
   def valid_move?(x_target, y_target)
-    return false if same_location?(x_target, y_target)
+    
   end
 
   private
