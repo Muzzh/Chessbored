@@ -61,6 +61,18 @@ RSpec.describe Game, type: :model do
     end
   end
 
+  describe '.no_winner?' do
+    let(:game) { FactoryGirl.create :game, :no_winner }
+
+    it 'is no winner' do
+      expect(game.status).to eq 'no_winner'
+    end
+
+    it 'is not completed' do
+      expect(game.no_winner?).to eq true
+    end
+  end
+
   describe '.game_over?' do
     
     it 'returns true if the black player has won' do
@@ -70,6 +82,11 @@ RSpec.describe Game, type: :model do
 
     it 'returns true if the white player has won' do
       game = FactoryGirl.create :game, :white_player_won
+      expect(game.game_over?).to eq true
+    end
+
+    it 'returns true if no forfeit is declared before a second player joins' do
+      game = FactoryGirl.create :game, :no_winner
       expect(game.game_over?).to eq true
     end
   end
@@ -155,9 +172,12 @@ RSpec.describe Game, type: :model do
     end
   end
 
-
-
-
-
-
+  describe 'game#forfeit_no_opponent' do
+    let(:game) { FactoryGirl.create :game }
+    it 'marks no player as won if player forfeits before an opponent joins' do
+      game.forfeit(game.white_player_id)
+      expect(game.no_winner?).to eq true
+      expect(game.game_over?).to eq true
+    end
+  end
 end

@@ -88,6 +88,10 @@ FactoryGirl.define do
     trait :black_player_won do
       status 'black_player_won'
     end
+
+    trait :no_winner do
+      status 'no_winner'
+    end
     black_player_id 1
     white_player_id 2
     winner_id       nil

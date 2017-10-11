@@ -26,6 +26,11 @@ class GamesController < ApplicationController
     redirect_to game_path(@game), notice: "You have forfeited this game."
   end
 
+  def forfeit_no_opponent
+    @game.forfeit_no_opponent(current_user.id)
+    redirect_to game_path(@game), notice: "You have forfeited this game."
+  end
+
   def show
     if params[:chess_piece_id]
       @selected_piece = ChessPiece.find(params[:chess_piece_id])
