@@ -39,7 +39,7 @@ RSpec.describe King, type: :class do
     it "should check for a valid castle move" do
       user = FactoryGirl.create(:user)
       king = FactoryGirl.create(:king, user_id: user.id)
-      rook = FactoryGirl.create(:rook, user_id: user.id)
+      
 
       expect(king.valid_castle_move?).to eq(true)
     end

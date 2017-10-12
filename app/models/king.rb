@@ -8,10 +8,19 @@ class King < ChessPiece
     return false
   end
 
+  def castle_move
+    #after king moves, move rook
+  end
+
   def valid_castle_move?
-    return false if @piece.moved?
+    !self.moved?
+    #which rook?
     #has rook moved?
     #is there an obstruction?
+  end
+
+  def find_rook
+    #find rook based on direction of move?
   end
 
   def moved?
