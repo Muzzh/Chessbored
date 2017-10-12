@@ -74,6 +74,10 @@ class ChessPiece < ApplicationRecord
   def valid_move?(x_target, y_target)
   end
 
+  def moved?
+     created_at == updated_at ? false : true
+  end
+
   private
 
   def same_location?(x_target, y_target)

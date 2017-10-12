@@ -23,9 +23,7 @@ class King < ChessPiece
     #find rook based on direction of move?
   end
 
-  def moved?
-     created_at == updated_at ? false : true
-  end
+
 
 
 end
