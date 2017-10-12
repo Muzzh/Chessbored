@@ -7,6 +7,8 @@ RSpec.describe Pawn, type: :class do
       piece = FactoryGirl.create(:pawn, user_id: user.id)
       piece.x = 2; piece.y = 1; piece.color = "white";
       expect(piece.valid_move?(piece.x+0, piece.y+1)).to eq(true) 
+      expect(piece.valid_move?(piece.x+1, piece.y+1)).to eq(true)
+      expect(piece.valid_move?(piece.x-1, piece.y+1)).to eq(true)
       expect(piece.valid_move?(piece.x+0, piece.y+2)).to eq(true)   # up 2 steps
       expect(piece.valid_move?(piece.x+0, piece.y-1)).to eq(false)  # invalid move - back 1 step
       expect(piece.valid_move?(piece.x+0, piece.y+3)).to eq(false)  # invalid move - up 3 steps
@@ -14,27 +16,14 @@ RSpec.describe Pawn, type: :class do
       expect(piece.valid_move?(piece.x-2, piece.y+0)).to eq(false)
       expect(piece.valid_move?(piece.x+2, piece.y+2)).to eq(false)
     end
-    it "should check for valid & invalid move for a white Pawn (edge of board)" do
-      user = FactoryGirl.create(:user)
-      piece = FactoryGirl.create(:pawn, user_id: user.id)
-      piece.x = 1; piece.y = 7; piece.color = "white";
-      expect(piece.valid_move?(piece.x+0, piece.y+1)).to eq(true)   # pass the board
-      expect(piece.valid_move?(piece.x+0, piece.y+2)).to eq(false) 
-    end
     it "should check for valid & invalid move for a black Pawn (starting point)" do
       user = FactoryGirl.create(:user)
       piece = FactoryGirl.create(:pawn, user_id: user.id)
       piece.x = 1; piece.y = 6; piece.color = "black";
       expect(piece.valid_move?(piece.x+0, piece.y-1)).to eq(true)   # down 1 step
+      expect(piece.valid_move?(piece.x-1, piece.y-1)).to eq(true)
       expect(piece.valid_move?(piece.x+0, piece.y-2)).to eq(true)   # down 2 steps
       expect(piece.valid_move?(piece.x+0, piece.y+1)).to eq(false) # invalid move - back 1 step
-    end
-    it "should check for valid & invalid move for a black Pawn (edge of board)" do
-      user = FactoryGirl.create(:user)
-      piece = FactoryGirl.create(:pawn, user_id: user.id)
-      piece.x = 1; piece.y = 0; piece.color = "black";
-      expect(piece.valid_move?(piece.x+0, piece.y-1)).to eq(true)   # pass the board
-      expect(piece.valid_move?(piece.x+0, piece.y-2)).to eq(false)  # invalid move
     end
   end
 end
