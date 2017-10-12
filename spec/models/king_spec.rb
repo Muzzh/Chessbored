@@ -35,11 +35,20 @@ RSpec.describe King, type: :class do
     end
   end
 
+  describe '.is_castle_move?' do
+    it "should return true if move is a castle move" do
+      user = FactoryGirl.create(:user)
+      king = FactoryGirl.create(:king, user_id: user.id)
+      king.x = 2
+      expect(king.is_castle_move?(king.x, king.y)).to eq(true)
+    end
+  end
+
   describe '.valid_castle_move?' do
     it "should check for a valid castle move" do
       user = FactoryGirl.create(:user)
       king = FactoryGirl.create(:king, user_id: user.id)
-      
+
 
       expect(king.valid_castle_move?).to eq(true)
     end

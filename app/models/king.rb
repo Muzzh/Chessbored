@@ -8,6 +8,10 @@ class King < ChessPiece
     return false
   end
 
+  def is_castle_move?(x_target, y_target)
+    return true if horizontal_move?(x_target, y_target)
+  end
+
   def castle_move
     #after king moves, move rook
   end
