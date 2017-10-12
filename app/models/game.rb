@@ -32,19 +32,12 @@ class Game < ApplicationRecord
   end
 
   def forfeit(user_id)
-    if user_id == white_player_id
+    if user_id == white_player_id && black_player_id.nil? && pending?
+      update status: "no_winner"
+    elsif user_id == white_player_id
       update status: "black_player_won"
     elsif user_id == black_player_id
       update status: "white_player_won"
-    else
-      raise "Player does not exist."
-    end
-  end
-
-  def forfeit_no_opponent(user_id)
-    if user_id == white_player_id &&
-       status == pending
-      update status: "no_winner"
     else
       raise "Player does not exist."
     end

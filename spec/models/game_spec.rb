@@ -157,27 +157,32 @@ RSpec.describe Game, type: :model do
 
   describe 'game#forfeit' do
     let(:game) { FactoryGirl.create :game }
-    it 'marks white player as won if black player forfeits' do
-      game.forfeit(game.black_player_id)
-      expect(game.white_player_won?).to eq true
+    context 'if there is no black player' do
+      let(:game) { FactoryGirl.create :game, :pending, black_player_id: nil }
+      it 'marks no player as won if player forfeits before an opponent joins' do
+        game.forfeit(game.white_player_id)
+        expect(game.no_winner?).to eq true
+      end
+
+      it 'ends the game if player forfeits before an opponent joins' do
+        game.forfeit(game.white_player_id)
+        expect(game.game_over?).to eq true
+      end
     end
 
-    it 'marks black player as won if white player forfeits' do
-      game.forfeit(game.white_player_id)
-      expect(game.black_player_won?).to eq true
-    end
+    context 'if there is a black player' do
+      it 'marks white player as won if black player forfeits' do
+        game.forfeit(game.black_player_id)
+        expect(game.white_player_won?).to eq true
+      end
 
+      it 'marks black player as won if white player forfeits' do
+        game.forfeit(game.white_player_id)
+        expect(game.black_player_won?).to eq true
+      end
+    end
     it 'raises an error if an invalid user_id is provided' do
       expect{game.forfeit(0)}.to raise_error("Player does not exist.")
-    end
-  end
-
-  describe 'game#forfeit_no_opponent' do
-    let(:game) { FactoryGirl.create :game }
-    it 'marks no player as won if player forfeits before an opponent joins' do
-      game.forfeit(game.white_player_id)
-      expect(game.no_winner?).to eq true
-      expect(game.game_over?).to eq true
     end
   end
 end
