@@ -9,11 +9,27 @@ class ChessPiece < ApplicationRecord
   private_constant :MAX_INDEX
 
   def move_to(x_target, y_target)
-    if valid_move?(x_target.to_i, y_target.to_i)
-      update_attributes(x: x_target, y: y_target)
+    if valid_capture_move?(x_target.to_i, y_target.to_i)
+      if capture(x_target.to_i, y_target.to_i)
+        update_attributes(x: x_target, y: y_target) # move current piece
+      end
     else
-      return false
+      if valid_move?(x_target.to_i, y_target.to_i)
+        update_attributes(x: x_target, y: y_target)
+      else
+        return false
+      end
     end
+  end
+
+  def capture(x_target, y_target)
+    target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
+    if target && color != target.color
+      target.update_attributes(captured: true, x: nil, y: nil)
+      update_attributes(x: x_target, y: y_target)
+      return true
+    end
+    false
   end
 
   # this will be called inside valid_move? method
@@ -71,7 +87,13 @@ class ChessPiece < ApplicationRecord
   def occupied?(x_current, y_current)
     game.chess_pieces.where(x: x_current, y: y_current).present?
   end
+
   def valid_move?(x_target, y_target)
+    false
+  end
+
+  def valid_capture_move?(x_target, y_target)
+    valid_move?(x_target, y_target)
   end
 
   private

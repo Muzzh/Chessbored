@@ -9,10 +9,20 @@ class Pawn < ChessPiece
     return false if !in_board?(x_target, y_target)
     x_dist = (x_target - x).abs
     y_dist = y_target - y
-    return true if color == "white" && y == 1 && x_dist == 0 && (y_dist == 1 || y_dist == 2)   # 1st move
+    return true if color == "white" && y == 1 && x_dist == 0 && (y_dist ==  1 || y_dist ==  2) # 1st move
     return true if color == "black" && y == 6 && x_dist == 0 && (y_dist == -1 || y_dist == -2) # 1st move 
-    return true if color == "white" && x_dist == 0 && y_dist == 1  # only up
+    return true if color == "white" && x_dist == 0 && y_dist ==  1 # only up
     return true if color == "black" && x_dist == 0 && y_dist == -1 # only down
+    return false
+  end
+
+  def valid_capture_move?(x_target, y_target)
+    return false if same_location?(x_target, y_target)
+    return false if !in_board?(x_target, y_target)
+    x_dist = x_target - x
+    y_dist = y_target - y 
+    return true if color == "white" && y_dist ==  1 && x_dist.abs == 1
+    return true if color == "black" && y_dist == -1 && x_dist.abs == 1
     return false
   end
 
