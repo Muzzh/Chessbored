@@ -9,6 +9,7 @@ class King < ChessPiece
   end
 
   def is_castle_move?(x_target, y_target)
+    return false if move_single_step?(x_target, y_target)
     return true if horizontal_move?(x_target, y_target)
   end
 
