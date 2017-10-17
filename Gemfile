@@ -72,4 +72,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.3.3'
 end
 
-gem 'capybara-screenshot', :group => :test
+group :test do
+  gem 'capybara-screenshot'
+  gem 'database_cleaner' 
+end
