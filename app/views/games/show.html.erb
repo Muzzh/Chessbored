@@ -39,11 +39,11 @@
                 </div>
               <% end %>
             <% elsif piece.nil? %>
-              <%= link_to move_to_path(@selected_piece, x, y), method: :put, class: "cell" do %>
+              <%= link_to move_to_path(@game, @selected_piece, x, y), method: :put, class: "cell" do %>
                 <div></div>
               <% end %>
             <% else %>
-              <%= link_to move_to_path(@selected_piece, x, y), method: :put, class: "cell" do %>
+              <%= link_to move_to_path(@game, @selected_piece, x, y), method: :put, class: "cell" do %>
                 <div>
                   <%= image_tag "#{piece.type}_#{piece.color}.png" %>
                 </div>

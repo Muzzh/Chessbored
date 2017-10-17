@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!
-  before_action :current_game, only: [:show]
+  before_action :current_game, only: [:show, :move_piece]
   before_action :chess_pieces, only: [:show]
 
   def index
@@ -43,10 +43,20 @@ class GamesController < ApplicationController
     end
   end
 
+  def move_piece
+    piece = ChessPiece.find(params[:chess_piece_id])
+    if piece.move_to(params[:x_target], params[:y_target])
+      current_game.swap_turn
+    else
+      flash[:notice] = "Can't do that!"
+    end
+    redirect_to current_game
+  end
+
   private
 
   def current_player_color
-    current_user.id == @game.white_player_id ? 'white' : 'black'
+    @game.player_color(current_user)
   end
 
   def chess_pieces

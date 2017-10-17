@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   get 'games/:id/select_piece/:chess_piece_id', to: 'games#show', as: :select_piece
 
-  put 'chess_pieces/:id/to/:x_target/:y_target', to: 'chess_pieces#update', as: :move_to
+  put 'games/:id/move_piece/:chess_piece_id/:x_target/:y_target', to: 'games#move_piece', as: :move_to
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

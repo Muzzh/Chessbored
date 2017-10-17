@@ -9,6 +9,9 @@ class Game < ApplicationRecord
   scope :in_progress, -> { by_status('in_progress') }
   scope :recent, -> { order('games.updated_at DESC') }
 
+  def player_color(user)
+    white_player_id == user.id ? 'white' : 'black'
+  end
 
   def pending?
     status == 'pending'
