@@ -37,7 +37,6 @@ RSpec.describe Game, type: :model do
     end
   end
 
-<<<<<<< HEAD
   describe '.assign_turn' do
     it 'should assign turn to white' do
       user1 = FactoryGirl.create(:user)
@@ -188,7 +187,7 @@ RSpec.describe Game, type: :model do
     let(:game) { FactoryGirl.create :game }
     context 'if there is no black player' do
       let(:game) { FactoryGirl.create :game, :pending, black_player_id: nil }
-      it 'marks no player as won if player forfeits before an opponent joins' do
+      it 'marks no player has won if player forfeits before an opponent joins' do
         game.forfeit(game.white_player_id)
         expect(game.no_winner?).to eq true
       end
@@ -200,12 +199,12 @@ RSpec.describe Game, type: :model do
     end
 
     context 'if there is a black player' do
-      it 'marks white player as won if black player forfeits' do
+      it 'marks white player has won if black player forfeits' do
         game.forfeit(game.black_player_id)
         expect(game.white_player_won?).to eq true
       end
 
-      it 'marks black player as won if white player forfeits' do
+      it 'marks black player has won if white player forfeits' do
         game.forfeit(game.white_player_id)
         expect(game.black_player_won?).to eq true
       end

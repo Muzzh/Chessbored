@@ -19,6 +19,7 @@ class Game < ApplicationRecord
 
   def assign_first_turn
     update_attributes(turn: 'white')
+  end
 
   def white_player_won?
     status == 'white_player_won'
