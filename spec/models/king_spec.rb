@@ -11,6 +11,10 @@ RSpec.describe King, type: :class do
       expect(piece.valid_move?(piece.x-1, piece.y+0)).to eq(true)
       expect(piece.valid_move?(piece.x+0, piece.y+1)).to eq(true)
       expect(piece.valid_move?(piece.x+0, piece.y-1)).to eq(true)
+      expect(piece.valid_move?(piece.x+1, piece.y-1)).to eq(true)
+      expect(piece.valid_move?(piece.x-1, piece.y-1)).to eq(true)
+      expect(piece.valid_move?(piece.x+1, piece.y+1)).to eq(true)
+      expect(piece.valid_move?(piece.x-1, piece.y+1)).to eq(true)
     end
     it "should check for invalid move for a King" do
       user = FactoryGirl.create(:user)

@@ -1,36 +1,41 @@
+# Pawn specific methods ...
 class Pawn < ChessPiece
 
-  # Pawn specific methods ...
-
-  # Can go left and right, but only up (for white) and down (for black)
-  # 1st move can be 1 or 2 steps
   def valid_move?(x_target, y_target)
-    return false if same_location?(x_target, y_target)
-    return false if !in_board?(x_target, y_target)
-    x_dist = (x_target - x).abs
-    y_dist = y_target - y
-    return true if color == "white" && y == 1 && x_dist == 0 && (y_dist ==  1 || y_dist ==  2) # 1st move
-    return true if color == "black" && y == 6 && x_dist == 0 && (y_dist == -1 || y_dist == -2) # 1st move 
-    return true if color == "white" && x_dist == 0 && y_dist ==  1 # only up
-    return true if color == "black" && x_dist == 0 && y_dist == -1 # only down
-    return false
-  end
 
-  def valid_capture_move?(x_target, y_target)
-    return false if same_location?(x_target, y_target)
-    return false if !in_board?(x_target, y_target)
-    x_dist = x_target - x
-    y_dist = y_target - y 
-    return true if color == "white" && y_dist ==  1 && x_dist.abs == 1
-    return true if color == "black" && y_dist == -1 && x_dist.abs == 1
-    return false
-  end
+    return false unless super
+    return true if color == 'white' && y == 1 && x == x_target && y_target == 3 # 1st move & 2 steps
+    return true if color == 'black' && y == 6 && x == x_target && y_target == 4 # 1st move & 2 steps
 
-  # Override in_board?
-  # Pawn can go 1 step over the board up (for white) or down (for black)
-  def in_board?(x_target, y_target)
-    return x_target >= MIN_INDEX && x_target <= MAX_INDEX && 
-           y_target >= MIN_INDEX-1 && y_target <= MAX_INDEX+1
+    # checking for regular & capture move for white
+    if color == 'white' && move_single_step?(x_target, y_target) && y_target == y + 1
+
+      if (x_target - x).abs == 1
+        if occupied?(x_target, y_target) # capture move
+          target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
+          return true if target.color == 'black' 
+          return false
+        end
+      else
+        return true if !occupied?(x_target, y_target) # regular move
+      end
+    end
+
+    # checking for regular & capture move for black
+    if color == 'black' && move_single_step?(x_target, y_target) && y_target == y - 1
+      if (x_target - x).abs == 1
+        if occupied?(x_target, y_target) # capture move
+          target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
+          return true if target.color == 'white' 
+          return false
+        end
+      else
+        return true if !occupied?(x_target, y_target) # regular move
+      end
+    end
+
+    false
+
   end
 
 end

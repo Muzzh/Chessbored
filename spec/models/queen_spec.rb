@@ -13,7 +13,7 @@ RSpec.describe Queen, type: :class do
       expect(piece.valid_move?(piece.x-3, piece.y+0)).to eq(true)
       expect(piece.valid_move?(piece.x+1, piece.y+0)).to eq(true)
       expect(piece.valid_move?(piece.x+0, piece.y-1)).to eq(true)
-      # move horizontally => x and y move equal distance
+      # move diagonally => x and y move equal distance
       expect(piece.valid_move?(piece.x+3, piece.y+3)).to eq(true)
       expect(piece.valid_move?(piece.x+3, piece.y-3)).to eq(true)
       expect(piece.valid_move?(piece.x-3, piece.y+3)).to eq(true)

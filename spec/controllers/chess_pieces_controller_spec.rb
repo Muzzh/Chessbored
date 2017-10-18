@@ -43,11 +43,10 @@ RSpec.describe ChessPiecesController, type: :controller do
 
       game = FactoryGirl.create(:game, white_player_id: user1.id)
 
-      piece1 = FactoryGirl.create(:queen, user_id: user1.id, game_id: game.id, 
-        x: 3, y: 3, color: "white")
-
-      piece2 = FactoryGirl.create(:pawn, user_id: user2.id, game_id: game.id, 
-        x: 5, y: 5, color: "black")
+      piece1 = FactoryGirl.create(
+        :queen, user_id: user1.id, game_id: game.id, x: 3, y: 3, color: "white")
+      piece2 = FactoryGirl.create(
+        :pawn,  user_id: user2.id, game_id: game.id, x: 5, y: 5, color: "black")
 
       put :update, params: { id: piece1.id, x_target: piece2.x, y_target: piece2.y }
       piece1.reload
@@ -67,11 +66,10 @@ RSpec.describe ChessPiecesController, type: :controller do
 
       game = FactoryGirl.create(:game, white_player_id: user1.id)
 
-      piece1 = FactoryGirl.create(:pawn, user_id: user1.id, game_id: game.id, 
-        x: 3, y: 3, color: "white")
-
-      piece2 = FactoryGirl.create(:pawn, user_id: user2.id, game_id: game.id, 
-        x: 4, y: 4, color: "black")
+      piece1 = FactoryGirl.create(
+        :pawn, user_id: user1.id, game_id: game.id, x: 3, y: 3, color: "white")
+      piece2 = FactoryGirl.create(
+        :pawn, user_id: user2.id, game_id: game.id, x: 4, y: 4, color: "black")
 
       put :update, params: { id: piece1.id, x_target: piece2.x, y_target: piece2.y }
       piece1.reload
