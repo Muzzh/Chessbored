@@ -10,24 +10,24 @@ class Pawn < ChessPiece
     # checking for regular & capture move for white
     if color == 'white' && move_single_step?(x_target, y_target) && y_target == y + 1
       if (x_target - x).abs == 1
-      	if occupied?(x_target, y_target) # capture move
-      		target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
-      		target.color == 'black' ? true : false
-      	end
+        if occupied?(x_target, y_target) # capture move
+          target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
+          target.color == 'black' ? true : false
+        end
       else
-      	return true if !occupied?(x_target, y_target) # regular move
+        return true if !occupied?(x_target, y_target) # regular move
       end
     end
 
     # checking for regular & capture move for black
     if color == 'black' && move_single_step?(x_target, y_target) && y_target == y - 1
       if (x_target - x).abs == 1
-      	if occupied?(x_target, y_target) # capture move
-	      	target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
-      		target.color == 'white' ? true : false
-	      end
+        if occupied?(x_target, y_target) # capture move
+          target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
+          target.color == 'white' ? true : false
+        end
       else
-      	return true if !occupied?(x_target, y_target) # regular move
+        return true if !occupied?(x_target, y_target) # regular move
       end
     end
 
