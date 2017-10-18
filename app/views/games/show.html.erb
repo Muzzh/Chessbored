@@ -1,7 +1,8 @@
-
 <% unless @current_player_color == @game.turn %>
   <div class="text-center"><h4>Opponent's turn !<h4></div>
 <% end %>
+<%= link_to "forfeit", game_forfeit_path(@game), method: :post unless @game.game_over? %>
+
 <div class="board">
   <% 7.downto(0) do |y| %>
     <div class="row">

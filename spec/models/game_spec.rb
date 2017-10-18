@@ -37,6 +37,7 @@ RSpec.describe Game, type: :model do
     end
   end
 
+<<<<<<< HEAD
   describe '.assign_turn' do
     it 'should assign turn to white' do
       user1 = FactoryGirl.create(:user)
@@ -56,6 +57,60 @@ RSpec.describe Game, type: :model do
       game.swap_turn
       game.reload
       expect(game.turn).to eq('black')
+    end
+  end
+
+  describe '.white_player_won?' do
+    let(:game) { FactoryGirl.create :game, :white_player_won }
+
+    it 'is white_player_won' do
+      expect(game.status).to eq 'white_player_won'
+    end
+
+    it 'is not completed' do
+      expect(game.white_player_won?).to eq true
+    end
+  end
+
+  describe '.black_player_won?' do
+    let(:game) { FactoryGirl.create :game, :black_player_won }
+
+    it 'is black_player_won' do
+      expect(game.status).to eq 'black_player_won'
+    end
+
+    it 'is not completed' do
+      expect(game.black_player_won?).to eq true
+    end
+  end
+
+  describe '.no_winner?' do
+    let(:game) { FactoryGirl.create :game, :no_winner }
+
+    it 'is no winner' do
+      expect(game.status).to eq 'no_winner'
+    end
+
+    it 'is not completed' do
+      expect(game.no_winner?).to eq true
+    end
+  end
+
+  describe '.game_over?' do
+    
+    it 'returns true if the black player has won' do
+      game = FactoryGirl.create :game, :black_player_won
+      expect(game.game_over?).to eq true
+    end
+
+    it 'returns true if the white player has won' do
+      game = FactoryGirl.create :game, :white_player_won
+      expect(game.game_over?).to eq true
+    end
+
+    it 'returns true if no forfeit is declared before a second player joins' do
+      game = FactoryGirl.create :game, :no_winner
+      expect(game.game_over?).to eq true
     end
   end
 
@@ -126,6 +181,37 @@ RSpec.describe Game, type: :model do
     it 'adds a black king at x_position: 4, y_position: 7' do
       game.populate_black_pieces
       expect(King.where(game_id: game.id, x: 4, y: 7, user_id: game.black_player_id).first).not_to be_nil
+    end
+  end
+
+  describe 'games#forfeit' do
+    let(:game) { FactoryGirl.create :game }
+    context 'if there is no black player' do
+      let(:game) { FactoryGirl.create :game, :pending, black_player_id: nil }
+      it 'marks no player as won if player forfeits before an opponent joins' do
+        game.forfeit(game.white_player_id)
+        expect(game.no_winner?).to eq true
+      end
+
+      it 'ends the game if player forfeits before an opponent joins' do
+        game.forfeit(game.white_player_id)
+        expect(game.game_over?).to eq true
+      end
+    end
+
+    context 'if there is a black player' do
+      it 'marks white player as won if black player forfeits' do
+        game.forfeit(game.black_player_id)
+        expect(game.white_player_won?).to eq true
+      end
+
+      it 'marks black player as won if white player forfeits' do
+        game.forfeit(game.white_player_id)
+        expect(game.black_player_won?).to eq true
+      end
+    end
+    it 'raises an error if an invalid user_id is provided' do
+      expect{game.forfeit(0)}.to raise_error("Player does not exist.")
     end
   end
 end
