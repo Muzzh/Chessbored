@@ -13,16 +13,14 @@ class ChessPiece < ApplicationRecord
     if valid_move?(x_target.to_i, y_target.to_i)
       capture(x_target, y_target)
       update_attributes(x: x_target, y: y_target)
-    else
-      return false
     end
+    false
   end
 
   def capture(x_target, y_target)
     target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
     if target && color != target.color
       target.update_attributes(captured: true, x: nil, y: nil)
-      update_attributes(x: x_target, y: y_target)
       return true
     end
     false
