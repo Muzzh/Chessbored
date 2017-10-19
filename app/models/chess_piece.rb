@@ -29,7 +29,7 @@ class ChessPiece < ApplicationRecord
 
   def check?()
     color == "white"? opponent_color = "black" : opponent_color = "white"
-    opponent_king = game.chess_pieces.where(type: 'King', color: 'black').first
+    opponent_king = game.chess_pieces.where(type: 'King', color: opponent_color).first
     if opponent_king
       return valid_move?(opponent_king.x, opponent_king.y)
     end
