@@ -49,13 +49,20 @@ class GamesController < ApplicationController
   end
 
   def move_piece
-    piece = ChessPiece.find(params[:chess_piece_id])
-    if piece.move_to(params[:x_target], params[:y_target])
-      current_game.swap_turn
-    else
-      flash[:notice] = "Can't do that!"
+    if @game.in_progress?
+      piece = ChessPiece.find(params[:chess_piece_id])
+      if current_user.id == piece.user_id
+        if piece.move_to(params[:x_target], params[:y_target])
+          current_game.swap_turn
+        else
+          flash[:notice] = "Can't do that!"
+        end
+        redirect_to current_game
+      else
+        flash[:notice] = 'This is not your piece!'
+        redirect_to "/games/#{@game.id}"
+      end
     end
-    redirect_to current_game
   end
 
   private

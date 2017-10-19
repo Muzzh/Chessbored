@@ -17,6 +17,14 @@ class Game < ApplicationRecord
     status == 'pending'
   end
 
+  def completed?
+    status == 'completed'
+  end
+
+  def in_progress?
+    status == 'in_progress'
+  end
+
   def assign_first_turn
     update_attributes(turn: 'white')
   end

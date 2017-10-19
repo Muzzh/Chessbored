@@ -1,6 +1,16 @@
-<% unless @current_player_color == @game.turn %>
-  <div class="text-center"><h4>Opponent's turn !<h4></div>
+
+<% if @game.pending? %>
+  <div class="text-center"><h4>Waiting on an opponent !<h4></div>
+<% elsif @game.in_progress? %>
+  <% if @current_player_color == @game.turn %>
+    <div class="text-center"><h4>Your turn !<h4></div>
+  <% else %>
+    <div class="text-center"><h4>Opponent's turn !<h4></div>
+  <% end %>
+<% elsif @game.completed? %>
+  <div class="text-center"><h4>Game has ended !<h4></div>
 <% end %>
+  
 <%= link_to "forfeit", game_forfeit_path(@game), method: :post unless @game.game_over? %>
 
 <div class="board">
