@@ -13,9 +13,8 @@ class Pawn < ChessPiece
       if (x_target - x).abs == 1
         if occupied?(x_target, y_target) # capture move
           target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
-          # return true if target.color == 'black' 
-          # return false
-          target.color == 'black' ? true : false
+          return true if target.color == 'black' 
+          return false
         end
       else
         return true if !occupied?(x_target, y_target) # regular move
