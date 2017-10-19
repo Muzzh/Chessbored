@@ -11,7 +11,7 @@ class ChessPiece < ApplicationRecord
 
   def move_to(x_target, y_target)
     if valid_move?(x_target.to_i, y_target.to_i)
-      capture(x_target, y_target)
+      capture(x_target, y_target) if occupied?(x_target, y_target)
       update_attributes(x: x_target, y: y_target)
     end
     false
@@ -19,11 +19,7 @@ class ChessPiece < ApplicationRecord
 
   def capture(x_target, y_target)
     target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
-    if target && color != target.color
-      target.update_attributes(captured: true, x: nil, y: nil)
-      return true
-    end
-    false
+    target.update_attributes(captured: true, x: nil, y: nil) if target && color != target.color
   end
 
   def valid_move?(x_target, y_target)
