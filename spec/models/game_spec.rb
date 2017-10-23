@@ -185,4 +185,36 @@ RSpec.describe Game, type: :model do
       expect{game.forfeit(0)}.to raise_error("Player does not exist.")
     end
   end
+
+  
+
+
+=begin
+  describe 'game#draw' do
+    let(:game) { FactoryGirl.create :game }
+      it 'prompts the black player if white player proposes a draw' do
+        game.draw(game.white_player_id)
+        #expect(response).to have_http_status(:success)
+      end
+
+      it 'prompts the white player if black player proposes a draw' do
+        game.draw(game.black_player_id)
+        #expect(response).to have_http_status(:success)
+      end
+
+      it 'marks no player as won if black player agrees to a draw' do
+        #game.accept_draw(game.white_player_id)
+        expect(game.no_winner?).to eq true
+      end
+
+      it 'ends the game if both players agree to a draw' do
+        game.draw(game.white_player_id)
+        expect(game.game_over?).to eq true
+      end
+
+      it 'raises an error if an invalid user_id is provided' do
+        expect{game.forfeit(0)}.to raise_error("Player does not exist.")
+      end
+  end
+=end
 end

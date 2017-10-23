@@ -43,7 +43,8 @@ class Game < ApplicationRecord
     end
   end
 
-
+  def offer_draw(user_id)
+  end
 
   def populate_white_pieces
     #"white" Game Pieces

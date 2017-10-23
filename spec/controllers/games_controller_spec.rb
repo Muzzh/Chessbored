@@ -79,4 +79,28 @@ RSpec.describe GamesController, type: :controller do
       expect(response).to redirect_to game_path(game)
     end
   end
+
+  describe 'games#offer_draw' do
+    let(:game) { FactoryGirl.create :game }
+      it 'should successfully show the page that prompts opponent if a player proposes a draw' do
+        post :offer_draw
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'prompts the black player if white player proposes a draw' do
+        game.offer_draw(game.white_player_id)
+        
+        expect(response).to redirect_to game_offer_draw_path(game)
+      end
+
+      it 'prompts the white player if black player proposes a draw' do
+        game.offer_draw(game.black_player_id)
+        post :offer_draw
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'raises an error if an invalid user_id is provided' do
+        expect{game.offer_draw(0)}.to raise_error("Player does not exist.")
+      end
+  end
 end
