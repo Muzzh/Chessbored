@@ -2,7 +2,6 @@ class Game < ApplicationRecord
   has_many :chess_pieces
 
   after_create :populate_white_pieces
-  after_create :populate_black_pieces
 
   scope :by_status, ->(status) { where(status: status) }
   scope :pending, -> { by_status('pending') }
@@ -10,9 +9,24 @@ class Game < ApplicationRecord
   scope :in_progress, -> { by_status('in_progress') }
   scope :recent, -> { order('games.updated_at DESC') }
 
+  def player_color(user)
+    white_player_id == user.id ? 'white' : 'black'
+  end
 
   def pending?
     status == 'pending'
+  end
+
+  def completed?
+    status == 'completed'
+  end
+
+  def in_progress?
+    status == 'in_progress'
+  end
+
+  def assign_first_turn
+    update_attributes(turn: 'white')
   end
 
   def white_player_won?
@@ -43,7 +57,10 @@ class Game < ApplicationRecord
     end
   end
 
-
+  def swap_turn
+    change = turn == 'white' ? 'black' : 'white'
+    update_attributes(turn: change)
+  end
 
   def populate_white_pieces
     #"white" Game Pieces

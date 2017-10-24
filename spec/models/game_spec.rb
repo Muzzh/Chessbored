@@ -37,6 +37,28 @@ RSpec.describe Game, type: :model do
     end
   end
 
+  describe '.assign_turn' do
+    it 'should assign turn to white' do
+      user1 = FactoryGirl.create(:user)
+      user2 = FactoryGirl.create(:user)
+      game = FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id)
+      game.assign_first_turn
+      expect(game.turn).to eq('white')
+    end
+  end
+
+  describe '.swap_turn' do
+    it 'should change turn after a move' do
+      user1 = FactoryGirl.create(:user)
+      user2 = FactoryGirl.create(:user)
+      game = FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id)
+      game.assign_first_turn
+      game.swap_turn
+      game.reload
+      expect(game.turn).to eq('black')
+    end
+  end
+
   describe '.white_player_won?' do
     let(:game) { FactoryGirl.create :game, :white_player_won }
 
@@ -91,7 +113,7 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  describe 'game#populate_white_pieces action' do
+  describe '.populate_white_pieces' do
     let(:user1) { FactoryGirl.create(:user) }
     let(:game) { FactoryGirl.create :game, white_player_id: user1.id }
 
@@ -123,43 +145,49 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  describe 'game#populate_black_pieces action' do
+  describe '.populate_black_pieces' do
     let(:user2) { FactoryGirl.create(:user) }
     let(:game) { FactoryGirl.create :game, black_player_id: user2.id }
 
     it 'adds a black pawn at x_position: 0 through 7, y_position: 6' do
+      game.populate_black_pieces
       expect(Pawn.where(game_id: game.id, x: (0..7), y: 6, user_id: game.black_player_id).first).not_to be_nil
     end
 
     it 'adds a black rook at x_position: 0 and 7, y_position: 7' do
+      game.populate_black_pieces
       expect(Rook.where(game_id: game.id, x: 0, y: 7, user_id: game.black_player_id).first).not_to be_nil
       expect(Rook.where(game_id: game.id, x: 7, y: 7, user_id: game.black_player_id).first).not_to be_nil
     end
 
     it 'adds a black knight at x_position: 1 and 6, y_position: 7' do
+      game.populate_black_pieces
       expect(Knight.where(game_id: game.id, x: 1, y: 7, user_id: game.black_player_id).first).not_to be_nil
       expect(Knight.where(game_id: game.id, x: 6, y: 7, user_id: game.black_player_id).first).not_to be_nil
     end
 
     it 'adds a black bishop at x_position: 2 and 5, y_position: 0' do
+      game.populate_black_pieces
       expect(Bishop.where(game_id: game.id, x: 2, y: 7, user_id: game.black_player_id).first).not_to be_nil
       expect(Bishop.where(game_id: game.id, x: 5, y: 7, user_id: game.black_player_id).first).not_to be_nil
     end
 
     it 'adds a black queen at x_position: 3, y_position: 7' do
+      game.populate_black_pieces
       expect(Queen.where(game_id: game.id, x: 3, y: 7, user_id: game.black_player_id).first).not_to be_nil
     end
 
     it 'adds a black king at x_position: 4, y_position: 7' do
+      game.populate_black_pieces
       expect(King.where(game_id: game.id, x: 4, y: 7, user_id: game.black_player_id).first).not_to be_nil
     end
   end
 
-  describe 'game#forfeit' do
+  describe 'games#forfeit' do
     let(:game) { FactoryGirl.create :game }
     context 'if there is no black player' do
       let(:game) { FactoryGirl.create :game, :pending, black_player_id: nil }
-      it 'marks no player as won if player forfeits before an opponent joins' do
+      it 'marks no player has won if player forfeits before an opponent joins' do
         game.forfeit(game.white_player_id)
         expect(game.no_winner?).to eq true
       end
@@ -171,12 +199,12 @@ RSpec.describe Game, type: :model do
     end
 
     context 'if there is a black player' do
-      it 'marks white player as won if black player forfeits' do
+      it 'marks white player has won if black player forfeits' do
         game.forfeit(game.black_player_id)
         expect(game.white_player_won?).to eq true
       end
 
-      it 'marks black player as won if white player forfeits' do
+      it 'marks black player has won if white player forfeits' do
         game.forfeit(game.white_player_id)
         expect(game.black_player_won?).to eq true
       end
