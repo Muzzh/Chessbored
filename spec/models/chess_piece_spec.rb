@@ -3,6 +3,44 @@ require 'rails_helper'
 RSpec.describe ChessPiece, type: :model do
   it_behaves_like 'an STI class'
 
+  describe '#move_to' do
+    subject(:move_to) { chess_piece.move_to(2, 2) }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:chess_piece) { FactoryGirl.create(:rook, user_id: user.id) }
+    before do
+      allow(chess_piece).to receive(:valid_move?).and_return(result_valid_move)
+    end
+    context 'when move is valid' do
+      let(:result_valid_move) { true } 
+      before do
+        allow(chess_piece).to receive(:illegal_move?).and_return(result_illegal_move)
+      end
+      context 'when move is not illegal' do
+        let(:result_illegal_move) { false } 
+        context 'when move checks opponent' do
+          let(:result_check) { true } 
+          let(:game) { chess_piece.game } 
+          before do
+            allow(chess_piece).to receive(:check?).and_return(result_check)
+          end
+          it "status should equls in_check" do
+            move_to
+            expect(game.status).to eq "in_check"
+          end
+        end
+        it { is_expected.to eq true }
+      end
+      context 'when move is illegal' do
+        let(:result_illegal_move) { true } 
+        it { is_expected.to eq false }
+      end
+    end
+    context 'when move is invalid' do
+      let(:result_valid_move) { false } 
+      it { is_expected.to eq false }
+    end
+  end
+
   describe '.obstructed?' do
     let(:user1) { FactoryGirl.create(:user) }
     let(:user2) { FactoryGirl.create(:user) }

@@ -1,5 +1,8 @@
 # Common methods for all pieces
 class ChessPiece < ApplicationRecord
+
+  class KingIsMIsssingError < StandardError; end
+
   belongs_to :game
   belongs_to :user
 
@@ -10,14 +13,13 @@ class ChessPiece < ApplicationRecord
   private_constant :MAX_INDEX
 
   def move_to(x_target, y_target)
-    if valid_move?(x_target.to_i, y_target.to_i)
-      update_attributes(x: x_target, y: y_target)
-      if check?()
-        game.update_attributes(status: "in_check")
-      end
-    else
-      false
+    return false unless valid_move?(x_target, y_target)
+    return false if illegal_move?(x_target, y_target)
+    update_attributes(x: x_target, y: y_target)
+    if check?()
+      game.update_attributes(status: "in_check")
     end
+    true
   end
 
   def valid_move?(x_target, y_target)
@@ -27,8 +29,31 @@ class ChessPiece < ApplicationRecord
     true
   end
 
-  def check?()
-    color == "white"? opponent_color = "black" : opponent_color = "white"
+ # illegal_move places or leaves one's king in check.
+  def illegal_move?(x_target, y_target)
+
+    if type == 'King'
+      x_check = x_target
+      y_check = y_target
+    else
+      king = game.chess_pieces.where(type: 'King', color: color).first
+      if king
+        x_check = king.x
+        y_check = king.y
+      else
+        raise KingIsMissingError, "for the game #{game.id}"
+      end
+    end
+
+    opponent_pieces.each do |opponent|
+      return true if opponent.valid_move?(x_check.to_i, y_check.to_i)
+    end
+
+    false
+
+  end
+
+  def check?
     opponent_king = game.chess_pieces.where(type: 'King', color: opponent_color).first
     if opponent_king
       return valid_move?(opponent_king.x, opponent_king.y)
@@ -107,4 +132,16 @@ class ChessPiece < ApplicationRecord
     y_dist = (y_target - y).abs
     x_dist <= 1 && y_dist <= 1 ? true : false
   end
+
+  private
+
+  def opponent_color
+    return "black" if color == "white"
+    "white"
+  end
+
+  def opponent_pieces
+    game.chess_pieces.where(color: opponent_color, captured: false)
+  end
+
 end
