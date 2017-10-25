@@ -51,8 +51,9 @@ class ChessPiece < ApplicationRecord
 
   def checking?
     opponent_king = game.chess_pieces.where(type: 'King', color: opponent_color).first
-    if opponent_king
-      return valid_move?(opponent_king.x, opponent_king.y)
+    pieces = game.chess_pieces.where(color: color)
+    pieces.each do |piece|
+      return true if piece.valid_move?(opponent_king.x.to_i, opponent_king.y.to_i)
     end
     false
   end
