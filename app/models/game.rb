@@ -1,4 +1,7 @@
 class Game < ApplicationRecord
+
+  class KingIsMIsssingError < StandardError; end
+  
   has_many :chess_pieces
 
   after_create :populate_white_pieces
@@ -52,10 +55,13 @@ class Game < ApplicationRecord
   def in_check?(color)
     color == "white" ? opponent_color = "black" : opponent_color = "white"
     king = chess_pieces.where(type: 'King', color: color).first
-    opponents = chess_pieces.where(color: opponent_color)
-    opponents.each do |opponent|
-  puts "check #{opponent.color} #{opponent.type} #{opponent.x},#{opponent.y}"
-      return true if opponent.valid_move?(king.x.to_i, king.y.to_i)
+    if king
+      opponents = chess_pieces.where(color: opponent_color)
+      opponents.each do |opponent|
+        return true if opponent.valid_move?(king.x.to_i, king.y.to_i)
+      end
+    else
+      raise KingIsMissingError, "for the game #{game.id}"
     end
     false
   end
