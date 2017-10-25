@@ -186,28 +186,101 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  describe '#check?' do
+  # rspec for color_in_check the "normal" way
+  describe '#color_in_check' do
     let(:user1) { FactoryGirl.create(:user) }
     let(:user2) { FactoryGirl.create(:user) }
     let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
-    it 'should return nil - no player in check' do
-      expect(game.check?).to eq(nil)
+    it 'should return nil - nothing in check' do
+      king1 = game.get_piece('King', 'white')
+      king2 = game.get_piece('King', 'black')
+      king1.update_attributes(x: 3, y: 3)
+      king2.update_attributes(x: 7, y: 6)
+      expect(game.color_in_check).to eq(nil)
     end
     it 'should return white - white in check' do
-      FactoryGirl.create(:king,  color: 'white', x: 3, y: 3, user_id: user1.id, game_id: game.id)
-      FactoryGirl.create(:rook,  color: 'black', x: 1, y: 7, user_id: user2.id, game_id: game.id)
-      FactoryGirl.create(:queen, color: 'black', x: 3, y: 7, user_id: user2.id, game_id: game.id)
-      FactoryGirl.create(:king,  color: 'black', x: 2, y: 7, user_id: user2.id, game_id: game.id)
-      expect(game.check?).to eq('white')
+      king1 = game.get_piece('King', 'white')
+      queen2 = game.get_piece('Queen', 'black')
+      king1.update_attributes(x: 3, y: 3)
+      queen2.update_attributes(x: 3, y: 6)
+      expect(game.color_in_check).to eq('white')
     end
-
     it 'should return black - black in check' do
-      FactoryGirl.create(:king,  color: 'black', x: 3, y: 3, user_id: user1.id, game_id: game.id)
-      FactoryGirl.create(:rook,  color: 'white', x: 1, y: 7, user_id: user2.id, game_id: game.id)
-      FactoryGirl.create(:queen, color: 'white', x: 3, y: 7, user_id: user2.id, game_id: game.id)
-      FactoryGirl.create(:king,  color: 'white', x: 1, y: 1, user_id: user2.id, game_id: game.id)
-      expect(game.check?).to eq('black')
+      king1 = game.get_piece('King', 'black')
+      queen2 = game.get_piece('Queen', 'white')
+      king1.update_attributes(x: 3, y: 3)
+      queen2.update_attributes(x: 3, y: 6)
+      expect(game.color_in_check).to eq('black')
     end
-
   end  
+
+  describe '#color_in_check unit test' do
+    subject(:color_in_check) { game.color_in_check }
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
+    context 'when nothing in check' do
+      before do
+        allow(game).to receive(:in_check?).and_return(false)
+      end
+      it { is_expected.to eq nil }
+    end
+    context 'when white is in check' do
+      before do
+        allow(game).to receive(:in_check?).with("black").and_return(false)
+        allow(game).to receive(:in_check?).with("white").and_return(true)
+      end
+      it { is_expected.to eq "white" }
+    end
+    context 'when black is in check' do
+      before do
+        allow(game).to receive(:in_check?).with("black").and_return(true)
+        allow(game).to receive(:in_check?).with("white").and_return(false)
+      end
+      it { is_expected.to eq "black" }
+    end
+  end
+
+  describe '#in_check? unit test' do
+    subject(:in_check?) { game.in_check?('white') }
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
+    context 'when nothing is in check' do
+      let(:white_king)  { FactoryGirl.build_stubbed(:king,  color: 'white', x: 3, y: 3) }
+      let(:black_king)  { FactoryGirl.build_stubbed(:king,  color: 'black', x: 6, y: 6) }
+      let(:opponent_pieces) { [black_king] }
+      before do
+        allow(game).to receive(:get_piece).and_return(white_king)
+        allow(game).to receive(:opponent_color).and_return('black')
+        allow(game).to receive(:opponent_pieces).and_return(opponent_pieces)
+      end
+      it { is_expected.to eq false }
+    end
+    context 'when white is in check' do
+      let(:white_king)  { FactoryGirl.build_stubbed(:king,  color: 'white', x: 3, y: 3) }
+      let(:black_king)  { FactoryGirl.build_stubbed(:king,  color: 'black', x: 6, y: 6) }
+      let(:black_queen) { FactoryGirl.build_stubbed(:queen, color: 'black', x: 3, y: 6) }
+      let(:opponent_pieces) { [black_king, black_queen] }
+      before do
+        allow(game).to receive(:get_piece).and_return(white_king)
+        allow(game).to receive(:opponent_color).and_return('black')
+        allow(game).to receive(:opponent_pieces).and_return(opponent_pieces)
+      end
+      it { is_expected.to eq true }
+    end
+    context 'when black is in check' do
+      let(:black_king)  { FactoryGirl.build_stubbed(:king,  color: 'black', x: 3, y: 3) }
+      let(:white_king)  { FactoryGirl.build_stubbed(:king,  color: 'white', x: 6, y: 6) }
+      let(:white_queen) { FactoryGirl.build_stubbed(:queen, color: 'white', x: 3, y: 6) }
+      let(:opponent_pieces) { [white_king, white_queen] }
+      before do
+        allow(game).to receive(:get_piece).and_return(black_king)
+        allow(game).to receive(:opponent_color).and_return('white')
+        allow(game).to receive(:opponent_pieces).and_return(opponent_pieces)
+      end
+      it { is_expected.to eq true }
+    end
+  end
+
 end

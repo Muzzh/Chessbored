@@ -1,7 +1,7 @@
 # Common methods for all pieces
 class ChessPiece < ApplicationRecord
 
-  class KingIsMIsssingError < StandardError; end
+  class KingIsMissingError < StandardError; end
 
   belongs_to :game
   belongs_to :user
@@ -32,32 +32,26 @@ class ChessPiece < ApplicationRecord
   # illegal_move places or leaves one's king in check.
   def illegal_move?(x_target, y_target)
     if type == 'King'
-      x_check = x_target.to_i
-      y_check = y_target.to_i
+      x_check = x_target
+      y_check = y_target
     else
       king = game.chess_pieces.where(type: 'King', color: color).first
-      if king
-        x_check = king.x.to_i
-        y_check = king.y.to_i
-      else
-        raise KingIsMissingError, "for the game #{game.id}"
-      end
+      raise KingIsMissingError, "for the game #{game.id}" unless king.present?
+      x_check = king.x
+      y_check = king.y
     end
     opponent_pieces.each do |opponent|
-      return true if opponent.valid_move?(x_check, y_check)
+      return true if opponent.valid_move?(x_check.to_i, y_check.to_i)
     end
     false
   end
 
   def checking?
     opponent_king = game.chess_pieces.where(type: 'King', color: opponent_color).first
-    if opponent_king
-      pieces = game.chess_pieces.where(color: color)
-      pieces.each do |piece|
-        return true if piece.valid_move?(opponent_king.x.to_i, opponent_king.y.to_i)
-      end
-    else
-      raise KingIsMissingError, "for the game #{game.id}"
+    raise KingIsMissingError, "for the game #{game.id}" unless opponent_king.present?
+    pieces = game.chess_pieces.where(color: color)
+    pieces.each do |piece|
+      return true if piece.valid_move?(opponent_king.x.to_i, opponent_king.y.to_i)
     end
     false
   end

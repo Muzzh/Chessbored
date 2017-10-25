@@ -8,20 +8,20 @@ RSpec.describe ChessPiece, type: :model do
     let(:user) { FactoryGirl.create(:user) }
     let(:chess_piece) { FactoryGirl.create(:rook, user_id: user.id) }
     before do
-      allow(chess_piece).to receive(:valid_move?).and_return(result_valid_move)
+      allow(chess_piece).to receive(:valid_move?).and_return(valid_move?)
     end
     context 'when move is valid' do
-      let(:result_valid_move) { true } 
+      let(:valid_move?) { true } 
       before do
-        allow(chess_piece).to receive(:illegal_move?).and_return(result_illegal_move)
+        allow(chess_piece).to receive(:illegal_move?).and_return(illegal_move?)
       end
       context 'when move is not illegal' do
-        let(:result_illegal_move) { false } 
+        let(:illegal_move?) { false } 
         context 'when move checks opponent' do
-          let(:result_checking) { true } 
+          let(:checking?) { true } 
           let(:game) { chess_piece.game } 
           before do
-            allow(chess_piece).to receive(:checking?).and_return(result_checking)
+            allow(chess_piece).to receive(:checking?).and_return(checking?)
           end
           it "status should equls in_check" do
             move_to
@@ -31,12 +31,12 @@ RSpec.describe ChessPiece, type: :model do
         it { is_expected.to eq true }
       end
       context 'when move is illegal' do
-        let(:result_illegal_move) { true } 
+        let(:illegal_move?) { true } 
         it { is_expected.to eq false }
       end
     end
     context 'when move is invalid' do
-      let(:result_valid_move) { false } 
+      let(:valid_move?) { false } 
       it { is_expected.to eq false }
     end
   end
