@@ -18,10 +18,10 @@ RSpec.describe ChessPiece, type: :model do
       context 'when move is not illegal' do
         let(:result_illegal_move) { false } 
         context 'when move checks opponent' do
-          let(:result_check) { true } 
+          let(:result_checking) { true } 
           let(:game) { chess_piece.game } 
           before do
-            allow(chess_piece).to receive(:check?).and_return(result_check)
+            allow(chess_piece).to receive(:checking?).and_return(result_checking)
           end
           it "status should equls in_check" do
             move_to

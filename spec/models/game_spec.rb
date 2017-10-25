@@ -185,4 +185,29 @@ RSpec.describe Game, type: :model do
       expect{game.forfeit(0)}.to raise_error("Player does not exist.")
     end
   end
+
+  describe '#check?' do
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
+    it 'should return nil - no player in check' do
+      expect(game.check?).to eq(nil)
+    end
+    it 'should return white - white in check' do
+      FactoryGirl.create(:king,  color: 'white', x: 3, y: 3, user_id: user1.id, game_id: game.id)
+      FactoryGirl.create(:rook,  color: 'black', x: 1, y: 7, user_id: user2.id, game_id: game.id)
+      FactoryGirl.create(:queen, color: 'black', x: 3, y: 7, user_id: user2.id, game_id: game.id)
+      FactoryGirl.create(:king,  color: 'black', x: 2, y: 7, user_id: user2.id, game_id: game.id)
+      expect(game.check?).to eq('white')
+    end
+
+    it 'should return black - black in check' do
+      FactoryGirl.create(:king,  color: 'black', x: 3, y: 3, user_id: user1.id, game_id: game.id)
+      FactoryGirl.create(:rook,  color: 'white', x: 1, y: 7, user_id: user2.id, game_id: game.id)
+      FactoryGirl.create(:queen, color: 'white', x: 3, y: 7, user_id: user2.id, game_id: game.id)
+      FactoryGirl.create(:king,  color: 'white', x: 1, y: 1, user_id: user2.id, game_id: game.id)
+      expect(game.check?).to eq('black')
+    end
+
+  end  
 end

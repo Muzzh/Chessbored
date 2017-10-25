@@ -16,7 +16,7 @@ class ChessPiece < ApplicationRecord
     return false unless valid_move?(x_target, y_target)
     return false if illegal_move?(x_target, y_target)
     update_attributes(x: x_target, y: y_target)
-    if check?()
+    if checking?
       game.update_attributes(status: "in_check")
     end
     true
@@ -29,31 +29,27 @@ class ChessPiece < ApplicationRecord
     true
   end
 
- # illegal_move places or leaves one's king in check.
+  # illegal_move places or leaves one's king in check.
   def illegal_move?(x_target, y_target)
-
     if type == 'King'
-      x_check = x_target
-      y_check = y_target
+      x_check = x_target.to_i
+      y_check = y_target.to_i
     else
       king = game.chess_pieces.where(type: 'King', color: color).first
       if king
-        x_check = king.x
-        y_check = king.y
+        x_check = king.x.to_i
+        y_check = king.y.to_i
       else
         raise KingIsMissingError, "for the game #{game.id}"
       end
     end
-
     opponent_pieces.each do |opponent|
-      return true if opponent.valid_move?(x_check.to_i, y_check.to_i)
+      return true if opponent.valid_move?(x_check, y_check)
     end
-
     false
-
   end
 
-  def check?
+  def checking?
     opponent_king = game.chess_pieces.where(type: 'King', color: opponent_color).first
     if opponent_king
       return valid_move?(opponent_king.x, opponent_king.y)

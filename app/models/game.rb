@@ -43,7 +43,22 @@ class Game < ApplicationRecord
     end
   end
 
+  def check?
+    return "white" if in_check?("white")
+    return "black" if in_check?("black")
+    nil
+  end
 
+  def in_check?(color)
+    color == "white" ? opponent_color = "black" : opponent_color = "white"
+    king = chess_pieces.where(type: 'King', color: color).first
+    opponents = chess_pieces.where(color: opponent_color)
+    opponents.each do |opponent|
+  puts "check #{opponent.color} #{opponent.type} #{opponent.x},#{opponent.y}"
+      return true if opponent.valid_move?(king.x.to_i, king.y.to_i)
+    end
+    false
+  end
 
   def populate_white_pieces
     #"white" Game Pieces
