@@ -17,6 +17,10 @@ RSpec.describe ChessPiece, type: :model do
       end
       context 'when move is not illegal' do
         let(:illegal_move?) { false } 
+        let(:checking?) { false }         
+        before do
+          allow(chess_piece).to receive(:checking?).and_return(checking?)
+        end
         context 'when move checks opponent' do
           let(:checking?) { true } 
           let(:game) { chess_piece.game } 
