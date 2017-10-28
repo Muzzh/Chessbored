@@ -53,17 +53,17 @@ RSpec.describe Pawn, type: :class do
     end
   end
 
-  describe '.en_passant' do
+  describe '.en_passant?' do
     it "should check for valid en passant capture by a black Pawn" do
       user1 = FactoryGirl.create(:user)
       user2 = FactoryGirl.create(:user)
-      sign_in user1
-      sign_in user2
+      #sign_in user1
+      #sign_in user2
       game = FactoryGirl.create(:game)
-      piece1 = FactoryGirl.create(:pawn, user_id: user1.id, game_id: game_id)
+      piece1 = FactoryGirl.create(:pawn, user_id: user1.id, game_id: game.id)
       #white pawn just made first move of two steps
-      piece1.x = 2; piece1.y = 1; piece1.color = "white"; piece1.white_pawn_just_moved_two? == true;
-      piece2 = FactoryGirl.create(:pawn, user_id: user2.id, game_id: game_id)
+      piece1.x = 2; piece1.y = 1; piece1.color = "white"; piece1.white_pawn_just_moved_two?(2, 3);
+      piece2 = FactoryGirl.create(:pawn, user_id: user2.id, game_id: game.id)
       piece2.x = 3; piece2.y = 3; piece2.color = "black";
       #black pawn could have made capture if pawn had moved only one step
       put :update, params: { id: piece2.id, x_target: piece1.x, y_target: piece1.y }
