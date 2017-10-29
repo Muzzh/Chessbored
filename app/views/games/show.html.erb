@@ -1,5 +1,5 @@
-<%= link_to "forfeit", game_forfeit_path(@game), method: :post unless @game.game_over? %>
-<%= link_to "offer_draw", game_offer_draw_path(@game), method: :post unless @game.game_over? %>
+<%= link_to "Forfeit", game_forfeit_path(@game), method: :post unless @game.game_over? %>
+<%= link_to "Offer Draw", game_offer_draw_path(@game), method: :post unless @game.game_over? %>
 
 <div class="board">
   <% 7.downto(0) do |y| %>

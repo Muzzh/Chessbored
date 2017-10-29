@@ -83,7 +83,10 @@ RSpec.describe GamesController, type: :controller do
   describe 'games#offer_draw' do
     let(:game) { FactoryGirl.create :game }
       it 'should successfully show the page that prompts opponent if a player proposes a draw' do
-        post :offer_draw
+        user = FactoryGirl.create(:user)
+        sign_in user
+        game = FactoryGirl.create(:game, :in_progress, white_player_id: user.id)
+        put :update, params: { id: game.id, current_user: user.id }
         expect(response).to have_http_status(:success)
       end
 

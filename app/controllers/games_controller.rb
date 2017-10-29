@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!
-  before_action :current_game, only: [:show, :forfeit]
+  before_action :current_game, only: [:show, :forfeit, :offer_draw]
   before_action :chess_pieces, only: [:show]
 
   def index
