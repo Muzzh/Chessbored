@@ -55,7 +55,7 @@ RSpec.describe GamesController, type: :controller do
   end
 
   describe 'games#update action' do
-    it 'should allow user to join a game as the black player' do
+    it 'should allow user to join a game as the black player and assign the first turn' do
       user1 = FactoryGirl.create(:user)
       user2 = FactoryGirl.create(:user)
 
@@ -67,6 +67,7 @@ RSpec.describe GamesController, type: :controller do
       game.reload
       expect(game.status).to eq('in_progress')
       expect(game.black_player_id).to eq(user2.id)
+      expect(game.turn).to eq('white')
     end
 
     it 'should not allow user to join a game they created' do
@@ -79,4 +80,5 @@ RSpec.describe GamesController, type: :controller do
       expect(response).to redirect_to game_path(game)
     end
   end
+
 end

@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!
-  before_action :current_game, only: [:show, :forfeit]
+  before_action :current_game, only: [:show, :move_piece, :forfeit]
   before_action :chess_pieces, only: [:show]
 
   def index
@@ -27,6 +27,7 @@ class GamesController < ApplicationController
   end
 
   def show
+    @current_player_color = current_player_color
     if params[:chess_piece_id]
       @selected_piece = ChessPiece.find(params[:chess_piece_id])
     end
@@ -38,6 +39,7 @@ class GamesController < ApplicationController
     if current_user.id != white_player
       @game.update_attributes(:black_player_id => current_user.id, :status => "in_progress")
       @game.populate_black_pieces
+      @game.assign_first_turn
       flash[:notice] = "Joined game #{@game.id}!"
       redirect_to game_path(@game.id)
     else
@@ -46,7 +48,28 @@ class GamesController < ApplicationController
     end
   end
 
+  def move_piece
+    if @game.in_progress?
+      piece = ChessPiece.find(params[:chess_piece_id])
+      if current_user.id == piece.user_id
+        if piece.move_to(params[:x_target], params[:y_target])
+          current_game.swap_turn
+        else
+          flash[:notice] = "Can't do that!"
+        end
+        redirect_to current_game
+      else
+        flash[:notice] = 'This is not your piece!'
+        redirect_to "/games/#{@game.id}"
+      end
+    end
+  end
+
   private
+
+  def current_player_color
+    @game.player_color(current_user)
+  end
 
   def chess_pieces
     @chess_pieces ||= current_game.chess_pieces

@@ -3,6 +3,34 @@ require 'rails_helper'
 RSpec.describe ChessPiece, type: :model do
   it_behaves_like 'an STI class'
 
+  describe '#capture' do
+    subject(:capture) { white_rook.capture(2, 2) }
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:white_rook) { FactoryGirl.create(:rook, color: 'white', user_id: user1.id) }
+    let(:white_queen) { FactoryGirl.create(:queen, color: 'white', user_id: user1.id) }
+    let(:black_queen) { FactoryGirl.create(:queen, color: 'black', user_id: user2.id) }
+    before do
+      allow(white_rook).to receive(:find_piece).and_return(find_piece)
+    end
+    context 'target is of different colors' do
+      let(:find_piece) { black_queen } 
+      it "should capture the target" do
+        capture
+        black_queen.reload
+        expect(black_queen.captured).to eq true
+      end
+    end
+    context 'target is of the same color' do
+      let(:find_piece) { white_queen } 
+      it "should not capture the target" do
+        capture
+        white_queen.reload
+        expect(black_queen.captured).to eq false
+      end
+    end
+  end
+
   describe '#move_to' do
     subject(:move_to) { chess_piece.move_to(2, 2) }
     let(:user) { FactoryGirl.create(:user) }
