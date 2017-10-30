@@ -3,6 +3,76 @@ require 'rails_helper'
 RSpec.describe ChessPiece, type: :model do
   it_behaves_like 'an STI class'
 
+  describe '#capture' do
+    subject(:capture) { white_rook.capture(2, 2) }
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:white_rook) { FactoryGirl.create(:rook, color: 'white', user_id: user1.id) }
+    let(:white_queen) { FactoryGirl.create(:queen, color: 'white', user_id: user1.id) }
+    let(:black_queen) { FactoryGirl.create(:queen, color: 'black', user_id: user2.id) }
+    before do
+      allow(white_rook).to receive(:find_piece).and_return(find_piece)
+    end
+    context 'target is of different colors' do
+      let(:find_piece) { black_queen } 
+      it "should capture the target" do
+        capture
+        black_queen.reload
+        expect(black_queen.captured).to eq true
+      end
+    end
+    context 'target is of the same color' do
+      let(:find_piece) { white_queen } 
+      it "should not capture the target" do
+        capture
+        white_queen.reload
+        expect(black_queen.captured).to eq false
+      end
+    end
+  end
+
+  describe '#move_to' do
+    subject(:move_to) { chess_piece.move_to(2, 2) }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:chess_piece) { FactoryGirl.create(:rook, user_id: user.id) }
+    before do
+      allow(chess_piece).to receive(:valid_move?).and_return(valid_move?)
+    end
+    context 'when move is valid' do
+      let(:valid_move?) { true } 
+      before do
+        allow(chess_piece).to receive(:illegal_move?).and_return(illegal_move?)
+      end
+      context 'when move is not illegal' do
+        let(:illegal_move?) { false } 
+        let(:checking?) { false }         
+        before do
+          allow(chess_piece).to receive(:checking?).and_return(checking?)
+        end
+        context 'when move checks opponent' do
+          let(:checking?) { true } 
+          let(:game) { chess_piece.game } 
+          before do
+            allow(chess_piece).to receive(:checking?).and_return(checking?)
+          end
+          it "status should equls in_check" do
+            move_to
+            expect(game.status).to eq "in_check"
+          end
+        end
+        it { is_expected.to eq true }
+      end
+      context 'when move is illegal' do
+        let(:illegal_move?) { true } 
+        it { is_expected.to eq false }
+      end
+    end
+    context 'when move is invalid' do
+      let(:valid_move?) { false } 
+      it { is_expected.to eq false }
+    end
+  end
+
   describe '.obstructed?' do
     let(:user1) { FactoryGirl.create(:user) }
     let(:user2) { FactoryGirl.create(:user) }

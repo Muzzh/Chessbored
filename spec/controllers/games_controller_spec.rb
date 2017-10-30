@@ -80,4 +80,5 @@ RSpec.describe GamesController, type: :controller do
       expect(response).to redirect_to game_path(game)
     end
   end
+
 end

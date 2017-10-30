@@ -1,5 +1,8 @@
 # Common methods for all pieces
 class ChessPiece < ApplicationRecord
+
+  class KingIsMissingError < StandardError; end
+
   belongs_to :game
   belongs_to :user
 
@@ -10,16 +13,23 @@ class ChessPiece < ApplicationRecord
   private_constant :MAX_INDEX
 
   def move_to(x_target, y_target)
-    if valid_move?(x_target.to_i, y_target.to_i)
-      capture(x_target, y_target) if occupied?(x_target, y_target)
-      update_attributes(x: x_target, y: y_target)
+    return false unless valid_move?(x_target, y_target)
+    return false if illegal_move?(x_target, y_target)
+    capture(x_target, y_target) if occupied?(x_target, y_target)
+    update_attributes(x: x_target, y: y_target)
+    if checking?
+      game.update_attributes(status: "in_check")
     end
-    false
+    true
   end
 
   def capture(x_target, y_target)
-    target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
+    target = find_piece(x_target, y_target)
     target.update_attributes(captured: true, x: nil, y: nil) if target && color != target.color
+  end
+
+  def find_piece(x_target, y_target)
+      return ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
   end
 
   def valid_move?(x_target, y_target)
@@ -27,6 +37,33 @@ class ChessPiece < ApplicationRecord
     return false unless in_board?(x_target, y_target)
     return false if obstructed?(x_target, y_target)
     true
+  end
+
+  # illegal_move places or leaves one's king in check.
+  def illegal_move?(x_target, y_target)
+    if type == 'King'
+      x_check = x_target
+      y_check = y_target
+    else
+      king = game.chess_pieces.where(type: 'King', color: color).first
+      raise KingIsMissingError, "for the game #{game.id}" unless king.present?
+      x_check = king.x
+      y_check = king.y
+    end
+    opponent_pieces.each do |opponent|
+      return true if opponent.valid_move?(x_check.to_i, y_check.to_i)
+    end
+    false
+  end
+
+  def checking?
+    opponent_king = game.chess_pieces.where(type: 'King', color: opponent_color).first
+    raise KingIsMissingError, "for the game #{game.id}" unless opponent_king.present?
+    pieces = game.chess_pieces.where(color: color)
+    pieces.each do |piece|
+      return true if piece.valid_move?(opponent_king.x.to_i, opponent_king.y.to_i)
+    end
+    false
   end
 
   def obstructed?(x_target, y_target)
@@ -100,4 +137,16 @@ class ChessPiece < ApplicationRecord
     y_dist = (y_target - y).abs
     x_dist <= 1 && y_dist <= 1 ? true : false
   end
+
+  private
+
+  def opponent_color
+    return "black" if color == "white"
+    "white"
+  end
+
+  def opponent_pieces
+    game.chess_pieces.where(color: opponent_color, captured: false)
+  end
+
 end
