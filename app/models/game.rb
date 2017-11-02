@@ -75,6 +75,26 @@ class Game < ApplicationRecord
     false
   end
 
+  def stalemate?(color)
+    pieces = chess_pieces.where(color: color, captured: false)
+    pieces.each do |piece|
+      x_piece = piece.x
+      y_piece = piece.y
+      moves = piece.get_valid_moves(piece.x, piece.y)
+      moves.each do |move|
+        target = capture(move.x, move.y) if occupied?(move.x, move.y)
+        # pseudo move
+        piece.update_attributes(x: move.x, y: move.y)
+        in_check = in_check?(color)
+        # undo pseudo move
+        piece.update_attributes(x: x_piece, y: y_piece)
+        target.update_attributes(captured: false)
+        return false if !in_check
+      end
+    end
+    return true
+  end
+
   def swap_turn
     change = turn == 'white' ? 'black' : 'white'
     update_attributes(turn: change)
@@ -135,7 +155,7 @@ class Game < ApplicationRecord
   end
   
   def get_piece(type, color)
-    chess_pieces.where(type: type, color: color).first
+    chess_pieces.where(type: type, color: color, captured: false).first
   end
 
   def opponent_color(color)
@@ -143,7 +163,7 @@ class Game < ApplicationRecord
   end
 
   def opponent_pieces(color)
-    chess_pieces.where(color: opponent_color(color))
+    chess_pieces.where(color: opponent_color(color), captured: false)
   end
 
 end

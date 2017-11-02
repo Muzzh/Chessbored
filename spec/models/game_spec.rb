@@ -220,22 +220,23 @@ RSpec.describe Game, type: :model do
     let(:user2) { FactoryGirl.create(:user) }
     let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
     it 'should return nil - nothing in check' do
-      king1 = game.get_piece('King', 'white')
+      king1 = FactoryGirl.create(:king, color: 'white', game_id: game.id, user_id: user1.id)
       king2 = FactoryGirl.create(:king, color: 'black', game_id: game.id, user_id: user2.id)
       king1.update_attributes(x: 3, y: 3)
       king2.update_attributes(x: 7, y: 6)
       expect(game.color_in_check).to eq(nil)
     end
     it 'should return white - white in check' do
-      king1 = game.get_piece('King', 'white')
+      king1 = FactoryGirl.create(:king, color: 'white', game_id: game.id, user_id: user1.id)
       queen2 = FactoryGirl.create(:queen, color: 'black', game_id: game.id, user_id: user2.id)
       king1.update_attributes(x: 3, y: 3)
       queen2.update_attributes(x: 3, y: 6)
       expect(game.color_in_check).to eq('white')
     end
     it 'should return black - black in check' do
-      queen1 = game.get_piece('Queen', 'white')
+      king1 = FactoryGirl.create(:king, color: 'white', game_id: game.id, user_id: user1.id)
       king2 = FactoryGirl.create(:king, color: 'black', game_id: game.id, user_id: user2.id)
+      queen1 = FactoryGirl.create(:queen, color: 'white', game_id: game.id, user_id: user1.id)
       queen1.update_attributes(x: 3, y: 3)
       king2.update_attributes(x: 3, y: 6)
       expect(game.color_in_check).to eq('black')

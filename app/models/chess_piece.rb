@@ -25,11 +25,12 @@ class ChessPiece < ApplicationRecord
 
   def capture(x_target, y_target)
     target = find_piece(x_target, y_target)
-    target.update_attributes(captured: true, x: nil, y: nil) if target && color != target.color
+    target.update_attributes(captured: true) if target && color != target.color
+    return target
   end
 
   def find_piece(x_target, y_target)
-      return ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
+      return ChessPiece.where(game_id: game_id, x: x_target, y: y_target, captured: false).first
   end
 
   def valid_move?(x_target, y_target)
@@ -56,10 +57,11 @@ class ChessPiece < ApplicationRecord
     false
   end
 
+  # Does my move check the opponent king?
   def checking?
     opponent_king = game.chess_pieces.where(type: 'King', color: opponent_color).first
     raise KingIsMissingError, "for the game #{game.id}" unless opponent_king.present?
-    pieces = game.chess_pieces.where(color: color)
+    pieces = game.chess_pieces.where(color: color, captured: false)
     pieces.each do |piece|
       return true if piece.valid_move?(opponent_king.x.to_i, opponent_king.y.to_i)
     end
@@ -118,7 +120,7 @@ class ChessPiece < ApplicationRecord
   end
 
   def occupied?(x_current, y_current)
-    game.chess_pieces.where(x: x_current, y: y_current).present?
+    game.chess_pieces.where(x: x_current, y: y_current, captured: false).present?
   end
 
   private
