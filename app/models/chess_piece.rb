@@ -24,9 +24,12 @@ class ChessPiece < ApplicationRecord
   end
 
   def capture(x_target, y_target)
+puts "capture"
     target = find_piece(x_target, y_target)
+puts "capture #{x_target},#{y_target} target"
     target.update_attributes(captured: true) if target && color != target.color
     return target
+puts target
   end
 
   def find_piece(x_target, y_target)

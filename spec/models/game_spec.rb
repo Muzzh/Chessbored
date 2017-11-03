@@ -312,4 +312,23 @@ RSpec.describe Game, type: :model do
     end
   end
 
+  describe '#stalemate?' do
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
+    it 'should indicate stalemate condition 1' do
+      king1 = FactoryGirl.create(:king, color: 'white', x: 1, y: 5, game_id: game.id, user_id: user1.id)
+      queen1 = FactoryGirl.create(:queen, color: 'white', x: 0, y: 5, game_id: game.id, user_id: user1.id)
+      king2 = FactoryGirl.create(:king, color: 'black', x: 1, y: 7, game_id: game.id, user_id: user2.id)
+      expect(game.stalemate?('black')).to eq(true)
+    end
+    it 'should indicate stalemate condition 2' do
+      king1 = FactoryGirl.create(:king, color: 'white', x: 1, y: 5, game_id: game.id, user_id: user1.id)
+      kinght = FactoryGirl.create(:knight, color: 'white', x: 2, y: 5, game_id: game.id, user_id: user1.id)
+      king2 = FactoryGirl.create(:king, color: 'black', x: 0, y: 7, game_id: game.id, user_id: user2.id)
+      expect(game.stalemate?('black')).to eq(true)
+    end
+
+  end
+
 end
