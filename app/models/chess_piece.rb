@@ -1,8 +1,6 @@
 # Common methods for all pieces
 class ChessPiece < ApplicationRecord
-
   class KingIsMissingError < StandardError; end
-
   belongs_to :game
   belongs_to :user
 
@@ -121,6 +119,10 @@ class ChessPiece < ApplicationRecord
     game.chess_pieces.where(x: x_current, y: y_current).present?
   end
 
+  def moved_yet?
+    updated_at != created_at
+  end
+
   private
 
   def same_location?(x_target, y_target)
@@ -148,5 +150,4 @@ class ChessPiece < ApplicationRecord
   def opponent_pieces
     game.chess_pieces.where(color: opponent_color, captured: false)
   end
-
 end
