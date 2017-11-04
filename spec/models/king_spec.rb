@@ -29,4 +29,50 @@ RSpec.describe King, type: :class do
     end
   end
 
+  describe '.castling' do
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
+    
+    it 'should not allow castling if the King has moved' do
+      game.populate_white_pieces
+      game.populate_black_pieces
+      piece = ChessPiece.last
+      piece.update_attributes(x: 4, y: 6)
+      piece.update_attributes(x: 4, y: 7)
+      expect(piece.type).to eq('King')
+      expect(piece.color).to eq('black')
+      expect(piece.castling?(6, 7)).to eq(false)
+    end
+  end
+
+  describe '.castling_rook' do
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:game) { FactoryGirl.create(:game, :populated, white_player_id: user1.id, black_player_id: user2.id) }
+    
+    it 'should return the coupling rook for castling' do
+      black_king = ChessPiece.where(type: 'King', color: 'black').first
+      white_king = ChessPiece.where(type: 'King', color: 'white').first
+      white_left_rook = white_king.castling_rook(2, 0)
+      expect(white_left_rook.type).to eq('Rook')
+      expect(white_left_rook.x).to eq(0)
+      expect(white_left_rook.y).to eq(0)
+
+      white_right_rook = white_king.castling_rook(6, 0)
+      expect(white_right_rook.type).to eq('Rook')
+      expect(white_right_rook.x).to eq(7)
+      expect(white_right_rook.y).to eq(0)
+
+      black_left_rook = black_king.castling_rook(2, 7)
+      expect(black_left_rook.type).to eq('Rook')
+      expect(black_left_rook.x).to eq(0)
+      expect(black_left_rook.y).to eq(7)
+
+      black_right_rook = black_king.castling_rook(6, 7)
+      expect(black_right_rook.type).to eq('Rook')
+      expect(black_right_rook.x).to eq(7)
+      expect(black_right_rook.y).to eq(7)
+    end
+  end
 end

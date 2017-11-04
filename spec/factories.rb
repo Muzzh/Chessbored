@@ -97,6 +97,13 @@ FactoryGirl.define do
     winner_id       nil
     turn            'white'
 
+    trait :populated do
+      after(:create) do |game|
+        game.populate_white_pieces
+        game.populate_black_pieces
+      end
+    end
+
     factory :pending_game,  :traits => [:pending]
   end
 
