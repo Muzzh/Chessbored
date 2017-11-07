@@ -26,9 +26,18 @@ class GamesController < ApplicationController
     redirect_to game_path(@game), notice: "You have forfeited this game."
   end
 
+  def accept_draw
+    @game.accept_draw(current_user.id)
+    redirect_to game_path(@game), notice: "You have accepted to end this game in a draw."
+  end
+
+  def decline_draw
+    # decline_draw_path(@game)
+  end
+
   def offer_draw
-    @game.offer_draw(current_user.id)
-    redirect_to game_offer_draw_path(@game)#, notice: "current_user.id has offered a draw."
+    #@game.offer_draw(current_user.id)
+    #offer_draw_path(@game), notice: "current_user.id has offered a draw."
   end
 
   def show

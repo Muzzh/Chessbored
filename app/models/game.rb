@@ -57,13 +57,17 @@ class Game < ApplicationRecord
     end
   end
 
-<<<<<<< HEAD
-  def offer_draw(user_id)
-=======
+  def accept_draw(user_id)
+    update status: "no_winner"
+  end
+
+  #def offer_draw(user_id)
+  
+  #end
+
   def swap_turn
     change = turn == 'white' ? 'black' : 'white'
     update_attributes(turn: change)
->>>>>>> master
   end
 
   def populate_white_pieces
