@@ -13,11 +13,7 @@ class King < ChessPiece
     castled_rook = castling_rook(x_target, y_target)
     return false if castled_rook.moved_yet?
     # not in check
-    if game.status == 'in_check'
-      return false
-    else
-      return true
-    end
+    return false if game.status == 'in_check'
     # no space that king moves through is in check
 
     # illegal_move
