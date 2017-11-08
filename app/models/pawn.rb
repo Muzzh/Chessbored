@@ -1,17 +1,36 @@
 # Pawn specific methods ...
 class Pawn < ChessPiece
+
   def valid_move?(x_target, y_target)
+
     return false unless super
-    return true if color == 'white' && y == 1 && x == x_target && y_target == 3 # 1st move
-    return true if color == 'black' && y == 6 && x == x_target && y_target == 4 # 1st move
-    return true if color == 'white' && move_single_step?(x_target, y_target) && y_target > y
-    return true if color == 'black' && move_single_step?(x_target, y_target) && y_target < y
-    #return true for en passant for white to capture black
-    #return true if color == 'white' && 
-    #return true for en passant for black to capture white
-    #return true if color == 'black' &&
-    false
-  end
+    return true if color == 'white' && y == 1 && x == x_target && y_target == 3 # 1st move & 2 steps
+    return true if color == 'black' && y == 6 && x == x_target && y_target == 4 # 1st move & 2 steps
+
+    # checking for regular & capture move for white
+    if color == 'white' && move_single_step?(x_target, y_target) && y_target == y + 1
+
+      if (x_target - x).abs == 1
+        if occupied?(x_target, y_target) # capture move
+          target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
+          return target.color == 'black' ? true : false
+        end
+      else
+        return true if !occupied?(x_target, y_target) # regular move
+      end
+    end
+
+    # checking for regular & capture move for black
+    if color == 'black' && move_single_step?(x_target, y_target) && y_target == y - 1
+      if (x_target - x).abs == 1
+        if occupied?(x_target, y_target) # capture move
+          target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
+          return target.color == 'black' ? true : false
+        end
+      else
+        return true if !occupied?(x_target, y_target) # regular move
+      end
+    end
 
   def white_pawn_just_moved_two?(x_target, y_target)
     return true if valid_move?(x_target, y_target) && color == 'white' && y == 1 && x == x_target && y_target == 3
@@ -33,5 +52,7 @@ class Pawn < ChessPiece
     return true if valid_move?(x_target, y_target) && white_pawn_just_moved_two?(pawn.last.x, 3 #or y_target
       ) && color == 'black' && y == 3 && x == x_target + 1 || x == x_target - 1 && y_target == 2
     false
+
   end
+
 end

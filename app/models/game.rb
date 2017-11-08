@@ -1,8 +1,10 @@
 class Game < ApplicationRecord
+
+  class KingIsMissingError < StandardError; end
+
   has_many :chess_pieces
 
   after_create :populate_white_pieces
-  after_create :populate_black_pieces
 
   scope :by_status, ->(status) { where(status: status) }
   scope :pending, -> { by_status('pending') }
@@ -10,9 +12,24 @@ class Game < ApplicationRecord
   scope :in_progress, -> { by_status('in_progress') }
   scope :recent, -> { order('games.updated_at DESC') }
 
+  def player_color(user)
+    white_player_id == user.id ? 'white' : 'black'
+  end
 
   def pending?
     status == 'pending'
+  end
+
+  def completed?
+    status == 'completed'
+  end
+
+  def in_progress?
+    status == 'in_progress'
+  end
+
+  def assign_first_turn
+    update_attributes(turn: 'white')
   end
 
   def white_player_won?
@@ -43,7 +60,25 @@ class Game < ApplicationRecord
     end
   end
 
+  def color_in_check
+    return "white" if in_check?("white")
+    return "black" if in_check?("black")
+    nil
+  end
 
+  def in_check?(color)
+    king = get_piece('King', color)
+    raise KingIsMissingError, "for the game #{id}" unless king.present?
+    opponent_pieces(color).each do |opponent|
+      return true if opponent.valid_move?(king.x.to_i, king.y.to_i)
+    end
+    false
+  end
+
+  def swap_turn
+    change = turn == 'white' ? 'black' : 'white'
+    update_attributes(turn: change)
+  end
 
   def populate_white_pieces
     #"white" Game Pieces
@@ -98,4 +133,17 @@ class Game < ApplicationRecord
 
     King.create(game_id: id, x: 4, y: 7, user_id: black_player_id, color: "black")
   end
+  
+  def get_piece(type, color)
+    chess_pieces.where(type: type, color: color).first
+  end
+
+  def opponent_color(color)
+    color == "white" ? "black" : "white"
+  end
+
+  def opponent_pieces(color)
+    chess_pieces.where(color: opponent_color(color))
+  end
+
 end
