@@ -68,6 +68,12 @@ FactoryGirl.define do
   end
 
   factory :game do
+
+    black_player_id 1
+    white_player_id 2
+    winner_id       nil
+    turn            'white'
+
     trait :pending do
       status 'pending'
       black_player_id nil
@@ -92,13 +98,12 @@ FactoryGirl.define do
     trait :no_winner do
       status 'no_winner'
     end
-    black_player_id 1
-    white_player_id 2
-    winner_id       nil
-    turn            'white'
 
     trait :populated do
+      user1 = user
+      user2 = user
       after(:create) do |game|
+        game.update_attributes(white_player_id: user1.id, black_player_id: user2.id)
         game.populate_white_pieces
         game.populate_black_pieces
       end

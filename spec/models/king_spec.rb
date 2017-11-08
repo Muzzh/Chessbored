@@ -34,24 +34,46 @@ RSpec.describe King, type: :class do
     let(:user2) { FactoryGirl.create(:user) }
     let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
     
-    it 'should not allow castling if the King has moved' do
+    it 'does not allow castling if the King has moved' do
       game.populate_white_pieces
       game.populate_black_pieces
-      piece = ChessPiece.last
-      piece.update_attributes(x: 4, y: 6)
-      piece.update_attributes(x: 4, y: 7)
-      expect(piece.type).to eq('King')
-      expect(piece.color).to eq('black')
-      expect(piece.castling?(6, 7)).to eq(false)
+      black_king = ChessPiece.last
+      black_king.update_attributes(x: 4, y: 6)
+      black_king.update_attributes(x: 4, y: 7)
+      expect(black_king.type).to eq('King')
+      expect(black_king.color).to eq('black')
+      expect(black_king.castling?(6, 7)).to eq(false)
+    end
+
+    it 'does not allow castling if rook has moved' do
+      game.populate_white_pieces
+      game.populate_black_pieces
+      white_left_rook = ChessPiece.where(x: 0, y: 0).first
+      white_king = ChessPiece.where(x: 4, y: 0).first
+      white_left_rook.update_attributes(x: 4, y: 4)
+      white_left_rook.update_attributes(x: 0, y: 0)
+      expect(white_left_rook.type).to eq('Rook')
+      expect(white_left_rook.color).to eq('white')
+      expect(white_king.castling?(2, 0)).to eq(false)
+    end
+
+    it 'does not allow castling if game is in check' do
+      game.populate_white_pieces
+      game.populate_black_pieces
+      black_king = ChessPiece.last
+      game.update_attributes(status: 'in_check')
+      expect(black_king.castling?(6, 7)).to eq(false)
     end
   end
 
   describe '.castling_rook' do
     let(:user1) { FactoryGirl.create(:user) }
     let(:user2) { FactoryGirl.create(:user) }
-    let(:game) { FactoryGirl.create(:game, :populated, white_player_id: user1.id, black_player_id: user2.id) }
+    let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
     
-    it 'should return the coupling rook for castling' do
+    it 'returns the coupling rook for castling' do
+      game.populate_white_pieces
+      game.populate_black_pieces
       black_king = ChessPiece.where(type: 'King', color: 'black').first
       white_king = ChessPiece.where(type: 'King', color: 'white').first
       white_left_rook = white_king.castling_rook(2, 0)
