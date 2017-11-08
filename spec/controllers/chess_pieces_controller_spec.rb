@@ -12,4 +12,5 @@ RSpec.describe ChessPiecesController, type: :controller do
       expect(king.type).to eq('King')
     end
   end
+
 end
