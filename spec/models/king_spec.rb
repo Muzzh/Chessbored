@@ -64,6 +64,9 @@ RSpec.describe King, type: :class do
       game.update_attributes(status: 'in_check')
       expect(black_king.castling?(6, 7)).to eq(false)
     end
+
+    it 'does not allow castling if crosse square is in check' do
+    end
   end
 
   describe '.castling_rook' do

@@ -140,8 +140,6 @@ class ChessPiece < ApplicationRecord
     x_dist <= 1 && y_dist <= 1 ? true : false
   end
 
-  private
-
   def opponent_color
     return "black" if color == "white"
     "white"

@@ -41,7 +41,7 @@ FactoryGirl.define do
     game
     type      'King'
     user_id   1
-    x         3
+    x         4
     y         0
     captured  false
     color     'white'
@@ -51,7 +51,7 @@ FactoryGirl.define do
     game
     type      'Queen'
     user_id   1
-    x         4
+    x         3
     y         0
     captured  false
     color     'white'

@@ -186,7 +186,7 @@ RSpec.describe ChessPiece, type: :model do
     end
   end
 
-  describe '.moved_yet' do
+  describe '.moved_yet?' do
     let(:user1) { FactoryGirl.create(:user) }
     let(:game) { FactoryGirl.create(:game) }
     let(:piece) { FactoryGirl.create(:queen, x: 4, y:4, user_id: user1.id, game_id: game.id) }

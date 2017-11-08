@@ -15,8 +15,13 @@ class King < ChessPiece
     # not in check
     return false if game.status == 'in_check'
     # no space that king moves through is in check
-
-    # illegal_move
+    direction = x_target > x ? 1 : -1
+    (x + direction).step(x_target - direction, direction) do |x_current|
+      opponent_pieces.each do |opponent|
+        return false if opponent.valid_move?(x_current.to_i, y.to_i)
+      end
+    end
+    # illegal_move => already checked in any move_to
 
   end
 
