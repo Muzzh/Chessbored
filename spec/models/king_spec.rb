@@ -66,6 +66,10 @@ RSpec.describe King, type: :class do
     end
 
     it 'does not allow castling if crosse square is in check' do
+      white_king = FactoryGirl.create(:king, game_id: game.id, user_id: user1.id)
+      white_left_rook = FactoryGirl.create(:rook, game_id: game.id, user_id: user1.id)
+      black_bishop = FactoryGirl.create(:bishop, game_id: game.id, user_id: user2.id, x: 6, y: 3)
+      expect(white_king.castling?(2, 0)).to eq(false)
     end
   end
 
