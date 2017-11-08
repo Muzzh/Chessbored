@@ -93,14 +93,47 @@ RSpec.describe GamesController, type: :controller do
 
       it 'prompts the black player if white player proposes a draw' do
         game.offer_draw(game.white_player_id)
-        
+        get :offer_draw
         expect(response).to redirect_to game_offer_draw_path(game)
       end
 
       it 'prompts the white player if black player proposes a draw' do
         game.offer_draw(game.black_player_id)
-        post :offer_draw
+        get :offer_draw
         expect(response).to have_http_status(:success)
+      end
+
+      it 'marks no player as won if black player agrees to a draw' do
+        #game.accept_draw(game.black_player_id)
+        expect(game.no_winner?).to eq true
+      end
+
+      it 'marks no player as won if white player agrees to a draw' do
+        #game.accept_draw(game.white_player_id)
+        expect(game.no_winner?).to eq true
+      end
+
+      it 'ends the game if both players agree to a draw' do
+        game.draw(game.white_player_id)
+        expect(game.game_over?).to eq true
+      end
+
+      it 'prompts the black player if white player declines a draw' do
+      end
+
+      it 'prompts the white player if black player declines a draw' do
+      end
+
+      it 'ends the game in forfeit if the black player forfeits' do
+      end
+
+      it 'ends the game in forfeit if the white player forfeits' do
+      end
+
+      it 'continues the game if the black player declines to forfeit' do
+      end
+
+      it 'continues the game if the white player declines to forfeit' do
       end
 
       it 'raises an error if an invalid user_id is provided' do

@@ -33,11 +33,16 @@ class GamesController < ApplicationController
 
   def decline_draw
     # decline_draw_path(@game)
+    redirect_to game_path(@game), notice: "You have accepted to end this game in a draw."
   end
 
   def offer_draw
+    #puts "potato"
+    #puts params.inspect
+    #puts @game.inspect
     #@game.offer_draw(current_user.id)
-    #offer_draw_path(@game), notice: "current_user.id has offered a draw."
+    #game_offer_draw_path(@game)
+    #render :offer_draw
   end
 
   def show
