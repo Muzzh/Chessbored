@@ -9,7 +9,6 @@ class Pawn < ChessPiece
 
     # checking for regular & capture move for white
     if color == 'white' && move_single_step?(x_target, y_target) && y_target == y + 1
-
       if (x_target - x).abs == 1
         if occupied?(x_target, y_target) # capture move
           target = ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
@@ -31,6 +30,7 @@ class Pawn < ChessPiece
         return true if !occupied?(x_target, y_target) # regular move
       end
     end
+  end
 
   def white_pawn_just_moved_two?(x_target, y_target)
     return true if valid_move?(x_target, y_target) && color == 'white' && y == 1 && x == x_target && y_target == 3
