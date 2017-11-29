@@ -52,7 +52,7 @@ class GamesController < ApplicationController
     if @game.in_progress?
       piece = ChessPiece.find(params[:chess_piece_id])
       if current_user.id == piece.user_id
-        if piece.move_to(params[:x_target], params[:y_target])
+        if piece.move_to(params[:x_target].to_i, params[:y_target].to_i)
           current_game.swap_turn
         else
           flash[:notice] = "Can't do that!"
