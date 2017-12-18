@@ -13,6 +13,7 @@ class ChessPiece < ApplicationRecord
     if valid_move?(x_target.to_i, y_target.to_i)
       capture(x_target, y_target) if occupied?(x_target, y_target)
       update_attributes(x: x_target, y: y_target)
+      return true
     end
     false
   end
