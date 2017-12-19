@@ -3,7 +3,7 @@ deployment:
     branch: master
     commands:
       - heroku maintenance:on --app chessbored
-      - git push git@heroku.com:chessbored.git $CIRCLE_SHA1:refs/heads/master
+      - git push https://git.heroku.com/chessbored.git $CIRCLE_SHA1:refs/heads/master
       - heroku run rake db:migrate --app chessbored
       - heroku restart --app chessbored
       - heroku maintenance:off --app chessbored
