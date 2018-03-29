@@ -13,14 +13,13 @@ class ChessPiece < ApplicationRecord
   private_constant :MAX_INDEX
 
   def move_to(x_target, y_target)
-    return false unless valid_move?(x_target, y_target)
-    return false if illegal_move?(x_target, y_target)
-    capture(x_target, y_target) if occupied?(x_target, y_target)
-    update_attributes(x: x_target, y: y_target)
-    if checking?
-      game.update_attributes(status: "in_check")
-    end
-    true
+    if valid_move?(x_target.to_i, y_target.to_i)
+      capture(x_target, y_target) if occupied?(x_target, y_target)
+      update_attributes(x: x_target, y: y_target)
+      if checking?
+        game.update_attributes(status: "in_check")
+      end
+      return true
   end
 
   def capture(x_target, y_target)
