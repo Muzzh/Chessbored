@@ -14,7 +14,7 @@ deploy:
   app: chessbored
   on:
     repo: Muzzh/MeetingTime404
-    run:
-    - "rake db:migrate"
-    - restart
-    - "rake cleanup"
+  run:
+  - "rake db:migrate"
+  - restart
+  - "rake cleanup"
