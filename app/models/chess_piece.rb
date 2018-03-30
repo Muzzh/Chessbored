@@ -20,6 +20,7 @@ class ChessPiece < ApplicationRecord
         game.update_attributes(status: "in_check")
       end
       return true
+    end
   end
 
   def capture(x_target, y_target)
