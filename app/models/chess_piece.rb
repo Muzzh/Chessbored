@@ -59,7 +59,7 @@ class ChessPiece < ApplicationRecord
   def checking?
     opponent_king = game.chess_pieces.where(type: 'King', color: opponent_color).first
     raise KingIsMissingError, "for the game #{game.id}" unless opponent_king.present?
-    pieces = game.chess_pieces.where(color: color)
+    pieces = game.chess_pieces.where(color: color, captured: nil)
     pieces.each do |piece|
       return true if piece.valid_move?(opponent_king.x.to_i, opponent_king.y.to_i)
     end
