@@ -185,4 +185,25 @@ RSpec.describe ChessPiece, type: :model do
       expect(rook.obstructed?(2, 2)).to eq(false)
     end
   end
+
+  describe '.friendly_fire?' do
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:game) { FactoryGirl.create(:game) }
+    let(:white_queen) { FactoryGirl.create(:queen, x: 4, y: 4, user_id: user1.id, game_id: game.id) }
+
+    it 'should return True if target square is occupied by a same color piece' do
+      FactoryGirl.create(:pawn, x: 4, y: 5, user_id: user1.id, game_id: game.id)
+      expect(white_queen.friendly_fire?(4, 5)).to eq(true)
+    end
+
+    it 'should return False if target square is inoccupied' do
+      expect(white_queen.friendly_fire?(3, 4)).to eq(false)
+    end
+
+    it 'should return False if target square is different color' do
+      FactoryGirl.create(:pawn, x: 4, y: 3, color: 'black', user_id: user2.id, game_id: game.id)
+      expect(white_queen.friendly_fire?(4, 3)).to eq(false)
+    end
+  end
 end

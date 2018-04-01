@@ -31,29 +31,38 @@ class ChessPiece < ApplicationRecord
   end
 
   def find_piece(x_target, y_target)
-      return ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
+    return ChessPiece.where(game_id: game_id, x: x_target, y: y_target).first
   end
 
   def valid_move?(x_target, y_target)
     return false if same_location?(x_target, y_target)
     return false unless in_board?(x_target, y_target)
     return false if obstructed?(x_target, y_target)
+    return false if friendly_fire?(x_target, y_target)
     true
   end
 
   # illegal_move places or leaves one's king in check.
   def illegal_move?(x_target, y_target)
     if type == 'King'
-      x_check = x_target
-      y_check = y_target
+      king_x = x_target
+      king_y = y_target
+      return true if king_in_check?(king_x, king_y)
     else
+      original_coord = [x, y]
       king = game.chess_pieces.where(type: 'King', color: color).first
-      raise KingIsMissingError, "for the game #{game.id}" unless king.present?
-      x_check = king.x
-      y_check = king.y
+      update_attributes(x: x_target, y: y_target)
+      if king_in_check?(king.x, king.y)
+        update_attributes(x: original_coord[0], y: original_coord[1])
+        return true
+      end
     end
+    false
+  end
+
+  def king_in_check?(king_x, king_y)
     opponent_pieces.each do |opponent|
-      return true if opponent.valid_move?(x_check, y_check)
+      return true if opponent.valid_move?(king_x, king_y)
     end
     false
   end
@@ -119,6 +128,11 @@ class ChessPiece < ApplicationRecord
     false
   end
 
+  def friendly_fire?(x_target, y_target)
+    target_piece = find_piece(x_target, y_target)
+    target_piece.nil? ? false : (color == target_piece.color)
+  end
+
   def occupied?(x_current, y_current)
     game.chess_pieces.where(x: x_current, y: y_current).present?
   end
@@ -139,8 +153,6 @@ class ChessPiece < ApplicationRecord
     y_dist = (y_target - y).abs
     x_dist <= 1 && y_dist <= 1 ? true : false
   end
-
-  private
 
   def opponent_color
     return "black" if color == "white"
