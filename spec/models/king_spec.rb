@@ -46,7 +46,7 @@ RSpec.describe King, type: :class do
     let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
     
     it 'returns true for a valid castling' do
-      pieces = ChessPiece.where(captured: 'false').destroy_all
+      game.chess_pieces.update_all(x: nil, y: nil, captured: true)
       white_king = FactoryGirl.create(:king, game_id: game.id, user_id: user1.id)
       white_left_rook = FactoryGirl.create(:rook, color: 'white', game_id: game.id, user_id: user1.id, x: 0, y: 0)
       white_right_rook = FactoryGirl.create(:rook, color: 'white', game_id: game.id, user_id: user1.id, x: 7, y: 0)
