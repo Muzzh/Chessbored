@@ -46,19 +46,41 @@ class ChessPiece < ApplicationRecord
   def illegal_move?(x_target, y_target)
     method_return = false
     original_coord = [x, y]
-    king_coord = []
+    king_coord = find_king_coord(x_target, y_target)
+
+    #temporarly remove a piece that would be capture while verifying check status in case it would remove check status
+    if occupied?(x_target, y_target)
+      captured_piece = find_piece(x_target, y_target)
+      captured_piece_coord = [captured_piece.x, captured_piece.y]
+      capture(x_target, y_target)
+    end
+    #temporarly move piece to verify check status
+    update_attributes(x: x_target, y: y_target)
+    if king_in_check?(king_coord[0], king_coord[1])
+      method_return = true
+    end
+    #return moved piece to it's original coord
+    update_attributes(x: original_coord[0], y: original_coord[1])
+    #return captured piece if there is
+    undo_temp_capture(captured_piece.id, captured_piece_coord) unless captured_piece.nil?
+    return method_return
+  end
+
+  def find_king_coord(x_target, y_target)
+    #determine king position
+    king_coord =[]
     if type == 'King'
       king_coord << x_target << y_target
     else
       king = game.chess_pieces.where(type: 'King', color: color).first
       king_coord << king.x << king.y
     end
-    update_attributes(x: x_target, y: y_target)
-    if king_in_check?(king_coord[0], king_coord[1])
-      method_return = true
-    end
-    update_attributes(x: original_coord[0], y: original_coord[1])
-    return method_return
+    return king_coord
+  end
+
+  def undo_temp_capture(id, coord)
+    piece = ChessPiece.where(id: id).first
+    piece.update_attributes(x: coord[0], y: coord[1], captured: false)
   end
 
   def king_in_check?(king_x, king_y)
