@@ -29,7 +29,7 @@ RSpec.describe King, type: :class do
     end
   end
 
-  describe '.castling' do
+  describe '.castling?' do
     let(:user1) { FactoryGirl.create(:user) }
     let(:user2) { FactoryGirl.create(:user) }
     let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
@@ -65,10 +65,10 @@ RSpec.describe King, type: :class do
       expect(black_king.castling?(6, 7)).to eq(false)
     end
 
-    it 'does not allow castling if crosse square is in check' do
+    it 'does not allow castling if crossed square is in check' do
       white_king = FactoryGirl.create(:king, game_id: game.id, user_id: user1.id)
       white_left_rook = FactoryGirl.create(:rook, game_id: game.id, user_id: user1.id)
-      black_bishop = FactoryGirl.create(:bishop, game_id: game.id, user_id: user2.id, x: 6, y: 3)
+      black_bishop = FactoryGirl.create(:bishop, game_id: game.id, user_id: user2.id, color: 'black', x: 6, y: 4)
       expect(white_king.castling?(2, 0)).to eq(false)
     end
   end
@@ -102,6 +102,24 @@ RSpec.describe King, type: :class do
       expect(black_right_rook.type).to eq('Rook')
       expect(black_right_rook.x).to eq(7)
       expect(black_right_rook.y).to eq(7)
+    end
+  end
+
+  describe '.allowed_castling_target?' do
+    let(:user1) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
+    
+    it 'returns true if target square is a legal castling square' do
+      game.populate_white_pieces
+      game.populate_black_pieces
+      black_king = ChessPiece.where(type: 'King', color: 'black').first
+      white_king = ChessPiece.where(type: 'King', color: 'white').first
+
+      expect(white_king.allowed_castling_target?(2, 0)).to eq(true)
+      expect(white_king.allowed_castling_target?(6, 0)).to eq(true)
+      expect(black_king.allowed_castling_target?(2, 7)).to eq(true)
+      expect(black_king.allowed_castling_target?(6, 7)).to eq(true)
     end
   end
 end

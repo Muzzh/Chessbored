@@ -7,22 +7,26 @@ class King < ChessPiece
   end
 
   def castling?(x_target, y_target)
+    return false unless allowed_castling_target?(x_target, y_target)
     # king has not moved
     return false if moved_yet?
     # rook has not moved
     castled_rook = castling_rook(x_target, y_target)
-    return false if castled_rook.moved_yet?
+    return false if castled_rook.nil? || castled_rook.moved_yet?
     # not in check
     return false if game.status == 'in_check'
-    # no space that king moves through is in check
+    # no space that king moves through is in check or is occupied
     direction = x_target > x ? 1 : -1
-    (x + direction).step(x_target - direction, direction) do |x_current|
-      opponent_pieces.each do |opponent|
-        return false if opponent.valid_move?(x_current.to_i, y.to_i)
-      end
-    end
-    # illegal_move => already checked in any move_to
+    return false if king_in_check?((x + direction), y_target) || occupied?((x + direction), y_target)
+    true
+  end
 
+  def allowed_castling_target?(x_target, y_target)
+    if color == 'white'
+      true if (x_target == 2 || x_target == 6) && y_target == 0
+    else
+      true if (x_target == 2 || x_target == 6) && y_target == 7
+    end
   end
 
   def castling_rook(x_target, y_target)
