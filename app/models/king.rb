@@ -2,7 +2,7 @@
 class King < ChessPiece
   def valid_move?(x_target, y_target)
     return false unless super
-    # return true if castling?(x_target, y_target)
+    return true if castling?(x_target, y_target)
     move_single_step?(x_target, y_target)
   end
 
@@ -12,7 +12,7 @@ class King < ChessPiece
     return false if moved_yet?
     # rook has not moved
     castled_rook = castling_rook(x_target, y_target)
-    return false if castled_rook.nil? || castled_rook.moved_yet?
+    return false if castled_rook.moved_yet?
     # not in check
     return false if game.status == 'in_check'
     # no space that king moves through is in check or is occupied
@@ -23,10 +23,11 @@ class King < ChessPiece
 
   def allowed_castling_target?(x_target, y_target)
     if color == 'white'
-      true if (x_target == 2 || x_target == 6) && y_target == 0
+      return true if (x_target == 2 || x_target == 6) && y_target == 0
     else
-      true if (x_target == 2 || x_target == 6) && y_target == 7
+      return true if (x_target == 2 || x_target == 6) && y_target == 7
     end
+    false
   end
 
   def castling_rook(x_target, y_target)

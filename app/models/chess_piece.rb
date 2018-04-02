@@ -52,7 +52,7 @@ class ChessPiece < ApplicationRecord
     #return moved piece to it's original coord
     update_attributes(x: original_coord[0], y: original_coord[1])
     #return captured piece if there is
-    undo_temp_capture(temp_capt_id_and_coord[0], temp_capt_id_and_coord[1]) unless temp_capt_id_and_coord.empty?
+    undo_temp_capture(temp_capt_id_and_coord[0], temp_capt_id_and_coord[1]) unless temp_capt_id_and_coord.nil?
     return method_return
   end
 

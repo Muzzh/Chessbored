@@ -3,8 +3,11 @@ require 'rails_helper'
 RSpec.describe King, type: :class do
 
   describe '.valid_move?' do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:user2) { FactoryGirl.create(:user) }
+    let(:game) { FactoryGirl.create(:game, white_player_id: user.id, black_player_id: user2.id) }
+
     it "should check for valid move for a King" do
-      user = FactoryGirl.create(:user)
       piece = FactoryGirl.create(:king, user_id: user.id)
       piece.x = 4; piece.y = 4; piece.color = "white"
       expect(piece.valid_move?(piece.x+1, piece.y+0)).to eq(true) 
@@ -16,8 +19,16 @@ RSpec.describe King, type: :class do
       expect(piece.valid_move?(piece.x+1, piece.y+1)).to eq(true)
       expect(piece.valid_move?(piece.x-1, piece.y+1)).to eq(true)
     end
+
+    # it 'returns true for a castling move' do
+    #   king = FactoryGirl.create(:king, color: 'white', user_id: user.id)
+    #   white_left_rook = FactoryGirl.create(:rook, color: 'white', user_id: user.id, x: 0, y: 0)
+    #   white_right_rook = FactoryGirl.create(:rook, color: 'white', user_id: user.id, x: 7, y: 0)
+    #   expect(king.valid_move?(2, king.y)).to eq(true) #castling
+    #   expect(king.valid_move?(6, king.y)).to eq(true) #castling
+    # end
+
     it "should check for invalid move for a King" do
-      user = FactoryGirl.create(:user)
       piece = FactoryGirl.create(:king, user_id: user.id)
       piece.x = 4; piece.y = 4; piece.color = "white"
       expect(piece.valid_move?(piece.x+0, piece.y+0)).to eq(false)
@@ -34,6 +45,15 @@ RSpec.describe King, type: :class do
     let(:user2) { FactoryGirl.create(:user) }
     let(:game) { FactoryGirl.create(:game, white_player_id: user1.id, black_player_id: user2.id) }
     
+    it 'returns true for a valid castling' do
+      pieces = ChessPiece.where(captured: 'false').destroy_all
+      white_king = FactoryGirl.create(:king, game_id: game.id, user_id: user1.id)
+      white_left_rook = FactoryGirl.create(:rook, color: 'white', game_id: game.id, user_id: user1.id, x: 0, y: 0)
+      white_right_rook = FactoryGirl.create(:rook, color: 'white', game_id: game.id, user_id: user1.id, x: 7, y: 0)
+      expect(white_left_rook.moved_yet?).to eq(false)
+      expect(white_king.castling?(2, 0)).to eq(true)
+    end
+
     it 'does not allow castling if the King has moved' do
       game.populate_white_pieces
       game.populate_black_pieces
