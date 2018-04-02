@@ -44,20 +44,43 @@ class ChessPiece < ApplicationRecord
 
   # illegal_move places or leaves one's king in check.
   def illegal_move?(x_target, y_target)
+    method_return = false
+    original_coord = [x, y]
+    king_coord = find_king_coord(x_target, y_target)
+    temp_capt_id_and_coord = temp_capture(x_target, y_target) if occupied?(x_target, y_target)
+    #temporarly move piece to verify check status
+    update_attributes(x: x_target, y: y_target)
+    method_return = true if king_in_check?(king_coord[0], king_coord[1])
+    #return moved piece to it's original coord
+    update_attributes(x: original_coord[0], y: original_coord[1])
+    #return captured piece if there is
+    undo_temp_capture(temp_capt_id_and_coord[0], temp_capt_id_and_coord[1]) unless temp_capt_id_and_coord.empty?
+    return method_return
+  end
+
+  def temp_capture(x_target, y_target)
+    #temporarly remove a piece that would be capture while verifying check status in case it would remove check status
+    piece = find_piece(x_target, y_target)
+    id_and_coord = [piece.id, [piece.x, piece.y]]
+    capture(x_target, y_target)
+    return id_and_coord
+  end
+
+  def find_king_coord(x_target, y_target)
+    #determine king position
+    king_coord =[]
     if type == 'King'
-      king_x = x_target
-      king_y = y_target
-      return true if king_in_check?(king_x, king_y)
+      king_coord << x_target << y_target
     else
-      original_coord = [x, y]
       king = game.chess_pieces.where(type: 'King', color: color).first
-      update_attributes(x: x_target, y: y_target)
-      if king_in_check?(king.x, king.y)
-        update_attributes(x: original_coord[0], y: original_coord[1])
-        return true
-      end
+      king_coord << king.x << king.y
     end
-    false
+    return king_coord
+  end
+
+  def undo_temp_capture(id, coord)
+    piece = ChessPiece.where(id: id).first
+    piece.update_attributes(x: coord[0], y: coord[1], captured: false)
   end
 
   def king_in_check?(king_x, king_y)
