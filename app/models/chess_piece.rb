@@ -44,20 +44,21 @@ class ChessPiece < ApplicationRecord
 
   # illegal_move places or leaves one's king in check.
   def illegal_move?(x_target, y_target)
+    method_return = false
+    original_coord = [x, y]
+    king_coord = []
     if type == 'King'
-      king_x = x_target
-      king_y = y_target
-      return true if king_in_check?(king_x, king_y)
+      king_coord << x_target << y_target
     else
-      original_coord = [x, y]
       king = game.chess_pieces.where(type: 'King', color: color).first
-      update_attributes(x: x_target, y: y_target)
-      if king_in_check?(king.x, king.y)
-        update_attributes(x: original_coord[0], y: original_coord[1])
-        return true
-      end
+      king_coord << king.x << king.y
     end
-    false
+    update_attributes(x: x_target, y: y_target)
+    if king_in_check?(king_coord[0], king_coord[1])
+      method_return = true
+    end
+    update_attributes(x: original_coord[0], y: original_coord[1])
+    return method_return
   end
 
   def king_in_check?(king_x, king_y)
