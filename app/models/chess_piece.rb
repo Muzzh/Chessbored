@@ -47,23 +47,23 @@ class ChessPiece < ApplicationRecord
     method_return = false
     original_coord = [x, y]
     king_coord = find_king_coord(x_target, y_target)
-
-    #temporarly remove a piece that would be capture while verifying check status in case it would remove check status
-    if occupied?(x_target, y_target)
-      captured_piece = find_piece(x_target, y_target)
-      captured_piece_coord = [captured_piece.x, captured_piece.y]
-      capture(x_target, y_target)
-    end
+    temp_capt_id_and_coord = temp_capture(x_target, y_target) if occupied?(x_target, y_target)
     #temporarly move piece to verify check status
     update_attributes(x: x_target, y: y_target)
-    if king_in_check?(king_coord[0], king_coord[1])
-      method_return = true
-    end
+    method_return = true if king_in_check?(king_coord[0], king_coord[1])
     #return moved piece to it's original coord
     update_attributes(x: original_coord[0], y: original_coord[1])
     #return captured piece if there is
-    undo_temp_capture(captured_piece.id, captured_piece_coord) unless captured_piece.nil?
+    undo_temp_capture(temp_capt_id_and_coord[0], temp_capt_id_and_coord[1]) unless temp_capt_id_and_coord.empty?
     return method_return
+  end
+
+  def temp_capture(x_target, y_target)
+    #temporarly remove a piece that would be capture while verifying check status in case it would remove check status
+    piece = find_piece(x_target, y_target)
+    id_and_coord = [piece.id, [piece.x, piece.y]]
+    capture(x_target, y_target)
+    return id_and_coord
   end
 
   def find_king_coord(x_target, y_target)
