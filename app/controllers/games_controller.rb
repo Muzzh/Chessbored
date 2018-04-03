@@ -55,13 +55,25 @@ class GamesController < ApplicationController
       if current_user.id == piece.user_id
         if piece.move_to(params[:x_target].to_i, params[:y_target].to_i)
           current_game.swap_turn
+          ActionCable.server.broadcast 'turns',
+            game_id: @game.id,
+            user_played_id: current_user.id,
+            refresh: true
+          head :ok
         else
-          flash[:notice] = "Can't do that!"
+          # flash[:notice] = "Can't do that!"
+            ActionCable.server.broadcast 'turns',
+            game_id: @game.id,
+            user_played_id: current_user.id,
+            refresh: true,
+            pop_up: "Can't do that!"
+          head :ok
+          redirect_to current_game
         end
       else
         flash[:notice] = 'This is not your piece!'
       end
-      redirect_to current_game
+      # redirect_to current_game
     end
   end
 
