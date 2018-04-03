@@ -15,7 +15,7 @@
   
 <%= link_to "forfeit", game_forfeit_path(@game), method: :post unless @game.game_over? %>
 
-<div class="board">
+<div class="board" data-game-id=<%= @game.id %> data-user-id=<%= current_user.id %>>
   <% 7.downto(0) do |y| %>
     <div class="row">
       <div class="label"><%= "#{y + 1}" %></div>
