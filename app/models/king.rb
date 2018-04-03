@@ -6,6 +6,14 @@ class King < ChessPiece
     move_single_step?(x_target, y_target)
   end
 
+  def move_to(x_target, y_target)
+    super
+    if castling?(x_target, y_target)
+      rook = castling_rook(x_target, y_target)
+      rook.move_castled_rook(x_target, y_target)
+    end
+  end
+
   def castling?(x_target, y_target)
     return false unless allowed_castling_target?(x_target, y_target)
     # king has not moved

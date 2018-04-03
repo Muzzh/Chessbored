@@ -20,13 +20,14 @@ RSpec.describe King, type: :class do
       expect(piece.valid_move?(piece.x-1, piece.y+1)).to eq(true)
     end
 
-    # it 'returns true for a castling move' do
-    #   king = FactoryGirl.create(:king, color: 'white', user_id: user.id)
-    #   white_left_rook = FactoryGirl.create(:rook, color: 'white', user_id: user.id, x: 0, y: 0)
-    #   white_right_rook = FactoryGirl.create(:rook, color: 'white', user_id: user.id, x: 7, y: 0)
-    #   expect(king.valid_move?(2, king.y)).to eq(true) #castling
-    #   expect(king.valid_move?(6, king.y)).to eq(true) #castling
-    # end
+    it 'returns true for a castling move' do
+      game.chess_pieces.update_all(x: nil, y: nil, captured: true)
+      king = FactoryGirl.create(:king, color: 'white', game_id: game.id, user_id: user.id)
+      white_left_rook = FactoryGirl.create(:rook, color: 'white', game_id: game.id, user_id: user.id, x: 0, y: 0)
+      white_right_rook = FactoryGirl.create(:rook, color: 'white', game_id: game.id, user_id: user.id, x: 7, y: 0)
+      expect(king.valid_move?(2, king.y)).to eq(true) #castling
+      expect(king.valid_move?(6, king.y)).to eq(true) #castling
+    end
 
     it "should check for invalid move for a King" do
       piece = FactoryGirl.create(:king, user_id: user.id)
