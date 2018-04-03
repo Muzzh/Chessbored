@@ -7,11 +7,20 @@ class King < ChessPiece
   end
 
   def move_to(x_target, y_target)
-    super
+    return false unless valid_move?(x_target, y_target)
+    if illegal_move?(x_target, y_target)
+      return false
+    else
+      game.update_attributes(status: 'in_progress')
+    end
+    capture(x_target, y_target) if occupied?(x_target, y_target)
+    update_attributes(x: x_target, y: y_target)
+    game.update_attributes(status: "in_check") if checking?
     if castling?(x_target, y_target)
       rook = castling_rook(x_target, y_target)
       rook.move_castled_rook(x_target, y_target)
     end
+    true
   end
 
   def castling?(x_target, y_target)

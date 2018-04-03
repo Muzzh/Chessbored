@@ -7,12 +7,10 @@ App.messages = App.cable.subscriptions.create('TurnsChannel', {
     if(data.refresh == true && data.game_id == abc) {
       if(data.user_played_id == windowUserId) {
         location.replace('../');
+        alert(data.pop_up);
       } else {
         location.reload(true);
       }
-      $( document ).on('turbolinks:load', function() {
-        alert: data.pop_up;
-      });
     }
   }
 });

@@ -68,7 +68,6 @@ class GamesController < ApplicationController
             refresh: true,
             pop_up: "Can't do that!"
           head :ok
-          redirect_to current_game
         end
       else
         flash[:notice] = 'This is not your piece!'
