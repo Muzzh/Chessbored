@@ -159,7 +159,9 @@ class ChessPiece < ApplicationRecord
   end
 
   def moved_yet?
-    updated_at != created_at
+    # temporarly short cutting this method until the Moves db is set up
+    #updated_at != created_at
+    false
   end
 
   private
