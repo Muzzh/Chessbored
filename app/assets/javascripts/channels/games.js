@@ -1,4 +1,4 @@
-// app/assets/javascripts/channels/gamesChannel.js
+// app/assets/javascripts/channels/games.js
 
 //= require cable
 //= require_self
