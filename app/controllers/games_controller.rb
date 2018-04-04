@@ -63,7 +63,7 @@ class GamesController < ApplicationController
             turn_pop_up: "Your turn!"
           head :ok
         else
-            ActionCable.server.broadcast 'turns',
+          ActionCable.server.broadcast 'turns',
             game_path: game_path,
             game_id: @game.id,
             user_played_id: current_user.id,
