@@ -74,6 +74,7 @@ class GamesController < ApplicationController
       else
         flash[:notice] = 'This is not your piece!'
       end
+      redirect_to game_path
     end
   end
 
