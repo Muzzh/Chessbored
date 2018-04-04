@@ -2,14 +2,14 @@
 
 App.messages = App.cable.subscriptions.create('TurnsChannel', {  
   received: function(data) {
-    var abc = $('.board').data('game-id');
+    var gameID = $('.board').data('game-id');
     var windowUserId = $('.board').data('user-id');
-    if(data.refresh == true && data.game_id == abc) {
+    location.replace(data.game_path)
+    if(data.refresh == true && data.game_id == gameID) {
       if(data.user_played_id == windowUserId) {
-        location.replace('../');
-        alert(data.pop_up);
+        if (data.error_pop_up != null) alert(data.error_pop_up);
       } else {
-        location.reload(true);
+        if (data.turn_pop_up != null) alert(data.turn_pop_up)
       }
     }
   }

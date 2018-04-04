@@ -56,17 +56,19 @@ class GamesController < ApplicationController
         if piece.move_to(params[:x_target].to_i, params[:y_target].to_i)
           current_game.swap_turn
           ActionCable.server.broadcast 'turns',
-            game_id: @game.id,
-            user_played_id: current_user.id,
-            refresh: true
-          head :ok
-        else
-          # flash[:notice] = "Can't do that!"
-            ActionCable.server.broadcast 'turns',
+            game_path: game_path,
             game_id: @game.id,
             user_played_id: current_user.id,
             refresh: true,
-            pop_up: "Can't do that!"
+            turn_pop_up: "Your turn!"
+          head :ok
+        else
+            ActionCable.server.broadcast 'turns',
+            game_path: game_path,
+            game_id: @game.id,
+            user_played_id: current_user.id,
+            refresh: true,
+            error_pop_up: "Can't do that!"
           head :ok
         end
       else
