@@ -14,7 +14,6 @@
 <% end %>
   
 <%= link_to "forfeit", game_forfeit_path(@game), method: :post unless @game.game_over? %>
-
 <div class="board" data-game-id=<%= @game.id %> data-user-id=<%= current_user.id %>>
   <% 7.downto(0) do |y| %>
     <div class="row">
@@ -80,7 +79,7 @@
   </div>
 </div>
 <div class="captured-box">
-    <% @captured_pieces.each do |piece| %>
-        <%= image_tag "#{piece.type}_#{piece.color}.png" %>
-    <% end %>    
+  <% @captured_pieces.each do |piece| %>
+      <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+  <% end %>    
 </div>

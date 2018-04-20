@@ -2,7 +2,6 @@
   <div class="board-image">
   </div>
   <div class="box">
-    
     <% unless user_signed_in? %>
       <%= render "login" %>
       <%= link_to "Sign Up", "#sign_up", "data-toggle" => "modal", :class => 'btn btn-small btn-success' %>
