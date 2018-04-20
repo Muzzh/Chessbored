@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   mount ActionCable.server => 'cable'
-  devise_for :users
+  devise_for :users, :controllers => { registrations: 'registrations' }
   root 'pages#index'
 
   resources :chess_pieces, only: [:create, :update]
