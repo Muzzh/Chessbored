@@ -78,11 +78,6 @@
       <div class="column-label">H</div>
     </div>
   </div>
-  <div class="captured-box">
-    <% @captured_pieces.each do |piece| %>
-        <%= image_tag "#{piece.type}_#{piece.color}.png" %>
-    <% end %>    
-  </div>
   <div class="text-center player-panel">
     <% if @game.in_progress? || @game.in_check? || @game.pending? %>
       <%= link_to "forfeit", game_forfeit_path(@game), class: 'btn btn-danger game-button', method: :post unless @game.game_over? %>
@@ -96,5 +91,10 @@
     <br />
     <%= link_to 'Sign Out', destroy_user_session_path, class: 'btn btn-warning game-button', method: :delete %>
   </div>
+</div>
+<div class="captured-box">
+  <% @captured_pieces.each do |piece| %>
+      <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+  <% end %>    
 </div>
 
