@@ -13,73 +13,88 @@
   <div class="text-center"><h4>Game has ended !<h4></div>
 <% end %>
   
-<%= link_to "forfeit", game_forfeit_path(@game), method: :post unless @game.game_over? %>
-<div class="board" data-game-id=<%= @game.id %> data-user-id=<%= current_user.id %>>
-  <% 7.downto(0) do |y| %>
-    <div class="row">
-      <div class="label"><%= "#{y + 1}" %></div>
-      <% 0.upto(7) do |x| %>
-        <% piece = @chess_pieces.where(x: x, y: y).first %>
-        <% if @current_player_color != @game.turn %>
-          <% if piece.nil? %>
-            <div class="cell"></div>
-          <% else %>
-            <div class="cell">
-              <%= image_tag "#{piece.type}_#{piece.color}.png" %>
-            </div>
-          <% end %>
-        <% else %>
-          <% if @selected_piece.nil? %>
+<div class="board-container">
+  <div class="board" data-game-id=<%= @game.id %> data-user-id=<%= current_user.id %>>
+    <% 7.downto(0) do |y| %>
+      <div class="row">
+        <div class="label"><%= "#{y + 1}" %></div>
+        <% 0.upto(7) do |x| %>
+          <% piece = @chess_pieces.where(x: x, y: y).first %>
+          <% if @current_player_color != @game.turn %>
             <% if piece.nil? %>
               <div class="cell"></div>
-            <% elsif piece.color == @current_player_color %>
-              <%= link_to select_piece_path(@game, piece), class: "cell" do %>
-                <div>
-                  <%= image_tag "#{piece.type}_#{piece.color}.png" %>
-                </div>
-              <% end %>
             <% else %>
               <div class="cell">
-                  <%= image_tag "#{piece.type}_#{piece.color}.png" %>
-                </div>
+                <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+              </div>
             <% end %>
           <% else %>
-            <% if @selected_piece == piece %>
-              <%= link_to game_path(@game), class: "cell selected-square" do %>
-                <div>
-                  <%= image_tag "#{piece.type}_#{piece.color}.png" %>
-                </div>
-              <% end %>
-            <% elsif piece.nil? %>
-              <%= link_to move_to_path(@game, @selected_piece, x, y), method: :put, class: "cell" do %>
-                <div></div>
+            <% if @selected_piece.nil? %>
+              <% if piece.nil? %>
+                <div class="cell"></div>
+              <% elsif piece.color == @current_player_color %>
+                <%= link_to select_piece_path(@game, piece), class: "cell" do %>
+                  <div>
+                    <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+                  </div>
+                <% end %>
+              <% else %>
+                <div class="cell">
+                    <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+                  </div>
               <% end %>
             <% else %>
-              <%= link_to move_to_path(@game, @selected_piece, x, y), method: :put, class: "cell" do %>
-                <div>
-                  <%= image_tag "#{piece.type}_#{piece.color}.png" %>
-                </div>
+              <% if @selected_piece == piece %>
+                <%= link_to game_path(@game), class: "cell selected-square" do %>
+                  <div>
+                    <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+                  </div>
+                <% end %>
+              <% elsif piece.nil? %>
+                <%= link_to move_to_path(@game, @selected_piece, x, y), method: :put, class: "cell" do %>
+                  <div></div>
+                <% end %>
+              <% else %>
+                <%= link_to move_to_path(@game, @selected_piece, x, y), method: :put, class: "cell" do %>
+                  <div>
+                    <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+                  </div>
+                <% end %>
               <% end %>
             <% end %>
           <% end %>
         <% end %>
-      <% end %>
+      </div>
+    <% end %>
+    <div class="row column-label-row">
+      <div class="last-label">*</div>
+      <div class="column-label">A</div>
+      <div class="column-label">B</div>
+      <div class="column-label">C</div>
+      <div class="column-label">D</div>
+      <div class="column-label">E</div>
+      <div class="column-label">F</div>
+      <div class="column-label">G</div>
+      <div class="column-label">H</div>
     </div>
-  <% end %>
-  <div class="row column-label-row">
-    <div class="last-label">*</div>
-    <div class="column-label">A</div>
-    <div class="column-label">B</div>
-    <div class="column-label">C</div>
-    <div class="column-label">D</div>
-    <div class="column-label">E</div>
-    <div class="column-label">F</div>
-    <div class="column-label">G</div>
-    <div class="column-label">H</div>
+  </div>
+  <div class="captured-box">
+    <% @captured_pieces.each do |piece| %>
+        <%= image_tag "#{piece.type}_#{piece.color}.png" %>
+    <% end %>    
+  </div>
+  <div class="text-center player-panel">
+    <% if @game.in_progress? || @game.in_check? || @game.pending? %>
+      <%= link_to "forfeit", game_forfeit_path(@game), class: 'btn btn-danger game-button', method: :post unless @game.game_over? %>
+    <% else %>
+      <%= link_to "Create a game", games_path(user_id: :user_id), class: 'btn btn-primary game-button', method: :post %>
+      <br />
+      <% if @random_game %>
+        <%= button_to "Join a Random Game", game_path(@random_game), method: :put, class: 'btn btn-primary game-button' %>
+      <% end %>
+    <% end %>
+    <br />
+    <%= link_to 'Sign Out', destroy_user_session_path, class: 'btn btn-warning game-button', method: :delete %>
   </div>
 </div>
-<div class="captured-box">
-  <% @captured_pieces.each do |piece| %>
-      <%= image_tag "#{piece.type}_#{piece.color}.png" %>
-  <% end %>    
-</div>
+

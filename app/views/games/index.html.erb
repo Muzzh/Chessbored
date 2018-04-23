@@ -1,5 +1,5 @@
 <div class="row game-page-container">
-  <div class="col-8 text-center games-container board-image">
+  <div class="col-5 offset-1 text-center games-container board-image">
     <h3>Currently available games !</h3>
     <br />
     <div class="row">
@@ -17,12 +17,12 @@
   <div class="col-4 text-center player-panel">
     <h1> Welcome, <%= current_user.name %></h1>
     <br />
-    <%= link_to "Create a game", games_path(user_id: :user_id), class: 'btn btn-primary', method: :post %>
+    <%= link_to "Create a game", games_path(user_id: :user_id), class: 'btn btn-primary game-button', method: :post %>
     <br />
     <% if @random_game %>
-      <%= button_to "Join a Random Game", game_path(@random_game), method: :put, class: 'btn btn-primary btn-sm' %>
+      <%= button_to "Join a Random Game", game_path(@random_game), method: :put, class: 'btn btn-primary game-button' %>
     <% end %>
     <br />
-    <%= link_to 'Sign Out', destroy_user_session_path, class: 'btn btn-warning', method: :delete %>
+    <%= link_to 'Sign Out', destroy_user_session_path, class: 'btn btn-warning game-button', method: :delete %>
   </div>
 </div>
