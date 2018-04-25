@@ -14,15 +14,16 @@ Contributors to the project were:
 - [Theresa](https://github.com/tbarin)
 - [Xavier](https://github.com/Muzzh)
 
-### Features I built
+## Features I built
 
-#### ```obstructed?``` Method
+### ```obstructed?``` Method
 
 I was tasked with coding the logic business of the method evaluating whether a piece passed through obstructed/occupied squares when a move was processed. I initially coded a very rough but working step by step method, along with RSpec tests ([model's method](https://github.com/MeetingTime404/MeetingTime404/blob/28f10a4ada2f25c35505caab545ee37800cd2c95/app/models/chess_piece.rb), [tests](https://github.com/MeetingTime404/MeetingTime404/blob/28f10a4ada2f25c35505caab545ee37800cd2c95/spec/models/chess_piece_spec.rb)). I refactored the code for better Ruby styling and to get the code as DRY as possible ([refactor branch](https://github.com/MeetingTime404/MeetingTime404/tree/refactor_obstructed)).
 <details>
-  <summary>Click here for the final version of the method with associated methods</summary>
+  <summary>Click here for the final version of the methods</summary>
   
   ```ruby
+  # app/models/chess_piece.rb
   def obstructed?(x_target, y_target)
     case
       when horizontal_move?(x_target, y_target)
@@ -77,7 +78,58 @@ I was tasked with coding the logic business of the method evaluating whether a p
   def occupied?(x_current, y_current)
     game.chess_pieces.where(x: x_current, y: y_current).present?
   end
-  def valid_move?(x_target, y_target)
+  ```
+</details>
+
+### First version of `move_piece` method via routing
+
+This early design is a non RESTful controller method, but allowed us to make the movements happen before implementing any Javascript.
+I created custom routes in order to capture the selected piece as well as the targetted square and a `move_to` model method to update the position of the selected piece.
+<details>
+  <summary>Routes</summary>
+
+  ```ruby
+  # routes.rb
+  get 'games/:id/select_piece/:chess_piece_id', to: 'games#show', as: :select_piece
+
+  put 'games/:id/move_piece/:chess_piece_id/:x_target/:y_target', to: 'games#move_piece', as: :move_to
+
+  ```
+
+</details>
+<details>
+  <summary>Controller</summary>
+
+  ```ruby
+  # app/controllers/games_controller.rb
+  def move_piece
+    if @game.in_progress? || @game.in_check?
+      piece = ChessPiece.find(params[:chess_piece_id])
+      if current_user.id == piece.user_id
+        if piece.move_to(params[:x_target].to_i, params[:y_target].to_i)
+          current_game.swap_turn
+          broadcast_turn_change
+        else
+          flash[:notice] = "Can't do that!"
+        end
+      else
+        flash[:notice] = 'This is not your piece!'
+      end
+    end
+    redirect_to game_path
+  end
+
+  ```
+</details>
+<details>
+  <summary>Model</summary>
+
+  ```ruby
+  # app/models/chess_piece.rb
+  def move_to(x_target, y_target)
+    return false unless valid_move?(x_target, y_target)
+    update_attributes(x: x_target, y: y_target)
+    true
   end
   ```
 </details>
