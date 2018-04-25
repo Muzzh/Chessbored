@@ -84,12 +84,12 @@ I was tasked with coding the logic business of the method evaluating whether a p
 ### First version of `move_piece` method via routing
 
 This early design is a non RESTful controller method, but allowed us to make the movements happen before implementing any Javascript.
-I created custom routes in order to capture the selected piece as well as the targetted square and a `move_to` model method to update the position of the selected piece.
+I created custom routes in order to capture the selected piece as well as the targetted square and added an `update_attributes` to the model method `move_to`.
 <details>
   <summary>Routes</summary>
 
   ```ruby
-  # routes.rb
+  # config/routes.rb
   get 'games/:id/select_piece/:chess_piece_id', to: 'games#show', as: :select_piece
 
   put 'games/:id/move_piece/:chess_piece_id/:x_target/:y_target', to: 'games#move_piece', as: :move_to
@@ -102,13 +102,18 @@ I created custom routes in order to capture the selected piece as well as the ta
 
   ```ruby
   # app/controllers/games_controller.rb
+  def show
+    if params[:chess_piece_id]
+      @selected_piece = ChessPiece.find(params[:chess_piece_id])
+    end
+  end
+    
   def move_piece
     if @game.in_progress? || @game.in_check?
       piece = ChessPiece.find(params[:chess_piece_id])
       if current_user.id == piece.user_id
         if piece.move_to(params[:x_target].to_i, params[:y_target].to_i)
           current_game.swap_turn
-          broadcast_turn_change
         else
           flash[:notice] = "Can't do that!"
         end
